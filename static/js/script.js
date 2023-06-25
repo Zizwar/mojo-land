@@ -43,43 +43,46 @@ function newMessage(e) {
     conversation.appendChild(message);
     animateMessage(message);
 
-	
-	fetch('/api/send', {
-		method: 'POST',
-		headers: {
-		  'Content-Type': 'application/json'
-		},
-		body: JSON.stringify({ prompt: text })
-	  })
-	  .then(response => response.text())
-	  .then(resault =>{ 
-		  alert(resault)
-		  const conversation = buildMessage(resault,"received")
-		  conversation.appendChild(message);
-		  animateMessage(message);
-	  
-		  conversation.scrollTop = conversation.scrollHeight;
-	
-	
-	})
-	  .catch(error => console.error(error))
-	
-
   }
 
+  fetchThis(input.value);
   input.value = "";
   conversation.scrollTop = conversation.scrollHeight;
 
-  
   e.preventDefault();
   
 }
+const fetchThis =(text)=> {
 
-function buildMessage(text,typeMessage="sent") {
+	setTimeout(function () {
 
+	
+		fetch('/api/send', {
+			method: 'POST',
+			headers: {
+			  'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({ prompt: text })
+		  })
+		  .then(response => response.text())
+		  .then(resault =>{ 
+			  alert(resault)
+			  const conversation = buildMessage(resault)
+			  conversation.appendChild(message);
+			  animateMessage(message);
+		  
+			  conversation.scrollTop = conversation.scrollHeight;
+		
+		
+		})
+		  .catch(error => console.error(error))
+		}, 500);
+}
+function buildMessage(text,received) {
+alert(text)
   const element = document.createElement("div");
 
-  element.classList.add("message",typeMessage);
+  element.classList.add("message",received?"received": "sent");
 
   element.innerHTML = `${text}<span class="metadata"><span class="time">${moment().format(
     "h:mm A"
@@ -90,6 +93,7 @@ function buildMessage(text,typeMessage="sent") {
 
 function animateMessage(message) {
   setTimeout(function () {
+	
     const tick = message.querySelector(".tick");
     tick.classList.remove("tick-animation");
   }, 1500);
