@@ -48,7 +48,7 @@ const fetchThis = async (text) => {
       conversation.appendChild(message);
       animateMessage(message);
     }
-  }, 50);
+  }, 5);
 };
 
 

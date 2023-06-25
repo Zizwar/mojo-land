@@ -38,7 +38,7 @@ export default function App({ Component }: AppProps) {
         />
         <link rel="stylesheet" href="/css/style.css" />
       </Head>
-      <Component />
+      <Component/>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
       <script src="/js/script.js"></script>
     </div>
