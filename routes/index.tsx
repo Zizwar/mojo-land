@@ -2,7 +2,7 @@ export default function Home() {
   return (
     <>
       <div class="page">
-        <div class="marvel-device nexus5">
+        <div class="marvel-device iphone8plus">
           <div class="top-bar"></div>
           <div class="sleep"></div>
           <div class="volume"></div>
