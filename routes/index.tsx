@@ -50,7 +50,7 @@ export default function Home() {
                   <div class="conversation">
                     <div class="conversation-container">
                       <div class="message sent">
-                        What happened last night?
+                       اهلا هل اجد معلومات الكتاب?
                         <span class="metadata">
                           <span class="time"></span>
                           <span class="tick">
