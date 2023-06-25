@@ -29,7 +29,8 @@ form.addEventListener("submit", (e) => {
   e.preventDefault();
 });
 
-const fetchThis = (text) => {
+// deno-lint-ignore require-await
+const fetchThis = async (text) => {
   setTimeout(async () => {
     const response = await fetch(`/api/send`, {
       method: "POST",
@@ -40,16 +41,21 @@ const fetchThis = (text) => {
     });
 
     if (response.ok) {
-      const message = buildMessage(response.text());
+      const responseText = await response.text(); 
+
+      //console.log("text=", responseText);
+      const message = buildMessage(responseText,"received");
       conversation.appendChild(message);
       animateMessage(message);
     }
-  }, 500);
+  }, 50);
 };
 
-function buildMessage(text, received) {
+
+function buildMessage(text, receivedOrSent='sent') {
+  //alert(text)
   const element = document.createElement("div");
-  element.classList.add("message", received ? "received" : "sent");
+  element.classList.add("message",receivedOrSent);
 
   element.innerHTML = `${text}<span class="metadata"><span class="time">${moment().format(
     "h:mm A"
