@@ -15,9 +15,9 @@ export default function App({ Component }: AppProps) {
         <meta charSet="UTF-8" />
 
         <meta property="og:locale" content="en_US" />
-        <meta property="og:site_name" content="JPT-Whats" />
-        <meta property="og:title" content="JPT-Whats" />
-        <meta property="og:description" content="JPT-Whats" />
+        <meta property="og:site_name" content="Mlsoon" />
+        <meta property="og:title" content="Mlsoon" />
+        <meta property="og:description" content="Mlsoon" />
         <meta property="og:type" content="website" />
         <meta name="robots" content="index, follow" />
         <meta
