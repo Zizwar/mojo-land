@@ -11,15 +11,15 @@ messageTime.forEach((time) => {
 
 const form = document.querySelector(".conversation-compose");
 const conversation = document.querySelector(".conversation-container");
-
+const memory = [];
 form.addEventListener("submit", (e) => {
   const input = e.target.input;
-
+  memory.push({ role: "user", content: input.value });
   if (input.value) {
     const message = buildMessage(input.value);
     conversation.appendChild(message);
     animateMessage(message);
-    
+
     fetchThis(input.value);
   }
 
@@ -35,27 +35,26 @@ const fetchThis = async (text) => {
     const response = await fetch(`/api/send`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({ prompt: text })
+      body: JSON.stringify({ /*prompt: text,*/ memory }),
     });
 
     if (response.ok) {
-      const responseText = await response.text(); 
-
-      //console.log("text=", responseText);
-      const message = buildMessage(responseText,"received");
+      const responseText = await response.text();
+      memory.push({ role: "assistant", content: responseText });
+      //console.log({ memory });
+      const message = buildMessage(responseText, "received");
       conversation.appendChild(message);
       animateMessage(message);
     }
   }, 5);
 };
 
-
-function buildMessage(text, receivedOrSent='sent') {
+function buildMessage(text, receivedOrSent = "sent") {
   //alert(text)
   const element = document.createElement("div");
-  element.classList.add("message",receivedOrSent);
+  element.classList.add("message", receivedOrSent);
 
   element.innerHTML = `${text}<span class="metadata"><span class="time">${moment().format(
     "h:mm A"

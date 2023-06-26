@@ -29,12 +29,12 @@ export default function Home() {
                   <div class="user-bar">
                  
                     <div class="avatar">
-                      <img src="https://thumbs.dreamstime.com/b/parrot-logo-vector-parrot-logo-vector-illustration-112584410.jpg" alt="Avatar" />
+                      <img src="/images/logo.png" alt="Avatar" />
                     </div>
                     <div class="name">
-                      <span>Mlsoon AI</span>
+                      <span>Mlsoon - ملسون</span>
                       <span class="status">
-                        Market: Jareer#2356 
+                        جرير ليست مجرد مكتبة 
                       </span>
                     </div>
                     <div class="actions more">
