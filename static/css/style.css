@@ -194,6 +194,8 @@ body {
   max-width: 85%;
   word-wrap: break-word;
   z-index: -1;
+  white-space: pre-line;
+    direction: rtl;
 }
 
 .message:after {
