@@ -6,7 +6,7 @@ export const handler: Handlers = {
     try {
       const data = await req.json();
 
-      const openAI = new OpenAI(Deno.env.get("KEY_OPEN_AI") ?? ""); س
+      const openAI = new OpenAI(Deno.env.get("KEY_OPEN_AI") ?? ""); 
 
       const messages = [
         { role: "system", content: SystemRoleContenet },
