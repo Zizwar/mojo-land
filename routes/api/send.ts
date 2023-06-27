@@ -6,7 +6,7 @@ export const handler: Handlers = {
     try {
       const data = await req.json();
 
-      const openAI = new OpenAI(Deno.env.get("KEY_OPEN_AI") ?? "");
+      const openAI = new OpenAI(Deno.env.get("KEY_OPEN_AI") ?? ""); 
 
       const messages = [
         { role: "system", content: SystemRoleContenet },
@@ -34,6 +34,7 @@ export const handler: Handlers = {
     }
   },
 };
+
 
 const SystemRoleContenet = `system:
 message: |
@@ -72,3 +73,4 @@ products:
   url: [Product Link]
   image_url: [Image Link]
   reviews: ["Review1", "Review2"]`;
+
