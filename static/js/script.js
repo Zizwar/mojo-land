@@ -14,7 +14,10 @@ const conversation = document.querySelector(".conversation-container");
 const memory = [];
 form.addEventListener("submit", (e) => {
   const input = e.target.input;
-  memory.push({ role: "user", content: input.value });
+  memory.push({
+    role: "user",
+    content:input.value ,//`question --${input.value}-- If my question or query or any part of it has nothing to do with what's in the data you have or has nothing to do with the products, or not matching your description,just answer that it's not my specialty or my scope, Answer me in the language of the question.`,//also Answer as much as the question only without additional information
+  });
   if (input.value) {
     const message = buildMessage(input.value);
     conversation.appendChild(message);
@@ -37,7 +40,7 @@ const fetchThis = async (text) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ /*prompt: text,*/ memory }),
+      body: JSON.stringify({ prompt: text, memory }),
     });
 
     if (response.ok) {

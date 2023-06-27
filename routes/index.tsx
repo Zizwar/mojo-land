@@ -34,7 +34,7 @@ export default function Home() {
                     <div class="name">
                       <span>Mlsoon - ملسون</span>
                       <span class="status">
-                        جرير ليست مجرد مكتبة 
+                        جرعة فن
                       </span>
                     </div>
                     <div class="actions more">
