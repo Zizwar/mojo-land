@@ -10,7 +10,7 @@ class Database {
     try {
       const { data, error } = await supabase
         .from("stores")
-        .select("*")
+        .select("store_name,store_slug,store_is_active,store_logo_url,prompt(prompt),prompt_user(prompt)")
         .limit(13);
 
       if (error) {
@@ -24,7 +24,25 @@ class Database {
       throw error;
     }
   }
+  async getStoreBySlug(slug: string) {
+    try {
+      const { data, error } = await supabase
+        .from("stores")
+        .select("store_name,store_slug,store_is_active,store_logo_url,prompt(prompt),prompt_user(prompt)")
+        .eq("store_slug", slug)
+        .limit(1);
 
+      if (error) {
+        throw error;
+      }
+
+      return data[0] || [];
+
+    } catch (error) {
+      console.error("An error occurred while fetching the store:", error.message);
+      throw error;
+    }
+  }
   async getStore(id: number) {
     try {
       const { data, error } = await supabase

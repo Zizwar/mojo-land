@@ -16,7 +16,7 @@ form.addEventListener("submit", (e) => {
   const input = e.target.input;
   memory.push({
     role: "user",
-    content:input.value ,//`question --${input.value}-- If my question or query or any part of it has nothing to do with what's in the data you have or has nothing to do with the products, or not matching your description,just answer that it's not my specialty or my scope, Answer me in the language of the question.`,//also Answer as much as the question only without additional information
+    content: input.value, //`question --${input.value}-- If my question or query or any part of it has nothing to do with what's in the data you have or has nothing to do with the products, or not matching your description,just answer that it's not my specialty or my scope, Answer me in the language of the question.`,//also Answer as much as the question only without additional information
   });
   if (input.value) {
     const message = buildMessage(input.value);
@@ -34,13 +34,20 @@ form.addEventListener("submit", (e) => {
 
 // deno-lint-ignore require-await
 const fetchThis = async (text) => {
+  const promptz = document.getElementById("promptz") || [];
+  const prompt_user = document.getElementById("prompt_user") || [];
   setTimeout(async () => {
     const response = await fetch(`/api/send`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ prompt: text, memory }),
+      body: JSON.stringify({
+        prompt: text,
+        memory,
+        promptz: promptz.value,
+        prompt_user: prompt_user.value,
+      }),
     });
 
     if (response.ok) {

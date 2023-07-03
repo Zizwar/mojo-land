@@ -5,9 +5,9 @@ export const handler: Handlers = {
     async GET(_req, ctx) {
 const { db} = ctx.state
         
-        const res = await db?.getStore(24)//db?.getStores();
+        const res = await db?.getStore(1)//db?.getStores();
 
-console.log(res)
+//console.log(res)
 return new Response(JSON.stringify(res), {
   status: 200,
   headers: { "Content-Type": "application/json" },

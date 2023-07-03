@@ -7,25 +7,23 @@ export const handler: Handlers = {
       const data = await req.json();
 
       const openAI = new OpenAI(Deno.env.get("KEY_OPEN_AI") ?? "");
-      console.log("--promptz: ", data.promptz);
-      const messages = [
-        { role: "system", content: data.promptz || SystemRoleContenet },
 
-        ...data.memory.slice(-5, -1),
-        {
+      const messages = [
+        { role: "system", content: SystemRoleContenet },
+
+        ...data.memory.slice(-5),
+    /*    {
           role: "user",
-          content: data.prompt_user
-            ? data.prompt_user.replace("{{prompt_user}}", data.prompt)
-            : data.prompt,
         },
+        */
       ];
-      //console.log({ messages });
+      console.log({ messages });
       const chatCompletion = await openAI.createChatCompletion({
         model: "gpt-3.5-turbo",
         messages,
       });
 
-    //  console.log({ chatCompletion });
+      console.log(chatCompletion);
 
       const choices = chatCompletion?.choices;
 
