@@ -23,9 +23,33 @@ class Database {
       console.error("An error occurred while fetching the data:", error.message);
       throw error;
     }
+  } 
+   async getStoresMask() {
+    try {
+      const { data, error } = await 
+      supabase.from('stores').select(`
+      id, 
+      name, 
+    stores_masks_relations ( masks(name,prompt ))
+    `).eq("id",3)
+
+      if (error) {
+        throw JSON.stringify(error);
+      }
+
+      return data;
+
+    } catch (error) {
+      console.error("An error occurred while fetching the data:", error.message);
+      throw error;
+    }
   }
   async getStoreBySlug(slug: string) {
     try {
+
+      //
+      
+      //
       const { data, error } = await supabase
         .from("stores")
         .select("store_name,store_slug,store_is_active,store_logo_url,prompt(prompt),prompt_user(prompt)")
@@ -43,6 +67,7 @@ class Database {
       throw error;
     }
   }
+
   async getStore(id: number) {
     try {
       const { data, error } = await supabase

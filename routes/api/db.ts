@@ -1,11 +1,13 @@
 //import database from "../../communication/database.ts";
 
+import {getPraserUrl  } from "../../cheerio.ts"
+
 import { Handlers } from "$fresh/server.ts";
 export const handler: Handlers = {
     async GET(_req, ctx) {
 const { db} = ctx.state
-        
-        const res = await db?.getStore(1)//db?.getStores();
+        await getPraserUrl()
+        const res = await db?.getStoresMask()//getStore(1)//db?.getStores();
 
 //console.log(res)
 return new Response(JSON.stringify(res), {
