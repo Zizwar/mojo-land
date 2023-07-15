@@ -2,7 +2,8 @@
 import cheerio from "https://cdn.skypack.dev/cheerio";
 
 
-export const getPraserUrl = async (url="https://haraj.com.sa/",query)=>{ 
+export const getPraserUrl = async (url: RequestInfo|URL)=>{ 
+    if(!url)return {err:"not link"}
     const selectorArticle = "article[data-testid='post-article']";
 
 const response = await fetch(url);
