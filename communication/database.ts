@@ -126,5 +126,11 @@ products_links(*)
     }
   }
 }
-
+//get mask by slug
+//get masks by slug
+//vector search stores
+//vector search products 
+//upsert store , remove store, crud, if userID
+//crud product if userID
+//OUT PUT IN PUT SAVE IN CONVERSATION
 export default Database;
