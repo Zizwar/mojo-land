@@ -6,7 +6,7 @@ const supabase = createClient(
 );
 
 class Database {
-  async getStoreById(id: string) {
+  async getStoreById(id: number) {
     try {
       /**
        * ,
@@ -23,9 +23,10 @@ class Database {
           stores_links(*),
           stores_hours(*)
        */
-          const { data, error } = await supabase
-          .from("stores")
-          .select( `* ,
+      const { data, error } = await supabase
+        .from("stores")
+        .select(
+          `* ,
           products(*,
             products_categories(*),
             products_images(*),
@@ -36,20 +37,60 @@ class Database {
           stores_category_associations(*),
           stores_images(*),
           stores_links(*),
-          stores_hours(*)  `)
-         .eq("id",id)
-         .ilike("products.description", "%book%|game%|deno%");
+          stores_hours(*)  `
+        )
+        .eq("id", id)
+        .ilike("products.description", "%book%|game%|deno%");
       // .limit(13);
-console.log({data});
+      // console.log({ data });
 
-   
       // Retrieve other related data using additional queries or subqueries
 
       // Combine the results as needed
 
-      if ( error) {
+      if (error) {
         ///return error //{error:error.message}
-        throw  error
+        throw error;
+      }
+
+      return data;
+    } catch (error) {
+      console.error(
+        "An error occurred while fetching the data:",
+        error.message
+      );
+      throw error;
+    }
+  }
+  async searchStoreProduct(id: number, searchTerm: string) {
+    try {
+      const { data, error } = await supabase
+        .from("stores")
+        .select(
+          `* ,
+          products(*,
+            products_categories(name),
+            products_images(alt,src),
+            products_links(url,description),
+            products_options(key,value),
+            products_attributes(key,value)
+            ),
+          stores_category_associations(*),
+          stores_images(alt,src),
+          stores_links(url,description),
+          stores_hours(*)  `
+        )
+        .eq("id", id)
+        .textSearch("products.description", searchTerm, {
+          config: "english",
+          //  type: "phrase",
+          desc: true,
+          ts_rank: true,
+        });
+
+      if (error) {
+        ///return error //{error:error.message}
+        throw error;
       }
 
       return data;
