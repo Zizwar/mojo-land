@@ -81,7 +81,7 @@ class Database {
           stores_hours(*)  `
         )
         .eq("id", id)
-        .textSearch("products.description", searchTerm, {
+        .textSearch("products.description,products.name", searchTerm, {
           config: "english",
           //  type: "phrase",
           desc: true,
