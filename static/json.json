@@ -1,0 +1,1130 @@
+[
+  {
+    "id": 4,
+    "created_at": "2023-07-06T21:55:09.494724+00:00",
+    "updated_at": null,
+    "name": "Ahmed Fashion",
+    "description": "Exclusive clothing store",
+    "slug": "ahmed-fashion",
+    "shortcut": "AF",
+    "address": "123 Fashion Street",
+    "vector": null,
+    "status": "active",
+    "userid": 2,
+    "geolocation": "23.885942, 45.079162",
+    "links": null,
+    "images": null,
+    "categories": null,
+    "hours": null,
+    "settings": null,
+    "products": [
+      {
+        "id": 10,
+        "created_at": "2023-07-06T23:30:17.175993+00:00",
+        "updated_at": null,
+        "name": "Children Book C",
+        "slug": "children-book-c",
+        "description": "A fun and engaging book for children",
+        "vector": null,
+        "geolocation": null,
+        "store_id": 4,
+        "price": 59.99,
+        "products_categories": [
+          {
+            "id": 34,
+            "name": "Children's Books",
+            "description": null,
+            "status": null
+          }
+        ],
+        "products_images": [
+          {
+            "id": 1,
+            "product_id": 10,
+            "src": "imagetest.jpg",
+            "alt": "test\n",
+            "dis_order": null
+          }
+        ],
+        "products_links": [
+          {
+            "id": 1,
+            "created_at": "2023-07-17T17:49:29.446629+00:00",
+            "updated_at": null,
+            "url": "urlharrajtesst.com",
+            "description": "link harrage",
+            "shortcut": "hghgg",
+            "hits": 0,
+            "productid": 10,
+            "status": null
+          }
+        ],
+        "products_options": [
+          {
+            "id": 1,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "Engine",
+            "value": "6 cylinders",
+            "price": 60000,
+            "product_id": 10
+          },
+          {
+            "id": 3,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "Color",
+            "value": "Blue",
+            "price": 500,
+            "product_id": 10
+          }
+        ],
+        "products_attributes": [
+          {
+            "id": 19,
+            "key": "Age Group",
+            "value": "8-10 years",
+            "product_id": 10
+          },
+          {
+            "id": 20,
+            "key": "Author",
+            "value": "Jane Doe",
+            "product_id": 10
+          }
+        ]
+      },
+      {
+        "id": 20,
+        "created_at": "2023-07-06T23:33:31.721155+00:00",
+        "updated_at": null,
+        "name": "Board Game E",
+        "slug": "board-game-e",
+        "description": "A fun and exciting board game for the whole family",
+        "vector": null,
+        "geolocation": null,
+        "store_id": 4,
+        "price": 159.99,
+        "products_categories": [
+          {
+            "id": 16,
+            "name": "Toys & Games",
+            "description": null,
+            "status": null
+          }
+        ],
+        "products_images": [],
+        "products_links": [],
+        "products_options": [],
+        "products_attributes": [
+          {
+            "id": 39,
+            "key": "Age Group",
+            "value": "6+ years",
+            "product_id": 20
+          },
+          {
+            "id": 40,
+            "key": "Players",
+            "value": "2-4",
+            "product_id": 20
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "created_at": "2023-07-06T23:30:17.175993+00:00",
+        "updated_at": null,
+        "name": "Smartphone X",
+        "slug": "smartphone-x",
+        "description": "A powerful and stylish smartphone",
+        "vector": null,
+        "geolocation": null,
+        "store_id": 4,
+        "price": 39.99,
+        "products_categories": [
+          {
+            "id": 31,
+            "name": "Mobile Devices",
+            "description": null,
+            "status": null
+          }
+        ],
+        "products_images": [],
+        "products_links": [],
+        "products_options": [
+          {
+            "id": 16,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "Color",
+            "value": "Graphite",
+            "price": 1099,
+            "product_id": 5
+          },
+          {
+            "id": 17,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "Color",
+            "value": "Gold",
+            "price": 1099,
+            "product_id": 5
+          },
+          {
+            "id": 18,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "Storage",
+            "value": "128GB",
+            "price": 0,
+            "product_id": 5
+          },
+          {
+            "id": 19,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "Storage",
+            "value": "256GB",
+            "price": 100,
+            "product_id": 5
+          },
+          {
+            "id": 61,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "Color",
+            "value": "Graphite",
+            "price": 1099,
+            "product_id": 5
+          },
+          {
+            "id": 62,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "Color",
+            "value": "Gold",
+            "price": 1099,
+            "product_id": 5
+          },
+          {
+            "id": 63,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "Storage",
+            "value": "128GB",
+            "price": 0,
+            "product_id": 5
+          },
+          {
+            "id": 64,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "Storage",
+            "value": "256GB",
+            "price": 100,
+            "product_id": 5
+          }
+        ],
+        "products_attributes": [
+          {
+            "id": 9,
+            "key": "Memory",
+            "value": "128GB",
+            "product_id": 5
+          },
+          {
+            "id": 10,
+            "key": "Color",
+            "value": "Black",
+            "product_id": 5
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "created_at": "2023-07-06T23:30:17.175993+00:00",
+        "updated_at": null,
+        "name": "Trendy Men Shirt",
+        "slug": "trendy-men-shirt",
+        "description": "A trendy and modern shirt for men",
+        "vector": null,
+        "geolocation": null,
+        "store_id": 4,
+        "price": 19.99,
+        "products_categories": [
+          {
+            "id": 28,
+            "name": "Men's Shirts",
+            "description": null,
+            "status": null
+          }
+        ],
+        "products_images": [],
+        "products_links": [],
+        "products_options": [
+          {
+            "id": 8,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "RAM",
+            "value": "16GB",
+            "price": 1400,
+            "product_id": 2
+          },
+          {
+            "id": 9,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "RAM",
+            "value": "8GB",
+            "price": 1300,
+            "product_id": 2
+          },
+          {
+            "id": 10,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "Storage",
+            "value": "512GB SSD",
+            "price": 0,
+            "product_id": 2
+          },
+          {
+            "id": 11,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "Storage",
+            "value": "1TB SSD",
+            "price": 100,
+            "product_id": 2
+          },
+          {
+            "id": 34,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "Color",
+            "value": "Black",
+            "price": 34.99,
+            "product_id": 2
+          },
+          {
+            "id": 35,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "Color",
+            "value": "White",
+            "price": 34.99,
+            "product_id": 2
+          },
+          {
+            "id": 36,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "Size",
+            "value": "M",
+            "price": 0,
+            "product_id": 2
+          },
+          {
+            "id": 37,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "Size",
+            "value": "L",
+            "price": 0,
+            "product_id": 2
+          },
+          {
+            "id": 53,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "RAM",
+            "value": "16GB",
+            "price": 1400,
+            "product_id": 2
+          },
+          {
+            "id": 54,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "RAM",
+            "value": "8GB",
+            "price": 1300,
+            "product_id": 2
+          },
+          {
+            "id": 55,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "Storage",
+            "value": "512GB SSD",
+            "price": 0,
+            "product_id": 2
+          },
+          {
+            "id": 56,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "Storage",
+            "value": "1TB SSD",
+            "price": 100,
+            "product_id": 2
+          },
+          {
+            "id": 79,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "Color",
+            "value": "Black",
+            "price": 34.99,
+            "product_id": 2
+          },
+          {
+            "id": 80,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "Color",
+            "value": "White",
+            "price": 34.99,
+            "product_id": 2
+          },
+          {
+            "id": 81,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "Size",
+            "value": "M",
+            "price": 0,
+            "product_id": 2
+          },
+          {
+            "id": 82,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "Size",
+            "value": "L",
+            "price": 0,
+            "product_id": 2
+          }
+        ],
+        "products_attributes": [
+          {
+            "id": 3,
+            "key": "Size",
+            "value": "L",
+            "product_id": 2
+          },
+          {
+            "id": 4,
+            "key": "Color",
+            "value": "Black",
+            "product_id": 2
+          }
+        ]
+      },
+      {
+        "id": 33,
+        "created_at": "2023-07-08T02:35:15.411744+00:00",
+        "updated_at": null,
+        "name": "Children Book C",
+        "slug": "children-book-c",
+        "description": "A fun and engaging book for children",
+        "vector": null,
+        "geolocation": null,
+        "store_id": 4,
+        "price": null,
+        "products_categories": [],
+        "products_images": [],
+        "products_links": [],
+        "products_options": [],
+        "products_attributes": []
+      },
+      {
+        "id": 9,
+        "created_at": "2023-07-06T23:30:17.175993+00:00",
+        "updated_at": null,
+        "name": "Children Book B",
+        "slug": "children-book-b",
+        "description": "An interesting and educational book for children",
+        "vector": null,
+        "geolocation": null,
+        "store_id": 4,
+        "price": 64.99,
+        "products_categories": [
+          {
+            "id": 34,
+            "name": "Children's Books",
+            "description": null,
+            "status": null
+          }
+        ],
+        "products_images": [],
+        "products_links": [],
+        "products_options": [],
+        "products_attributes": [
+          {
+            "id": 17,
+            "key": "Age Group",
+            "value": "6-8 years",
+            "product_id": 9
+          },
+          {
+            "id": 18,
+            "key": "Author",
+            "value": "John Doe",
+            "product_id": 9
+          }
+        ]
+      },
+      {
+        "id": 15,
+        "created_at": "2023-07-06T23:33:31.721155+00:00",
+        "updated_at": null,
+        "name": "Smart TV",
+        "slug": "smart-tv",
+        "description": "A high-definition smart TV",
+        "vector": null,
+        "geolocation": null,
+        "store_id": 4,
+        "price": 109.99,
+        "products_categories": [
+          {
+            "id": 7,
+            "name": "Electronics",
+            "description": null,
+            "status": null
+          }
+        ],
+        "products_images": [],
+        "products_links": [],
+        "products_options": [],
+        "products_attributes": [
+          {
+            "id": 29,
+            "key": "Screen Size",
+            "value": "55 inches",
+            "product_id": 15
+          },
+          {
+            "id": 30,
+            "key": "Color",
+            "value": "Black",
+            "product_id": 15
+          }
+        ]
+      },
+      {
+        "id": 22,
+        "created_at": "2023-07-08T00:18:46.528931+00:00",
+        "updated_at": null,
+        "name": "Elegant Women Dress",
+        "slug": "elegant-women-dress1688775526397",
+        "description": "An elegant dress for women",
+        "vector": null,
+        "geolocation": null,
+        "store_id": 4,
+        "price": 34.99,
+        "products_categories": [],
+        "products_images": [],
+        "products_links": [],
+        "products_options": [],
+        "products_attributes": []
+      },
+      {
+        "id": 3,
+        "created_at": "2023-07-06T23:30:17.175993+00:00",
+        "updated_at": null,
+        "name": "Elegant Women Dress",
+        "slug": "elegant-women-dress",
+        "description": "An elegant dress for women",
+        "vector": null,
+        "geolocation": null,
+        "store_id": 4,
+        "price": 34.99,
+        "products_categories": [
+          {
+            "id": 29,
+            "name": "Women's Dresses",
+            "description": null,
+            "status": null
+          }
+        ],
+        "products_images": [],
+        "products_links": [],
+        "products_options": [
+          {
+            "id": 12,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "Size",
+            "value": "9",
+            "price": 79.99,
+            "product_id": 3
+          },
+          {
+            "id": 13,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "Size",
+            "value": "10",
+            "price": 79.99,
+            "product_id": 3
+          },
+          {
+            "id": 14,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "Color",
+            "value": "Cordovan/Squash",
+            "price": 0,
+            "product_id": 3
+          },
+          {
+            "id": 15,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "Color",
+            "value": "Black/Black",
+            "price": 0,
+            "product_id": 3
+          },
+          {
+            "id": 22,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "Color",
+            "value": "Black",
+            "price": 59.99,
+            "product_id": 3
+          },
+          {
+            "id": 23,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "Color",
+            "value": "Red",
+            "price": 59.99,
+            "product_id": 3
+          },
+          {
+            "id": 24,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "Size",
+            "value": "S",
+            "price": 0,
+            "product_id": 3
+          },
+          {
+            "id": 25,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "Size",
+            "value": "M",
+            "price": 0,
+            "product_id": 3
+          },
+          {
+            "id": 57,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "Size",
+            "value": "9",
+            "price": 79.99,
+            "product_id": 3
+          },
+          {
+            "id": 58,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "Size",
+            "value": "10",
+            "price": 79.99,
+            "product_id": 3
+          },
+          {
+            "id": 59,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "Color",
+            "value": "Cordovan/Squash",
+            "price": 0,
+            "product_id": 3
+          },
+          {
+            "id": 60,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "Color",
+            "value": "Black/Black",
+            "price": 0,
+            "product_id": 3
+          },
+          {
+            "id": 67,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "Color",
+            "value": "Black",
+            "price": 59.99,
+            "product_id": 3
+          },
+          {
+            "id": 68,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "Color",
+            "value": "Red",
+            "price": 59.99,
+            "product_id": 3
+          },
+          {
+            "id": 69,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "Size",
+            "value": "S",
+            "price": 0,
+            "product_id": 3
+          },
+          {
+            "id": 70,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "Size",
+            "value": "M",
+            "price": 0,
+            "product_id": 3
+          }
+        ],
+        "products_attributes": [
+          {
+            "id": 5,
+            "key": "Size",
+            "value": "M",
+            "product_id": 3
+          },
+          {
+            "id": 6,
+            "key": "Color",
+            "value": "Red",
+            "product_id": 3
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "created_at": "2023-07-06T23:30:17.175993+00:00",
+        "updated_at": null,
+        "name": "Casual Women Dress",
+        "slug": "casual-women-dress",
+        "description": "A casual and comfortable dress for women",
+        "vector": null,
+        "geolocation": null,
+        "store_id": 4,
+        "price": 24.99,
+        "products_categories": [
+          {
+            "id": 29,
+            "name": "Women's Dresses",
+            "description": null,
+            "status": null
+          }
+        ],
+        "products_images": [],
+        "products_links": [],
+        "products_options": [
+          {
+            "id": 30,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "Color",
+            "value": "Blue",
+            "price": 49.99,
+            "product_id": 4
+          },
+          {
+            "id": 31,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "Color",
+            "value": "Green",
+            "price": 49.99,
+            "product_id": 4
+          },
+          {
+            "id": 32,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "Size",
+            "value": "S",
+            "price": 0,
+            "product_id": 4
+          },
+          {
+            "id": 33,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "Size",
+            "value": "M",
+            "price": 0,
+            "product_id": 4
+          },
+          {
+            "id": 75,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "Color",
+            "value": "Blue",
+            "price": 49.99,
+            "product_id": 4
+          },
+          {
+            "id": 76,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "Color",
+            "value": "Green",
+            "price": 49.99,
+            "product_id": 4
+          },
+          {
+            "id": 77,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "Size",
+            "value": "S",
+            "price": 0,
+            "product_id": 4
+          },
+          {
+            "id": 78,
+            "created_at": "2023-07-08T02:42:49.030381+00:00",
+            "updated_at": null,
+            "key": "Size",
+            "value": "M",
+            "price": 0,
+            "product_id": 4
+          }
+        ],
+        "products_attributes": [
+          {
+            "id": 7,
+            "key": "Size",
+            "value": "S",
+            "product_id": 4
+          },
+          {
+            "id": 8,
+            "key": "Color",
+            "value": "Green",
+            "product_id": 4
+          }
+        ]
+      },
+      {
+        "id": 11,
+        "created_at": "2023-07-06T23:33:31.721155+00:00",
+        "updated_at": null,
+        "name": "Elegant Pearl Necklace",
+        "slug": "pearl-necklace",
+        "description": "An elegant pearl necklace",
+        "vector": null,
+        "geolocation": null,
+        "store_id": 4,
+        "price": 69.99,
+        "products_categories": [
+          {
+            "id": 1,
+            "name": "Accessories",
+            "description": null,
+            "status": null
+          }
+        ],
+        "products_images": [],
+        "products_links": [],
+        "products_options": [],
+        "products_attributes": [
+          {
+            "id": 21,
+            "key": "Material",
+            "value": "Pearl",
+            "product_id": 11
+          },
+          {
+            "id": 22,
+            "key": "Color",
+            "value": "White",
+            "product_id": 11
+          }
+        ]
+      },
+      {
+        "id": 12,
+        "created_at": "2023-07-06T23:33:31.721155+00:00",
+        "updated_at": null,
+        "name": "Trendy Leather Belt",
+        "slug": "leather-belt",
+        "description": "A trendy and durable leather belt",
+        "vector": null,
+        "geolocation": null,
+        "store_id": 4,
+        "price": 79.99,
+        "products_categories": [
+          {
+            "id": 1,
+            "name": "Accessories",
+            "description": null,
+            "status": null
+          }
+        ],
+        "products_images": [],
+        "products_links": [],
+        "products_options": [],
+        "products_attributes": [
+          {
+            "id": 23,
+            "key": "Material",
+            "value": "Leather",
+            "product_id": 12
+          },
+          {
+            "id": 24,
+            "key": "Color",
+            "value": "Black",
+            "product_id": 12
+          }
+        ]
+      },
+      {
+        "id": 34,
+        "created_at": "2023-07-08T02:35:51.114173+00:00",
+        "updated_at": null,
+        "name": "Elegant Pearl Necklace",
+        "slug": "pearl-necklace",
+        "description": "An elegant pearl necklace",
+        "vector": null,
+        "geolocation": null,
+        "store_id": 4,
+        "price": null,
+        "products_categories": [],
+        "products_images": [],
+        "products_links": [],
+        "products_options": [],
+        "products_attributes": []
+      },
+      {
+        "id": 35,
+        "created_at": "2023-07-08T02:35:51.114173+00:00",
+        "updated_at": null,
+        "name": "Trendy Leather Belt",
+        "slug": "leather-belt",
+        "description": "A trendy and durable leather belt",
+        "vector": null,
+        "geolocation": null,
+        "store_id": 4,
+        "price": null,
+        "products_categories": [],
+        "products_images": [],
+        "products_links": [],
+        "products_options": [],
+        "products_attributes": []
+      },
+      {
+        "id": 23,
+        "created_at": "2023-07-08T00:22:27.367165+00:00",
+        "updated_at": null,
+        "name": "Elegant Women Dress BIDI1688775747243",
+        "slug": "elegant-women-dress-BIDI-test1688775747243",
+        "description": "An elegant dress for women",
+        "vector": null,
+        "geolocation": null,
+        "store_id": 4,
+        "price": 34.99,
+        "products_categories": [],
+        "products_images": [],
+        "products_links": [],
+        "products_options": [],
+        "products_attributes": []
+      },
+      {
+        "id": 26,
+        "created_at": "2023-07-08T02:35:15.411744+00:00",
+        "updated_at": null,
+        "name": "Elegant Women Dress",
+        "slug": "elegant-women-dress",
+        "description": "An elegant dress for women",
+        "vector": null,
+        "geolocation": null,
+        "store_id": 4,
+        "price": null,
+        "products_categories": [],
+        "products_images": [],
+        "products_links": [],
+        "products_options": [],
+        "products_attributes": []
+      },
+      {
+        "id": 27,
+        "created_at": "2023-07-08T02:35:15.411744+00:00",
+        "updated_at": null,
+        "name": "Casual Women Dress",
+        "slug": "casual-women-dress",
+        "description": "A casual and comfortable dress for women",
+        "vector": null,
+        "geolocation": null,
+        "store_id": 4,
+        "price": null,
+        "products_categories": [],
+        "products_images": [],
+        "products_links": [],
+        "products_options": [],
+        "products_attributes": []
+      }
+    ],
+    "stores_category_associations": [
+      {
+        "id": 2,
+        "created_at": "2023-07-08T02:56:18.679971+00:00",
+        "store_id": 4,
+        "categoty_id": 2
+      }
+    ],
+    "stores_images": [
+      {
+        "id": 14,
+        "store_id": 4,
+        "src": "https://example.com/omar-books-toys.jpg",
+        "alt": "Omar Books & Toys Store Image",
+        "dis_order": 1
+      }
+    ],
+    "stores_links": [
+      {
+        "id": 1,
+        "created_at": "2023-07-08T02:57:23.106292+00:00",
+        "status": "active",
+        "url": "https://instagram.com/ahmed_fashion",
+        "description": "Instagram account for Ahmed Fashion",
+        "shortcut": "IG_AF",
+        "hits": 0,
+        "store_id": 4,
+        "key": null
+      },
+      {
+        "id": 2,
+        "created_at": "2023-07-08T02:57:23.106292+00:00",
+        "status": "active",
+        "url": "https://tiktok.com/@ahmed_fashion",
+        "description": "TikTok account for Ahmed Fashion",
+        "shortcut": "TT_AF",
+        "hits": 0,
+        "store_id": 4,
+        "key": null
+      },
+      {
+        "id": 3,
+        "created_at": "2023-07-08T02:57:23.106292+00:00",
+        "status": "active",
+        "url": "https://youtube.com/ahmed_fashion",
+        "description": "Youtube channel for Ahmed Fashion",
+        "shortcut": "YT_AF",
+        "hits": 0,
+        "store_id": 4,
+        "key": null
+      },
+      {
+        "id": 16,
+        "created_at": "2023-07-08T02:58:35.128843+00:00",
+        "status": "active",
+        "url": "https://instagram.com/ahmed_fashion",
+        "description": "Instagram account for Ahmed Fashion",
+        "shortcut": "IG_AF",
+        "hits": 0,
+        "store_id": 4,
+        "key": "instagram"
+      },
+      {
+        "id": 17,
+        "created_at": "2023-07-08T02:58:35.128843+00:00",
+        "status": "active",
+        "url": "https://tiktok.com/@ahmed_fashion",
+        "description": "TikTok account for Ahmed Fashion",
+        "shortcut": "TT_AF",
+        "hits": 0,
+        "store_id": 4,
+        "key": "tiktok"
+      },
+      {
+        "id": 18,
+        "created_at": "2023-07-08T02:58:35.128843+00:00",
+        "status": "active",
+        "url": "https://youtube.com/ahmed_fashion",
+        "description": "Youtube channel for Ahmed Fashion",
+        "shortcut": "YT_AF",
+        "hits": 0,
+        "store_id": 4,
+        "key": "youtube"
+      }
+    ],
+    "stores_hours": [
+      {
+        "id": 8,
+        "store_id": 4,
+        "day_of_week": 1,
+        "open_time": "10:00:00",
+        "close_time": "18:00:00",
+        "closes_next_day": false
+      },
+      {
+        "id": 9,
+        "store_id": 4,
+        "day_of_week": 2,
+        "open_time": "10:00:00",
+        "close_time": "18:00:00",
+        "closes_next_day": false
+      },
+      {
+        "id": 10,
+        "store_id": 4,
+        "day_of_week": 3,
+        "open_time": "10:00:00",
+        "close_time": "18:00:00",
+        "closes_next_day": false
+      },
+      {
+        "id": 11,
+        "store_id": 4,
+        "day_of_week": 4,
+        "open_time": "10:00:00",
+        "close_time": "18:00:00",
+        "closes_next_day": false
+      },
+      {
+        "id": 12,
+        "store_id": 4,
+        "day_of_week": 5,
+        "open_time": "10:00:00",
+        "close_time": "18:00:00",
+        "closes_next_day": false
+      },
+      {
+        "id": 13,
+        "store_id": 4,
+        "day_of_week": 6,
+        "open_time": "10:00:00",
+        "close_time": "14:00:00",
+        "closes_next_day": false
+      },
+      {
+        "id": 14,
+        "store_id": 4,
+        "day_of_week": 0,
+        "open_time": null,
+        "close_time": null,
+        "closes_next_day": false
+      }
+    ]
+  }
+]

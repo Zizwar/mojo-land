@@ -6,17 +6,50 @@ const supabase = createClient(
 );
 
 class Database {
-  async getStores() {
+  async getStoreById(id: string) {
     try {
-      const { data, error } = await supabase
-        .from("stores")
-        .select(
-          "store_name,store_slug,store_is_active,store_logo_url,prompt(prompt),prompt_user(prompt)"
-        )
-        .limit(13);
+      /**
+       * ,
+          products(*,
+            products_categories(*),
+            products_attributes(*),
+            products_images(*),
+            products_links(*),
+            products_options(*),
+            products_attributes(*)
+            ),
+          stores_category_associations(*),
+          stores_images(*),
+          stores_links(*),
+          stores_hours(*)
+       */
+          const { data, error } = await supabase
+          .from("stores")
+          .select( `* ,
+          products(*,
+            products_categories(*),
+            products_images(*),
+            products_links(*),
+            products_options(*),
+            products_attributes(*)
+            ),
+          stores_category_associations(*),
+          stores_images(*),
+          stores_links(*),
+          stores_hours(*)  `)
+         .eq("id",id)
+         .ilike("products.description", "%book%|game%|deno%");
+      // .limit(13);
+console.log({data});
 
-      if (error) {
-        throw error;
+   
+      // Retrieve other related data using additional queries or subqueries
+
+      // Combine the results as needed
+
+      if ( error) {
+        ///return error //{error:error.message}
+        throw  error
       }
 
       return data;
@@ -56,12 +89,12 @@ products_links(*)
       );
       throw error;
     }
-  } 
+  }
   async insertCats(cats: any) {
     try {
       const { data, error } = await supabase
         .from("products")
-        .insert(cats,{ upsert: true } )
+        .insert(cats, { upsert: true })
         .eq("id", 3);
 
       if (error) {
@@ -129,7 +162,7 @@ products_links(*)
 //get mask by slug
 //get masks by slug
 //vector search stores
-//vector search products 
+//vector search products
 //upsert store , remove store, crud, if userID
 //crud product if userID
 //OUT PUT IN PUT SAVE IN CONVERSATION

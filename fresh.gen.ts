@@ -6,12 +6,13 @@ import * as $0 from "./routes/_app.tsx";
 import * as $1 from "./routes/_middleware.ts";
 import * as $2 from "./routes/api/dev.ts";
 import * as $3 from "./routes/api/getProductByLink.ts";
-import * as $4 from "./routes/api/send.ts";
-import * as $5 from "./routes/api/sendz.ts";
-import * as $6 from "./routes/api/test.ts";
-import * as $7 from "./routes/index.tsx";
-import * as $8 from "./routes/s/[slug].tsx";
-import * as $9 from "./routes/sa.tsx";
+import * as $4 from "./routes/api/getStoreById.ts";
+import * as $5 from "./routes/api/send.ts";
+import * as $6 from "./routes/api/sendz.ts";
+import * as $7 from "./routes/api/test.ts";
+import * as $8 from "./routes/index.tsx";
+import * as $9 from "./routes/s/[slug].tsx";
+import * as $10 from "./routes/sa.tsx";
 import * as $$0 from "./islands/Counter.tsx";
 
 const manifest = {
@@ -20,12 +21,13 @@ const manifest = {
     "./routes/_middleware.ts": $1,
     "./routes/api/dev.ts": $2,
     "./routes/api/getProductByLink.ts": $3,
-    "./routes/api/send.ts": $4,
-    "./routes/api/sendz.ts": $5,
-    "./routes/api/test.ts": $6,
-    "./routes/index.tsx": $7,
-    "./routes/s/[slug].tsx": $8,
-    "./routes/sa.tsx": $9,
+    "./routes/api/getStoreById.ts": $4,
+    "./routes/api/send.ts": $5,
+    "./routes/api/sendz.ts": $6,
+    "./routes/api/test.ts": $7,
+    "./routes/index.tsx": $8,
+    "./routes/s/[slug].tsx": $9,
+    "./routes/sa.tsx": $10,
   },
   islands: {
     "./islands/Counter.tsx": $$0,

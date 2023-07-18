@@ -10,10 +10,7 @@ export const handler: Handlers = {
   const link = url.searchParams.get("link");
  // if(!link) return console.log("nlo link",link);
   
-     const praser = await getPraserUrl( link   );
-
-    
-    
+     const praser = await getPraserUrl( link   );i
     
     return new Response(JSON.stringify(praser), {
       status: 200,
