@@ -62,10 +62,10 @@ class Database {
       throw error;
     }
   }
-  async searchStoreProduct(id: number, searchTerm: string) {
+  async searchStoreProduct({id, slug,term}): Promise<any> {
     try {
-      const { data, error } = await supabase
-        .from("stores")
+      
+      const query = supabase.from("stores")
         .select(
           `* ,
           products(*,
@@ -80,13 +80,18 @@ class Database {
           stores_links(url,description),
           stores_hours(*)  `
         )
-        .eq("id", id)
-        .textSearch("products.description,products.name", searchTerm, {
-          config: "english",
-          //  type: "phrase",
-          desc: true,
-          ts_rank: true,
-        });
+        //;
+        if(id)query.eq("id", id);
+        if(slug)query.eq("slug",slug)
+
+
+
+    const { data, error } = await query.textSearch("products.description,products.name", term, {
+            config: "english",
+           //  type: "phrase",
+                   desc: true,
+               ts_rank: true,
+               });
 
       if (error) {
         ///return error //{error:error.message}

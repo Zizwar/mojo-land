@@ -120,8 +120,9 @@ export async function handler(
     params: { slug },
   } = ctx;
 
-  const data = await db?.getStoreBySlug(slug); //db?.getStores();
-
+  
+const data = await db?.searchStoreProduct({slug})
+    
   //console.log({ data });
 
   const response = await ctx.render(data);

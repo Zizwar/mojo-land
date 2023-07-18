@@ -6,11 +6,13 @@ export const handler: Handlers = {
   async GET(req, ctx) {
       const { db } = ctx.state;
     const url = new URL(req.url);
-    const id = url.searchParams.get("id") || 4;
-         const term = url.searchParams.get("term") || "book|game"; 
-         console.log("id is ",id);
+    const id = url.searchParams.get("id") //|| 4;  
+    const term = url.searchParams.get("term") || "book|game"; 
+    
+        const slug = url.searchParams.get("slug");
+    console.log({id,slug,term});
 
-    const data = await db?.searchStoreProduct(4,term)
+    const data = await db?.searchStoreProduct({id,term,slug})
     
     return new Response(JSON.stringify(data), {
       status: 200,
