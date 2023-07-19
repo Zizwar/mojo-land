@@ -1,17 +1,28 @@
 import { Handlers } from "$fresh/server.ts";
-import { OpenAI } from "openai";
 
 export const handler: Handlers = {
-  async POST(req, _ctx) {
+  async POST(req, ctx): Promise<Response> {
+    const { gpt, db } = ctx.state;
     try {
       const data = await req.json();
 
-      const openAI = new OpenAI(Deno.env.get("KEY_OPEN_AI") ?? "");
-      console.log("--promptz: ", data.promptz);
-      const messages = [
-        { role: "system", content: data.promptz || SystemRoleContenet },
+      console.log("--slug: ", data.slug);
 
-        ...data.memory.slice(-5, -1),
+      let content = SystemRoleContenet;
+      if (data.slug) {
+        const {
+          head,
+          masks: _masks,
+          products = [],
+          ...stores
+        } = await db.searchStoreProduct({ slug: data.slug });
+        products.reverse().length = 10;
+        console.log({ head, stores, products });
+        content = JSON.stringify({ head, stores, products });
+      }
+      const messages = [
+        { role: "system", content },
+        //...data.memory.slice(-3, -1),
         {
           role: "user",
           content: data.prompt_user
@@ -19,17 +30,8 @@ export const handler: Handlers = {
             : data.prompt,
         },
       ];
-      //console.log({ messages });
-      const chatCompletion = await openAI.createChatCompletion({
-        model: "gpt-3.5-turbo",
-        messages,
-      });
 
-    //  console.log({ chatCompletion });
-
-      const choices = chatCompletion?.choices;
-
-      const text = choices[0]?.message?.content ?? "gpt not respense";
+      const text = await gpt?.chat(messages);
 
       return new Response(text, {
         status: 200,

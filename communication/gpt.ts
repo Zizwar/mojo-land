@@ -15,10 +15,10 @@ export default class Gpt {
         content: term, //+'.رد علي بثل هذه الصيغة: #جافا_سكريبت | #الدار_البيضاء | #هاتف_سامسونج'
       },
     ];
-    return await this.gpt(messages);
+    return await this.chat(messages);
   }
 
-  async gpt(messages: any) {
+  async chat(messages: any) {
     const chatCompletion = await this.#openAI.createChatCompletion({
       model: "gpt-3.5-turbo",
       messages,

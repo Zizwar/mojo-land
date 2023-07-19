@@ -2,34 +2,36 @@
 // This file SHOULD be checked into source version control.
 // This file is automatically updated during development when running `dev.ts`.
 
-import * as $0 from "./routes/_app.tsx";
-import * as $1 from "./routes/_middleware.ts";
-import * as $2 from "./routes/api/dev.ts";
-import * as $3 from "./routes/api/getProductByLink.ts";
-import * as $4 from "./routes/api/getStoreById.ts";
-import * as $5 from "./routes/api/searchVector.ts";
-import * as $6 from "./routes/api/send.ts";
-import * as $7 from "./routes/api/sendz.ts";
-import * as $8 from "./routes/api/test.ts";
-import * as $9 from "./routes/index.tsx";
-import * as $10 from "./routes/s/[slug].tsx";
-import * as $11 from "./routes/sa.tsx";
+import * as $0 from "./routes/[slug].tsx";
+import * as $1 from "./routes/_app.tsx";
+import * as $2 from "./routes/_middleware.ts";
+import * as $3 from "./routes/api/dev.ts";
+import * as $4 from "./routes/api/getProductByLink.ts";
+import * as $5 from "./routes/api/getStoreById.ts";
+import * as $6 from "./routes/api/searchVector.ts";
+import * as $7 from "./routes/api/send.ts";
+import * as $8 from "./routes/api/sendz.ts";
+import * as $9 from "./routes/api/test.ts";
+import * as $10 from "./routes/index.tsx";
+import * as $11 from "./routes/s/[slug].tsx";
+import * as $12 from "./routes/sa.tsx";
 import * as $$0 from "./islands/Counter.tsx";
 
 const manifest = {
   routes: {
-    "./routes/_app.tsx": $0,
-    "./routes/_middleware.ts": $1,
-    "./routes/api/dev.ts": $2,
-    "./routes/api/getProductByLink.ts": $3,
-    "./routes/api/getStoreById.ts": $4,
-    "./routes/api/searchVector.ts": $5,
-    "./routes/api/send.ts": $6,
-    "./routes/api/sendz.ts": $7,
-    "./routes/api/test.ts": $8,
-    "./routes/index.tsx": $9,
-    "./routes/s/[slug].tsx": $10,
-    "./routes/sa.tsx": $11,
+    "./routes/[slug].tsx": $0,
+    "./routes/_app.tsx": $1,
+    "./routes/_middleware.ts": $2,
+    "./routes/api/dev.ts": $3,
+    "./routes/api/getProductByLink.ts": $4,
+    "./routes/api/getStoreById.ts": $5,
+    "./routes/api/searchVector.ts": $6,
+    "./routes/api/send.ts": $7,
+    "./routes/api/sendz.ts": $8,
+    "./routes/api/test.ts": $9,
+    "./routes/index.tsx": $10,
+    "./routes/s/[slug].tsx": $11,
+    "./routes/sa.tsx": $12,
   },
   islands: {
     "./islands/Counter.tsx": $$0,

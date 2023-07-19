@@ -34,8 +34,7 @@ form.addEventListener("submit", (e) => {
 
 // deno-lint-ignore require-await
 const fetchThis = async (text) => {
-  const promptz = document.getElementById("promptz") || [];
-  const prompt_user = document.getElementById("prompt_user") || [];
+  const slug = document.getElementById("slug") || [];
   setTimeout(async () => {
     const response = await fetch(`/api/send`, {
       method: "POST",
@@ -45,8 +44,7 @@ const fetchThis = async (text) => {
       body: JSON.stringify({
         prompt: text,
         memory,
-        promptz: promptz.value,
-        prompt_user: prompt_user.value,
+        slug: slug.value,
       }),
     });
 

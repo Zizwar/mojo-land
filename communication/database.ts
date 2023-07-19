@@ -54,8 +54,8 @@ class Database {
       //;
       if (id) query.eq("id", id);
       if (slug) query.eq("slug", slug);
-
-      const { data, error } = await query.textSearch(
+      if(term)
+query.textSearch(
         "products.description,products.name",
         term,
         {
@@ -65,6 +65,7 @@ class Database {
           ts_rank: true,
         }
       );
+      const { data, error } = await query.single();
 
       if (error) {
         ///return error //{error:error.message}
