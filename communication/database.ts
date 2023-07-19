@@ -6,50 +6,14 @@ const supabase = createClient(
 );
 
 class Database {
-  async getStoreById(id: number) {
+  async getPromptBySlug(slug: string) {
     try {
-      /**
-       * ,
-          products(*,
-            products_categories(*),
-            products_attributes(*),
-            products_images(*),
-            products_links(*),
-            products_options(*),
-            products_attributes(*)
-            ),
-          stores_category_associations(*),
-          stores_images(*),
-          stores_links(*),
-          stores_hours(*)
-       */
       const { data, error } = await supabase
-        .from("stores")
-        .select(
-          `* ,
-          products(*,
-            products_categories(*),
-            products_images(*),
-            products_links(*),
-            products_options(*),
-            products_attributes(*)
-            ),
-          stores_category_associations(*),
-          stores_images(*),
-          stores_links(*),
-          stores_hours(*)  `
-        )
-        .eq("id", id)
-        .ilike("products.description", "%book%|game%|deno%");
-      // .limit(13);
-      // console.log({ data });
-
-      // Retrieve other related data using additional queries or subqueries
-
-      // Combine the results as needed
+        .from("prompts")
+        .select(`*`)
+        .eq("slug", slug);
 
       if (error) {
-        ///return error //{error:error.message}
         throw error;
       }
 
@@ -62,36 +26,45 @@ class Database {
       throw error;
     }
   }
-  async searchStoreProduct({id, slug,term}): Promise<any> {
+  async searchStoreProduct({
+    id,
+    slug,
+    term,
+  }: {
+    id: number;
+    slug: string;
+    term: string;
+  }): Promise<any> {
     try {
-      
-      const query = supabase.from("stores")
-        .select(
-          `* ,
+      const query = supabase.from("stores").select(
+        `* ,
+          masks(prompts(prompt,role)),
           products(*,
-            products_categories(name),
-            products_images(alt,src),
-            products_links(url,description),
-            products_options(key,value),
-            products_attributes(key,value)
+            categories:products_categories(name),
+            images:products_images(alt,src),
+            links:products_links(url,description),
+            options:products_options(key,value),
+            attributes:products_attributes(key,value)
             ),
-          stores_category_associations(*),
-          stores_images(alt,src),
-          stores_links(url,description),
-          stores_hours(*)  `
-        )
-        //;
-        if(id)query.eq("id", id);
-        if(slug)query.eq("slug",slug)
+          categories:stores_category_associations(categorie:stores_categories(name)),
+          images:stores_images(alt,src),
+          links:stores_links(url,description),
+          hours:stores_hours(*)  `
+      );
+      //;
+      if (id) query.eq("id", id);
+      if (slug) query.eq("slug", slug);
 
-
-
-    const { data, error } = await query.textSearch("products.description,products.name", term, {
-            config: "english",
-           //  type: "phrase",
-                   desc: true,
-               ts_rank: true,
-               });
+      const { data, error } = await query.textSearch(
+        "products.description,products.name",
+        term,
+        {
+          config: "english",
+          //  type: "phrase",
+          desc: true,
+          ts_rank: true,
+        }
+      );
 
       if (error) {
         ///return error //{error:error.message}

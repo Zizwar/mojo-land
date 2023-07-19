@@ -1,39 +1,36 @@
 export default class PromptChecker {
-  hasNameAfterAtSymbol(website: string, name: string) {
-    const regex = new RegExp(`@${name}\\b`, "i");
-    return regex.test(website);
+  getWebsite(text: string) {
+    const regex = /^(http|https):\/\/([^ "]+)/;
+    const match = regex.exec(text);
+    return match ? match[0] : null;
   }
-
-  hasWebsite(website: string) {
-    const regex = /^(http|https):\/\/[^ "]+$/;
-    return regex.test(website);
+  getBulkWebsites(text: string) {
+    const regex = /(http|https):\/\/([^ "]+)/g;
+    const matches = text.match(regex);
+    return matches ? matches : [];
   }
-
-  hasAnyTextAfterAtSymbol(website: string) {
+  hasAnyTextAfterAtSymbol(text: string) {
     const regex = /@(.+)$/;
-    return regex.test(website);
+    return regex.test(text);
   }
 
-  getNameAfterAtSymbol(website: string) {
-    const regex = /@(.+)$/;
-    const match = regex.exec(website);
+  getNameAfterAtSymbol(text: string) {
+    const regex = /@([^ ]+)/;
+    const match = regex.exec(text);
     return match ? match[1] : null;
   }
 }
 
 const checker = new PromptChecker();
-const website1 = "example.com";
-const website2 = "john@example.com";
-const website3 = "jane@doe@example.com";
+/*const text1 = "example.com";
+const text2 = "john@ example.com";
+const text3 = "jane@doe@example .com fdfg";
 
-console.log(checker.hasNameAfterAtSymbol(website1, "name")); // false
-console.log(checker.hasNameAfterAtSymbol(website2, "john")); // true
-console.log(checker.hasNameAfterAtSymbol(website3, "doe")); // false
 
-console.log(checker.hasWebsite(website1)); 
-console.log(checker.hasWebsite(website2)); 
-console.log(checker.hasWebsite(website3));
+console.log("text1", checker.getNameAfterAtSymbol(text1));
+console.log("text2", checker.getWebsite(text2));
+console.log("text3", checker.getWebsite(text3));
 
-console.log(checker.hasAnyTextAfterAtSymbol(website1)); // false
-console.log(checker.hasAnyTextAfterAtSymbol(website2)); // false
-console.log(checker.hasAnyTextAfterAtSymbol(website3)); // true
+*/
+const text4 = "http://jane@doe@example.com dfg";
+console.log("text4", checker.getBulkWebsites(text4));
