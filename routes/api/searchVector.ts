@@ -13,8 +13,8 @@ export const handler: Handlers = {
     console.log({id,slug,term});
 
     const data = await db?.searchStoreProduct({id,term,slug})
-    
-    return new Response(JSON.stringify(data), {
+    const promptInstial = await db?.getPromptBySlug("intial-filter")
+    return new Response(JSON.stringify({promptInstial,data}), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });

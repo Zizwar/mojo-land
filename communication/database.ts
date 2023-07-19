@@ -10,7 +10,7 @@ class Database {
     try {
       const { data, error } = await supabase
         .from("prompts")
-        .select(`*`)
+        .select("role, content")
         .eq("slug", slug);
 
       if (error) {
@@ -38,7 +38,7 @@ class Database {
     try {
       const query = supabase.from("stores").select(
         `* ,
-          masks(prompts(prompt,role)),
+          masks(prompts(content,role)),
           products(*,
             categories:products_categories(name),
             images:products_images(alt,src),

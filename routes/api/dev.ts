@@ -1,6 +1,6 @@
 //import database from "../../communication/database.ts";
 
-import { getPraserUrl } from "../../cheerio.ts";
+import { getPraserUrl } from "@/outils/cheerio.ts";
 
 import { Handlers } from "$fresh/server.ts";
 export const handler: Handlers = {

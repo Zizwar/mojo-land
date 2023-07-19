@@ -21,16 +21,4 @@ export default class PromptChecker {
   }
 }
 
-const checker = new PromptChecker();
-/*const text1 = "example.com";
-const text2 = "john@ example.com";
-const text3 = "jane@doe@example .com fdfg";
 
-
-console.log("text1", checker.getNameAfterAtSymbol(text1));
-console.log("text2", checker.getWebsite(text2));
-console.log("text3", checker.getWebsite(text3));
-
-*/
-const text4 = "http://jane@doe@example.com dfg";
-console.log("text4", checker.getBulkWebsites(text4));
