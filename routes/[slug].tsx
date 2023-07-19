@@ -4,7 +4,7 @@ export default function Store({ data }: any) {
     name,
     slug,
     images,
-    logo,
+    logo="/images/logo.png",
     prompt_user = [],
     prompt = [],
   } = data;
@@ -38,7 +38,7 @@ export default function Store({ data }: any) {
                 <div class="chat-container">
                   <div class="user-bar">
                     <div class="avatar">
-                      <img src={logo} alt="Avatar" />
+                      <img src={logo || "/images/logo.png"} alt="Avatar" />
                     </div>
                     <div class="name">
                       <span>{name}</span>
@@ -122,7 +122,7 @@ export async function handler(
   const data = await db?.searchStoreProduct({ slug });
 
 
-  const {name,image=[],logo="/images/logo.png"} = data;
+  const {name,image=[],logo} = data;
   console.log({ slug ,name,image,logo});
   const response = await ctx.render({ slug ,name,image,logo});
   return response;
