@@ -17,8 +17,17 @@ export const handler: Handlers = {
           ...stores
         } = await db.searchStoreProduct({ slug: data.slug });
         products.reverse().length = 10;
-        console.log({ head, stores, products });
-        content = JSON.stringify({ head, stores, products });
+
+        let headStore;
+        if (head.content) {
+          headStore = head.content.replace(
+            /{{description}}/g,
+            stores.description
+          );
+          headStore = headStore.replace(/{{name}}/g, stores.name);
+        }
+        console.log({ headStore, stores });
+        content = JSON.stringify({ headStore, stores, products });
       }
       const messages = [
         { role: "system", content },

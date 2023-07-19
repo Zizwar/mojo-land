@@ -38,6 +38,7 @@ class Database {
     try {
       const query = supabase.from("stores").select(
         `* ,
+          head(*),
           masks(prompts(content,role)),
           products(*,
             categories:products_categories(name),
