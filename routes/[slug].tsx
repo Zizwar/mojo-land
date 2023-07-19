@@ -122,7 +122,7 @@ export async function handler(
   const data = await db?.searchStoreProduct({ slug });
 
 
-  const {name,image=[],logo} = data;
+  const {name,image=[],logo="/images/logo.png"} = data;
   console.log({ slug ,name,image,logo});
   const response = await ctx.render({ slug ,name,image,logo});
   return response;
