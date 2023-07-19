@@ -11,7 +11,6 @@ export const handler: Handlers = {
     // if(!link) return console.log("nlo link",link);
 
     const praser = await getPraserUrl(link);
-    i;
 
     return new Response(JSON.stringify(praser), {
       status: 200,
