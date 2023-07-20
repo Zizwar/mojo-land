@@ -9,7 +9,7 @@ export default class PromptChecker {
     const matches = text.match(regex);
     return matches ? matches : [];
   }
-  hasAnyTextAfterAtSymbol(text: string) {
+  hasTextAfterAtSymbol(text: string) {
     const regex = /@(.+)$/;
     return regex.test(text);
   }
@@ -19,6 +19,14 @@ export default class PromptChecker {
     const match = regex.exec(text);
     return match ? match[1] : null;
   }
+  getWebsiteIfHasCRUD(crud: string, text: string) {
+    if (this.hasTextAfterAtSymbol(crud)) return this.getWebsite(text);
+    return null;
+  }
+
+  getJsonInText(text: string) {
+    const regex = /{([^}]*)}/g;
+    const matches = Array.from(text.matchAll(regex));
+    return matches.map((match) => JSON.parse(match[0]));
+  }
 }
-
-
