@@ -2,7 +2,7 @@ import { Handlers } from "$fresh/server.ts";
 
 export const handler: Handlers = {
   async POST(req, ctx): Promise<Response> {
-    const { gpt, db } = ctx.state;
+    const { gpt, db,filter } = ctx.state;
     try {
       const data = await req.json();
 
@@ -10,13 +10,30 @@ export const handler: Handlers = {
 
       let content = SystemRoleContenet;
       if (data.slug) {
-        
+         const intialFilter = filter.messages.INTIAL;
+        const messages = [
+          { role: "system", content:intialFilter },
+          {
+            role: "user",
+            content:data.prompt
+          }
+        ];
+        const myBeJsonResault = await gpt.chat(messages);
+
+        const json_ = filter.matchJsonInText(myBeJsonResault)
+
+//        console.log("store==",json_.store,"product==",json_.product,{json_})
+//const term = json_.product || null
+const term = json_.product || null
+    
+// console.log({messages,jsonResault})
+        ///
         const {
           head,
           masks: _masks,
           products = [],
           ...stores
-        } = await db.searchStoreProduct({ slug: data.slug });
+        } = await db.searchStoreProduct({ slug: data.slug, term });
         products.reverse().length = 10;
 
         let headStore;
@@ -27,7 +44,7 @@ export const handler: Handlers = {
           );
           headStore = headStore.replace(/{{name}}/g, stores.name);
         }
-        console.log({ headStore, stores });
+        //console.log({ headStore, stores });
         content = JSON.stringify({ headStore, stores, products });
       }
       const messages = [
