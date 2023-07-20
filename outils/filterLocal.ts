@@ -77,6 +77,6 @@ const matcher = {
   tuple: "((.*?))",
   array: "[(.*?)]",
   src: ' src="(.*?)" ',
-  product: 'product:"(.*?)"',
+  product: 'product: "(.*?)"',
   custom: (_r) => _r,
 };

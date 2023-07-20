@@ -20,12 +20,14 @@ export const handler: Handlers = {
         ];
         const myBeJsonResault = await gpt.chat(messages);
 
-        const json_ = filter.matchJsonInText(myBeJsonResault)
+       // const json_ = filter.matchJsonInText(myBeJsonResault)
 
 //        console.log("store==",json_.store,"product==",json_.product,{json_})
 //const term = json_.product || null
-const term = json_.product || null
-    
+const key = "product"
+const product = filter.regexIno(myBeJsonResault)
+const term = product ? product[0] : null || null
+    console.log({product,myBeJsonResault})
 // console.log({messages,jsonResault})
         ///
         const {
