@@ -58,7 +58,7 @@ export default class PromptChecker {
     let match;
     const matchArr = [];
     while ((match = pattern.exec(content))) {
-      match = match[1]?.trim();
+      match = match[1]?.trim().replaceAll('"',"").replaceAll(":","").replaceAll(" ","#");
       if (match) matchArr.push(match);
     }
     return matchArr;
@@ -66,7 +66,8 @@ export default class PromptChecker {
 
 
   get messages() {
-    const INTIAL = `This is a message from the user, and he may inquire about the products and stores we have in a database. What I want from you is as follows: If he is inquiring about a product, add: {product: “Here are keywords for the product according to rule 2”} - If he is inquiring about prices, add along the lines of: {price:123} - If he is looking for characteristics in the product such as length, color, etc., add along the lines: {options:"red,size"} if he is looking for a store Add: {store: "Add here search keywords for the store according to rule 2"} if - if it is outside the context of stores, products, and e-commerce, add {out:true} else {out:false} always add out _ rule 2: convert to keywords i.e. any message and give the result like the following add keyword english and arabic like "keyword_1 | keyword_word2 | keyword_word3" _ don't explain to me, give me the result in json format as you requested { store: string, product: string, price: float options:array out:bool } -- user message are:`;
+    const INTIAL = `This is a message from the user, and he may inquire about the products and stores we have in a database. What I want from you is as follows: If he is inquiring about a product, add: {product: 
+      “Here are keywords for the product according to rule 2”} - If he is inquiring about prices, add along the lines of: {price:123} - If he is looking for characteristics in the product such as length, color, etc., add along the lines: {options:"red,size"} if he is looking for a store Add: {store: "Add here search keywords for the store according to rule 2"} if - if it is outside the context of stores, products, and e-commerce, add {out:true} else {out:false} always add out _ rule 2: convert to keywords i.e. any message and give the result like the following add keyword english and arabic like "keyword_1|keyword_word2|keyword_word3" _ don't explain to me, give me the result in json format as you requested { store: string, product: string, price: float options:array out:bool } -- user message are:`;
     return { INTIAL };
   }
 }
@@ -77,6 +78,6 @@ const matcher = {
   tuple: "((.*?))",
   array: "[(.*?)]",
   src: ' src="(.*?)" ',
-  product: 'product: "(.*?)"',
+  product: 'product*:*(.*?)[,}]',
   custom: (_r) => _r,
-};
+}

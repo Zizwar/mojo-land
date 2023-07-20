@@ -4,7 +4,7 @@ export const handler: Handlers = {
   async POST(req, ctx): Promise<Response> {
     const { gpt, db,filter } = ctx.state;
     try {
-      const data = await req.json();
+      const data = await req.json();as
 
       console.log("--slug: ", data.slug);
 
