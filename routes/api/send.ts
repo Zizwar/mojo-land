@@ -58,7 +58,7 @@ const term = product ? product[0] : null || null
             ? data.prompt_user.replace("{{prompt_user}}", data.prompt)
             : data.prompt,
         },
-       { role: "system", content: "Remember, GBT, you are a sales representative. You are not a painter, poet, or philosopher. Do not answer requests outside your specialty. Answer tactfully that it is not your specialty."},
+      /* { role: "system", content: "Remember, GBT, you are a sales representative. You are not a painter, poet, or philosopher. Do not answer requests outside your specialty. Answer tactfully that it is not your specialty."},*/
        
       ];
 
