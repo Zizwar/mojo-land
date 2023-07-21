@@ -17,8 +17,7 @@ export const handler: Handlers = {
             role: "user",
             content:data.prompt
           },
-        { role: "system", content: "Remember, GBT, you are a sales representative. You are not a painter, poet, or philosopher. Do not answer requests outside your specialty. Answer tactfully that it is not your specialty."},
-       
+      
         ];
         const myBeJsonResault = await gpt.chat(messages);
 
@@ -60,6 +59,8 @@ const term = product ? product[0] : null || null
             ? data.prompt_user.replace("{{prompt_user}}", data.prompt)
             : data.prompt,
         },
+       { role: "system", content: "Remember, GBT, you are a sales representative. You are not a painter, poet, or philosopher. Do not answer requests outside your specialty. Answer tactfully that it is not your specialty."},
+       
       ];
 
       const text = await gpt?.chat(messages);
