@@ -4,7 +4,7 @@ export const handler: Handlers = {
   async POST(req, ctx): Promise<Response> {
     const { gpt, db,filter } = ctx.state;
     try {
-      const data = await req.json();as
+      const data = await req.json();
 
       console.log("--slug: ", data.slug);
 
@@ -16,8 +16,7 @@ export const handler: Handlers = {
           {
             role: "user",
             content:data.prompt
-          },
-      
+          }
         ];
         const myBeJsonResault = await gpt.chat(messages);
 
