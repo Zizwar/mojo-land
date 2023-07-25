@@ -70,7 +70,26 @@ return new Response(text, {
         status: 200,
       });
 }
+//
+// Define the dynamic function using eval
+const dynamicFunction = eval(`
+    async function dynamicFunction(gpt, messages) {
+        const text = await gpt?.chat(messages);
+        console.log("eval", text);
+        return new Response(text, {
+            status: 200,
+        });
+    }
+`);
 
+// Call the dynamic function with gpt and messages
+const response = await dynamicFunction(gpt, messages);
+
+// Return the response
+return response;
+
+//
+/*
 const dynamicFunction = new Function('text', `
   console.log("dynamic function", text);
   return new Response(text, {
@@ -88,6 +107,7 @@ const text = await gpt?.chat(messages);
 return returnThis(text)
 
 });`);
+*/
 return;
     } catch (error) {
       console.error("Error occurred while processing request: ", error);
