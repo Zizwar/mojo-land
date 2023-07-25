@@ -83,10 +83,10 @@ const dynamicFunction = eval(`
 `);
 
 // Call the dynamic function with gpt and messages
-const response = await dynamicFunction(gpt, messages);
+return await dynamicFunction(gpt, messages);
 
 // Return the response
-return response;
+//return response;
 
 //
 /*
