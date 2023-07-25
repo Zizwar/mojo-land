@@ -61,9 +61,9 @@ const term = product ? product[0] : null || null
       /* { role: "system", content: "Remember, GBT, you are a sales representative. You are not a painter, poet, or philosopher. Do not answer requests outside your specialty. Answer tactfully that it is not your specialty."},*/
        
       ];
-eval(`
+//eval(`
       const text = await gpt?.chat(messages);
-`);
+//`);
 
       return new Response(text, {
         status: 200,
