@@ -64,10 +64,12 @@ const term = product ? product[0] : null || null
 //eval(`
       const text = await gpt?.chat(messages);
 //`);
-
+eval(`
       return new Response(text, {
         status: 200,
       });
+`);
+return;
     } catch (error) {
       console.error("Error occurred while processing request: ", error);
       return new Response("Something went wrong!", { status: 500 });
