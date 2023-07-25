@@ -71,7 +71,13 @@ return new Response(text, {
       });
 }
 
- return eval(`const text = await gpt?.chat(messages); return returnThis(text)`);
+ return eval(`
+
+        (async () => {
+const text = await gpt?.chat(messages); 
+return returnThis(text)
+
+});`);
 return;
     } catch (error) {
       console.error("Error occurred while processing request: ", error);
