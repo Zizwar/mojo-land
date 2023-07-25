@@ -61,6 +61,27 @@ const term = product ? product[0] : null || null
       /* { role: "system", content: "Remember, GBT, you are a sales representative. You are not a painter, poet, or philosopher. Do not answer requests outside your specialty. Answer tactfully that it is not your specialty."},*/
        
       ];
+const dynamicFunction = new Function("gpt", "messages", `
+  return (async () => {
+    const text = await gpt?.chat(messages);
+
+    console.log("eval", text);
+    const response =  new Response(text, {
+      status: 200,
+    });
+    return response;
+  })();
+`);
+
+// Call gpt?.chat(messages)
+//const text = await gpt?.chat(messages);
+
+// Call the dynamic function with the 'gpt' and 'messages' variables
+const response = await dynamicFunction(gpt, messages);
+
+// Return the response
+return response;
+//
 //eval(`
      const text = await gpt?.chat(messages);
 //`);
@@ -70,7 +91,7 @@ return new Response(text, {
         status: 200,
       });
 }
-//
+/*
 // Define the dynamic function using eval
 const dynamicFunction = eval(`
     async function dynamicFunction(gpt, messages) {
@@ -89,7 +110,7 @@ return await dynamicFunction(gpt, messages);
 //return response;
 
 //
-/*
+
 const dynamicFunction = new Function('text', `
   console.log("dynamic function", text);
   return new Response(text, {
