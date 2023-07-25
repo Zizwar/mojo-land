@@ -71,10 +71,7 @@ return new Response(text, {
       });
 }
 
- //eval(`
-  //  return  
-returnThis(text)
-//`);
+ return eval(`returnThis(text)`);
 return;
     } catch (error) {
       console.error("Error occurred while processing request: ", error);
