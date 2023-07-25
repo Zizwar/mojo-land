@@ -71,7 +71,7 @@ return new Response(text, {
       });
 }
 
-return eval(`
+ eval(`
     return  returnThis(text)
 `);
 return;
