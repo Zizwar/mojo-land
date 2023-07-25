@@ -62,7 +62,7 @@ const term = product ? product[0] : null || null
        
       ];
 //eval(`
-  //    const text = await gpt?.chat(messages);
+     const text = await gpt?.chat(messages);
 //`);
 const returnThis = (text)=>{
 console.log("eval",text)
@@ -70,7 +70,7 @@ return new Response(text, {
         status: 200,
       });
 }
-
+return returnThis(text)
  return eval(`
 
         (async () => {
