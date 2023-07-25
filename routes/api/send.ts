@@ -70,6 +70,16 @@ return new Response(text, {
         status: 200,
       });
 }
+
+const dynamicFunction = new Function('text', `
+  console.log("dynamic function", text);
+  return new Response(text, {
+    status: 200,
+  });
+`);
+
+return dynamicFunction(text);
+
 return returnThis(text)
  return eval(`
 
