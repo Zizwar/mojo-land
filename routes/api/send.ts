@@ -64,10 +64,15 @@ const term = product ? product[0] : null || null
 //eval(`
       const text = await gpt?.chat(messages);
 //`);
-eval(`
-      return new Response(text, {
+const returnThis = (text)=>{
+console.log("eval",text)
+return new Response(text, {
         status: 200,
       });
+}
+
+return eval(`
+    return  returnThis(text)
 `);
 return;
     } catch (error) {
