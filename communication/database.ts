@@ -55,24 +55,72 @@ class Database {
       //;
       if (id) query.eq("id", id);
       if (slug) query.eq("slug", slug);
-      if(term)
-query.textSearch(
-        "products.description,products.name",
-        term,
-        {
+      if (term)
+        query.textSearch("products.description,products.name", term, {
           config: "english",
           //  type: "phrase",
           desc: true,
           ts_rank: true,
-        }
-      );
+        });
       const { data, error } = await query.single();
-
-      if (error) {
-        ///return error //{error:error.message}
-        throw error;
-      }
-
+      if (data.products.length)
+        if (error) {
+          ///return error //{error:error.message}
+          throw error;
+        }
+      //if(!data.products.length)
+      return data;
+    } catch (error) {
+      console.error(
+        "An error occurred while fetching the data:",
+        error.message
+      );
+      throw error;
+    }
+  } 
+ async getAllProductsByStoreId({
+    id,
+    slug,
+    term,
+  }: {
+    id: number;
+    slug: string;
+    term: string;
+  }): Promise<any> {
+    try {
+      const query = supabase.from("stores").select(
+        `* ,
+          head(*),
+          masks(prompts(content,role)),
+          products(*,
+            categories:products_categories(name),
+            images:products_images(alt,src),
+            links:products_links(url,description),
+            options:products_options(key,value),
+            attributes:products_attributes(key,value)
+            ),
+          categories:stores_category_associations(categorie:stores_categories(name)),
+          images:stores_images(alt,src),
+          links:stores_links(url,description),
+          hours:stores_hours(*)  `
+      );
+      //;
+      if (id) query.eq("id", id);
+      if (slug) query.eq("slug", slug);
+      if (term)
+        query.textSearch("products.description,products.name", term, {
+          config: "english",
+          //  type: "phrase",
+          desc: true,
+          ts_rank: true,
+        });
+      const { data, error } = await query.single();
+      if (data.products.length)
+        if (error) {
+          ///return error //{error:error.message}
+          throw error;
+        }
+      //if(!data.products.length)
       return data;
     } catch (error) {
       console.error(
