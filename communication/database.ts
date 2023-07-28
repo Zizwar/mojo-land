@@ -77,8 +77,8 @@ class Database {
       );
       throw error;
     }
-  } 
- async getAllProductsByStoreId({
+  }
+  async getAllProductsByStoreId({
     id,
     slug,
     term,
@@ -178,6 +178,17 @@ products_links(*)
       );
       throw error;
     }
+  }
+  get supabase() {
+    return supabase;
+  }
+  async endpoint(end) {
+    const { data, error } = await supabase
+      .from("mojos")
+      .select("function")
+      .eq("endpoint", end)
+    if (error) throw error;
+    return data[0]
   }
   async getStoreBySlug(slug: string) {
     try {

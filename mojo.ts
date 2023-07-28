@@ -1,74 +1,36 @@
 export default class Mojo {
   async render(req, ctx, method) {
     const { gpt, db, filter } = ctx.state;
+
+    const url = new URL(req.url);
+    const query = (q) => url.searchParams.get(q);
+
     try {
-      const data = await req.json();
+      let { data: mojoLands, error } = await db.supabase
+  .from('mojos')
+  .select('function')
+     .eq("endpoint", "intial")
+        .single();
+      if (error) throw error;
+      
+    // const mojoLands = await db.endpoint("intial")
 
-      console.log("--slug: ", data.slug);
+      console.log("okkk", mojoLands);
+      const mojoLand = mojoLands?.function
 
-      let content = SystemRoleContenet;
-      if (data.slug) {
-        const intialFilter = filter.messages.INTIAL;
-        const messages = [
-          { role: "system", content: intialFilter },
-          {
-            role: "user",
-            content: data.prompt,
-          },
-        ];
-        const myBeJsonResault = await gpt.chat(messages);
+      const body = await req.json();
 
-        // const json_ = filter.matchJsonInText(myBeJsonResault)
+      const content = SystemRoleContenet;
 
-        //        console.log("store==",json_.store,"product==",json_.product,{json_})
-        //const term = json_.product || null
-        const key = "product";
-        const product = filter.regexIno(myBeJsonResault);
-        const term = product ? product[0] : null || null;
-        console.log({ product, myBeJsonResault });
-        // console.log({messages,jsonResault})
-        ///
-        const {
-          head,
-          masks: _masks,
-          products = [],
-          ...stores
-        } = await db.searchStoreProduct({ slug: data.slug, term });
-        products.reverse().length = 10;
-
-        let headStore;
-        if (head.content) {
-          headStore = head.content.replace(
-            /{{description}}/g,
-            stores.description
-          );
-          headStore = headStore.replace(/{{name}}/g, stores.name);
-        }
-        //console.log({ headStore, stores });
-        content = JSON.stringify({ headStore, stores, products });
-      }
-      const messages = [
-        { role: "system", content },
-        //...data.memory.slice(-3, -1),
-        {
-          role: "user",
-          content: data.prompt_user
-            ? data.prompt_user.replace("{{prompt_user}}", data.prompt)
-            : data.prompt,
-        },
-        /* { role: "system", content: "Remember, GBT, you are a sales representative. You are not a painter, poet, or philosopher. Do not answer requests outside your specialty. Answer tactfully that it is not your specialty."},*/
-      ];
       const dynamicFunction = new Function(
         "mojo",
         `
-            const {gpt, messages} = mojo;
-            //
+       const {gpt,filter,body,db} = mojo;
+       let {content}=mojo
         return (async () => {
-        const text = await mojo.gpt?.chat(messages);
-    
-        console.log("eval this");
-       
-        return mojo.text(text);
+          //
+          ${mojoLand}
+      //
       })();
     `
       );
@@ -84,57 +46,28 @@ export default class Mojo {
           status: 200,
         });
       };
-      const response = await dynamicFunction({ gpt, messages,json,text });
-
-      return response;
-      //
-
-
-      /*
-    // Define the dynamic function using eval
-    const dynamicFunction = eval(`
-        async function dynamicFunction(gpt, messages) {
-            const text = await gpt?.chat(messages);
-            console.log("eval", text);
-            return new Response(text, {
-                status: 200,
-            });
-        }
-    `);
-    
-    // Call the dynamic function with gpt and messages
-    return await dynamicFunction(gpt, messages);
-    
-    // Return the response
-    //return response;
-    
-    //
-    
-    const dynamicFunction = new Function('text', `
-      console.log("dynamic function", text);
-      return new Response(text, {
-        status: 200,
-      });
-    `);
-    
-    return dynamicFunction(text);
-    
-    return returnThis(text)
-     return eval(`
-    
-            (async () => {
-    const text = await gpt?.chat(messages); 
-    return returnThis(text)
-    
-    });`);
-    */
-      return;
+      try {
+        return await dynamicFunction({
+          gpt,
+          body,
+          filter,
+          json,
+          text,
+          query,
+          content,
+          db,
+        });
+      } catch (error) {
+        console.error("Error In FunctionDynamique Mojo.Land: ", error);
+        return new Response("Something went wrong!", { status: 500 });
+      }
     } catch (error) {
       console.error("Error occurred while processing request: ", error);
       return new Response("Something went wrong!", { status: 500 });
     }
   }
 }
+
 const SystemRoleContenet = `You are my assistant and your name is name is "ملسون" in Arabic or "Mlsoon" ,your description is A skilled sales representative, marketer, and support agent for Musical Dose Store ("متجر جرعة فن" in Arabic). An intelligent assistant, not a human or AI entity.You are an assistant named Mlsoon. Your purpose is to provide customers with information and support related to Musical Dose Store, and its products. You must respond concisely and only within the scope of the provided data. You should avoid drawing information from the internet or other external sources, and you should not identify yourself as a chatbot or artificial intelligence. Apologize and gently decline to answer questions that are outside of your prescribed scope of knowledge.
 Store Description:"Musical dose Store"("متجر جرعة فن" in Arabic) specializes in selling high-quality musical instruments, we provide many exclusive products at competitive prices, we are the exclusive distributors of Oud Techniques "oud tech" ("تقنيات العود" in Arabic) products.Starting from 1988 with a passion for music, which has turned over time into a permanent business, we deal with many international sources to provide the best products such as Egypt, Turkey, Germany and the USA.أعواد ("ouds" in english) ,عود ("oud" in English)As well as for many international brands such as Oud Technologies, Aurora  ( in Arabic "أوتار أوروا"), Pyramids ( in Arabic "بيراميد"), La Bella  ( in Arabic "لابيلا").The store is supervised by Saudi Ouds maker Ali Al-Malki ("علي المالكي" in Arabic), who has training in a number of leading luthiers around the world. We have a maintenance workshop for musical instruments that specializes in the maintenance of Ouds only, and soon more instruments.Our prices for all products are competitive, whether basic machines or accessories and we have many fans because we provide very excellent customer service.We offer reliability, warranty, transparency, and clarity of prices, and we offer commissions and support for all payment options, including installments through Tamara ("شركة تمارا" in Arabic), and we have many options in one place. We work daily except Sunday Working hours are from 4 pm to 11 pm,Address: RFRA4574, 4574 Ubadah Bin Al-Samit, 7153, Al-Rawdah District, Riyadh 13213 ("RFRA4574، 4574 عبادة بن الصامت، 7153، حي الروضة، الرياض 13213" in Arabic),Website https://musicaldose88.com, contact number and WhatsApp 966565581869, social networking accounts https://www.instagram.com/musicaldose88/,https://www.tiktok.com/@musicaldose88,https://twitter.com/musicaldose88.We do not represent Oud Techniques "oud tech" ("تقنيات العود" in Arabic) or represent its owner oud Abu Fares ("أبو فارس" in Arabic)   the musician, great teacher the founder of the Oud Techniques company.We Deliver to the world, Delivery price varies, but it starts from 50 Saudi riyals. You can return any oud you bought in 3 days but provided that it is in the same condition, it is not possible to retrieve any instrument's strings after unboxing them from their envelope, we always try to resolve disputes amicably.
 The products data is: csv --Name,Description,URL,Image URL,Review,Price
