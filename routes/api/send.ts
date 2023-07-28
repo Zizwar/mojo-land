@@ -1,139 +1,16 @@
 import { Handlers } from "$fresh/server.ts";
-
+import Mojo from "@/mojo.ts";
+const mojo = new Mojo();
 export const handler: Handlers = {
   async POST(req, ctx): Promise<Response> {
-    const { gpt, db,filter } = ctx.state;
-    try {
-      const data = await req.json();
+    return await mojo.render(req, ctx, "post");
+  },
+  async GET(req, ctx): Promise<Response> {
+    return await mojo.render(req, ctx, "get");
+  },
 
-      console.log("--slug: ", data.slug);
-
-      let content = SystemRoleContenet;
-      if (data.slug) {
-         const intialFilter = filter.messages.INTIAL;
-        const messages = [
-          { role: "system", content:intialFilter },
-          {
-            role: "user",
-            content:data.prompt
-          }
-        ];
-        const myBeJsonResault = await gpt.chat(messages);
-
-       // const json_ = filter.matchJsonInText(myBeJsonResault)
-
-//        console.log("store==",json_.store,"product==",json_.product,{json_})
-//const term = json_.product || null
-const key = "product"
-const product = filter.regexIno(myBeJsonResault)
-const term = product ? product[0] : null || null
-    console.log({product,myBeJsonResault})
-// console.log({messages,jsonResault})
-        ///
-        const {
-          head,
-          masks: _masks,
-          products = [],
-          ...stores
-        } = await db.searchStoreProduct({ slug: data.slug, term });
-        products.reverse().length = 10;
-
-        let headStore;
-        if (head.content) {
-          headStore = head.content.replace(
-            /{{description}}/g,
-            stores.description
-          );
-          headStore = headStore.replace(/{{name}}/g, stores.name);
-        }
-        //console.log({ headStore, stores });
-        content = JSON.stringify({ headStore, stores, products });
-      }
-      const messages = [
-        { role: "system", content },
-        //...data.memory.slice(-3, -1),
-        {
-          role: "user",
-          content: data.prompt_user
-            ? data.prompt_user.replace("{{prompt_user}}", data.prompt)
-            : data.prompt,
-        },
-      /* { role: "system", content: "Remember, GBT, you are a sales representative. You are not a painter, poet, or philosopher. Do not answer requests outside your specialty. Answer tactfully that it is not your specialty."},*/
-       
-      ];
-const dynamicFunction = new Function("gpt", "messages", `
-  return (async () => {
-    const text = await gpt?.chat(messages);
-
-    console.log("eval", text);
-    const response =  new Response(text, {
-      status: 200,
-    });
-    return response;
-  })();
-`);
-
-// Call gpt?.chat(messages)
-//const text = await gpt?.chat(messages);
-
-// Call the dynamic function with the 'gpt' and 'messages' variables
-const response = await dynamicFunction(gpt, messages);
-
-// Return the response
-return response;
-//
-//eval(`
-     const text = await gpt?.chat(messages);
-//`);
-const returnThis = (text)=>{
-console.log("eval",text)
-return new Response(text, {
-        status: 200,
-      });
-}
-/*
-// Define the dynamic function using eval
-const dynamicFunction = eval(`
-    async function dynamicFunction(gpt, messages) {
-        const text = await gpt?.chat(messages);
-        console.log("eval", text);
-        return new Response(text, {
-            status: 200,
-        });
-    }
-`);
-
-// Call the dynamic function with gpt and messages
-return await dynamicFunction(gpt, messages);
-
-// Return the response
-//return response;
-
-//
-
-const dynamicFunction = new Function('text', `
-  console.log("dynamic function", text);
-  return new Response(text, {
-    status: 200,
-  });
-`);
-
-return dynamicFunction(text);
-
-return returnThis(text)
- return eval(`
-
-        (async () => {
-const text = await gpt?.chat(messages); 
-return returnThis(text)
-
-});`);
-*/
-return;
-    } catch (error) {
-      console.error("Error occurred while processing request: ", error);
-      return new Response("Something went wrong!", { status: 500 });
-    }
+  async DELETE(req, ctx): Promise<Response> {
+    return await mojo.render(req, ctx, "delete");
   },
 };
 //
