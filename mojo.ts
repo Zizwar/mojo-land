@@ -64,35 +64,32 @@ export default class Mojo {
             const {gpt, messages} = mojo;
             //
         return (async () => {
-        const text = await gpt?.chat(messages);
+        const text = await mojo.gpt?.chat(messages);
     
-        console.log("eval", text);
-        const response =  new Response(text, {
-          status: 200,
-        });
-        return response;
+        console.log("eval this");
+       
+        return mojo.text(text);
       })();
     `
       );
-
-      // Call gpt?.chat(messages)
-      //const text = await gpt?.chat(messages);
-
-      // Call the dynamic function with the 'gpt' and 'messages' variables
-      const response = await dynamicFunction({ gpt, messages });
-
-      // Return the response
-      return response;
+      const json = (data) => {
+        return new Response(JSON.stringify(data), {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        });
+      };
       //
-      //eval(`
-      const text = await gpt?.chat(messages);
-      //`);
-      const returnThis = (text) => {
-        console.log("eval", text);
+      const text = (text) => {
         return new Response(text, {
           status: 200,
         });
       };
+      const response = await dynamicFunction({ gpt, messages,json,text });
+
+      return response;
+      //
+
+
       /*
     // Define the dynamic function using eval
     const dynamicFunction = eval(`
