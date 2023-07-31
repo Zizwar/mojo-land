@@ -1,3 +1,5 @@
+import { Statement } from "https://deno.land/x/ts_morph@17.0.1/ts_morph.js";
+
 export default class Mojo {
   async render(req, ctx, method) {
     const { gpt, db, filter } = ctx.state;
@@ -5,6 +7,7 @@ export default class Mojo {
     const url = new URL(req.url);
     const query = (q) => url.searchParams.get(q);
 
+    const body = await req.json();
     const json = (data: any, status = 200) => {
       return new Response(JSON.stringify(data), {
         status,
@@ -42,20 +45,20 @@ export default class Mojo {
     };
     //get data endpoint in db
     try {
-      let { data: mojoLands, error } = await db.supabase
+      let { data: mojoData, error } = await db.supabase
         .from("mojos")
-        .select("function")
-        .eq("endpoint", "intial")
+        .select("*")
+        .eq("endpoint", body.endpoint || "intial")
+        //  .eq("is_active",true)
         .single();
       if (error) throw error;
 
       // const mojoLands = await db.endpoint("intial")
 
-      //console.log("okkk", mojoLands);
-      const methods = mojoLands.method?.split(",")?.trim() || [];
-      const body = await req.json();
-      if (/*methods?.includes("function")*/true) {
-        const codeFunction = mojoLands?.function;
+      //  console.log("okkk", mojoData);
+      //   const methods = mojoData.method?.split(",")?.trim() || [];
+      if (mojoData.method === "function") {
+        const codeFunction = mojoData?.function;
         const content = SystemRoleContenet;
 
         const dynamicFunction = new Function(
@@ -90,9 +93,60 @@ export default class Mojo {
             error,
             log: "Error In FunctionDynamique Mojo.Land",
           });
-          return new Response("Something went wrong!", { status: 500 });
+          return json({ error: "Something went wrong!" }, 500);
         }
       }
+      //add
+      if (mojoData.method === "create") {
+        body.insert.user_id = 1;
+        let { data = [], error } = await db.supabase
+          .from(mojoData.table)
+          .insert(body.insert)
+          .select("id");
+
+        if (error) throw error;
+        //  return json({error:"Something went wrong!"+error.message}, 500);
+        return json({ id: data.id });
+      }
+      //get
+      if (mojoData.method === "read") {
+        //body.insert.user_id = 1;
+        let { data = [], error } = await db.supabase
+          .from(mojoData.table)
+          .select(mojoData.select);
+
+        if (error) throw error;
+        //  return json({error:"Something went wrong!"+error.message}, 500);
+        return json(data);
+      }
+//update
+if (mojoData.method === "update") {
+  //body.insert.user_id = 1;
+  let { data = [], error } = await db.supabase
+    .from(mojoData.table)
+    .update(body.update)
+    .eq("id",query("id"))
+    .select();
+
+  if (error) throw error;
+  //  return json({error:"Something went wrong!"+error.message}, 500);
+  return json(data);
+}
+//update
+if (mojoData.method === "delete") {
+  //body.insert.user_id = 1;
+  let { data = [], error } = await db.supabase
+    .from(mojoData.table)
+    .delete()
+    .eq("id",query("id"))
+   // .eq("user_id",ctx.state.user_id )
+    .select();
+
+  if (error) throw error;
+  //  return json({error:"Something went wrong!"+error.message}, 500);
+  return json(data);
+}
+
     } catch (error) {
       console.error("Error occurred while processing request: ", error);
       await log({
