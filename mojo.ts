@@ -5,66 +5,106 @@ export default class Mojo {
     const url = new URL(req.url);
     const query = (q) => url.searchParams.get(q);
 
+    const json = (data: any, status = 200) => {
+      return new Response(JSON.stringify(data), {
+        status,
+        headers: { "Content-Type": "application/json" },
+      });
+    };
+    //
+    const text = (text: string, status = 200) => {
+      return new Response(text, {
+        status,
+      });
+    };
+    //set logger
+    const log = async ({
+      status,
+      module = "mojo",
+      action = "log",
+      error: _error,
+      log,
+    }) => {
+      if (_error) action = "error";
+      try {
+        const { error } = await db.supabase
+          .from("logs")
+          .insert({ status, module, action, error: _error, log });
+
+        if (error) {
+          throw JSON.stringify(error);
+        }
+        console.log("add log in db");
+      } catch (error) {
+        console.error("An error unsert data:", error.message);
+        throw error;
+      }
+    };
+    //get data endpoint in db
     try {
       let { data: mojoLands, error } = await db.supabase
-  .from('mojos')
-  .select('function')
-     .eq("endpoint", "intial")
+        .from("mojos")
+        .select("function")
+        .eq("endpoint", "intial")
         .single();
       if (error) throw error;
-      
-    // const mojoLands = await db.endpoint("intial")
 
-      console.log("okkk", mojoLands);
-      const mojoLand = mojoLands?.function
+      // const mojoLands = await db.endpoint("intial")
 
+      //console.log("okkk", mojoLands);
+      const methods = mojoLands.method?.split(",")?.trim() || [];
       const body = await req.json();
+      if (/*methods?.includes("function")*/true) {
+        const codeFunction = mojoLands?.function;
+        const content = SystemRoleContenet;
 
-      const content = SystemRoleContenet;
-
-      const dynamicFunction = new Function(
-        "mojo",
-        `
+        const dynamicFunction = new Function(
+          "mojo",
+          `
        const {gpt,filter,body,db} = mojo;
        let {content}=mojo
         return (async () => {
           //
-          ${mojoLand}
+          ${codeFunction}
       //
       })();
     `
-      );
-      const json = (data) => {
-        return new Response(JSON.stringify(data), {
-          status: 200,
-          headers: { "Content-Type": "application/json" },
-        });
-      };
-      //
-      const text = (text) => {
-        return new Response(text, {
-          status: 200,
-        });
-      };
-      try {
-        return await dynamicFunction({
-          gpt,
-          body,
-          filter,
-          json,
-          text,
-          query,
-          content,
-          db,
-        });
-      } catch (error) {
-        console.error("Error In FunctionDynamique Mojo.Land: ", error);
-        return new Response("Something went wrong!", { status: 500 });
+        );
+
+        try {
+          return await dynamicFunction({
+            gpt,
+            body,
+            filter,
+            json,
+            text,
+            query,
+            content,
+            db,
+            log,
+          });
+        } catch (error) {
+          console.error("Error In FunctionDynamique Mojo.Land: ", error);
+          await log({
+            status: "function",
+            error,
+            log: "Error In FunctionDynamique Mojo.Land",
+          });
+          return new Response("Something went wrong!", { status: 500 });
+        }
       }
     } catch (error) {
       console.error("Error occurred while processing request: ", error);
+      await log({
+        status: "request",
+        error,
+        log: "Error occurred while processing request:",
+      });
       return new Response("Something went wrong!", { status: 500 });
     }
+    return new Response("crud not endpoint here!", { status: 500 });
+    // end get endpoint
+    //get data endpoint in db
   }
 }
 
