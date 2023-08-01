@@ -44,7 +44,7 @@ export default class Mojo {
       }
     };
     //get data endpoint in db
-console.log("params",ctx.params)
+//console.log("params",ctx.params)
     try {
       let { data: mojoData, error } = await db.supabase
         .from("mojos")
