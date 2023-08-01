@@ -112,9 +112,14 @@ export default class Mojo {
       //get
       if (mojoData.method === "read") {
         //body.insert.user_id = 1;
-        let { data = [], error } = await db.supabase
+        const query_= db.supabase
           .from(mojoData.table)
           .select(mojoData.select);
+if(query("id"){
+query_.iq("id", query("id"));
+query.single()
+}
+        let { data = [], error } = await= query_
 
         if (error) throw error;
         //  return json({error:"Something went wrong!"+error.message}, 500);
