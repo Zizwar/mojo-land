@@ -7,7 +7,7 @@ export default class Mojo {
     const url = new URL(req.url);
     const query = (q) => url.searchParams.get(q);
 
-    const body = await req.json() || [];
+    const body = method === "get"?[] : await req.json() || [];
     const json = (data: any, status = 200) => {
       return new Response(JSON.stringify(data), {
         status,
