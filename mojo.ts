@@ -44,11 +44,12 @@ export default class Mojo {
       }
     };
     //get data endpoint in db
+console.log("params",ctx.params)
     try {
       let { data: mojoData, error } = await db.supabase
         .from("mojos")
         .select("*")
-        .eq("endpoint",ctx.params.land || body.endpoint || "intial")
+        .eq("endpoint", query ("endpoint")||body.endpoint || "intial")
         //  .eq("is_active",true)
         .single();
       if (error) throw error;
