@@ -7,7 +7,7 @@ export default class Mojo {
     const url = new URL(req.url);
     const query = (q) => url.searchParams.get(q);
 
-    const body = await req.json();
+    const body = await req.json() || [];
     const json = (data: any, status = 200) => {
       return new Response(JSON.stringify(data), {
         status,
@@ -49,7 +49,7 @@ export default class Mojo {
       let { data: mojoData, error } = await db.supabase
         .from("mojos")
         .select("*")
-        .eq("endpoint", query ("endpoint")||body.endpoint || "intial")
+        .eq("endpoint", ctx.params.land || query ("endpoint")||body?.endpoint || "intial")
         //  .eq("is_active",true)
         .single();
       if (error) throw error;
@@ -102,7 +102,7 @@ export default class Mojo {
         body.insert.user_id = 1;
         let { data = [], error } = await db.supabase
           .from(mojoData.table)
-          .insert(body.insert)
+          .insert(body?.insert)
           .select("id");
 
         if (error) throw error;
@@ -125,7 +125,7 @@ if (mojoData.method === "update") {
   //body.insert.user_id = 1;
   let { data = [], error } = await db.supabase
     .from(mojoData.table)
-    .update(body.update)
+    .update(body?.update)
     .eq("id",query("id"))
     .select();
 
