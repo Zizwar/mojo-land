@@ -53,7 +53,7 @@ export default class Mojo {
           "endpoint",
           ctx.params.land || query("endpoint") || body?.endpoint || "intial"
         )
-        //  .eq("is_active",true)
+        //  .eq("status","active")
         .single();
       if (error) throw error;
 
@@ -106,11 +106,11 @@ export default class Mojo {
         let { data = [], error } = await db.supabase
           .from(mojoData.table)
           .insert(body?.insert)
-          .select("id");
+          .select(mojoData.select||"uuid");
 
         if (error) throw error;
         //  return json({error:"Something went wrong!"+error.message}, 500);
-        return json({ id: data.id });
+        return json(data);
       }
       //get
       if (mojoData.method === "read") {
@@ -156,6 +156,11 @@ export default class Mojo {
         //  return json({error:"Something went wrong!"+error.message}, 500);
         return json(data);
       }
+      if (mojoData.method === "data") {
+        //body.insert.user_id = 1;
+        return text(mojoData.data);
+      }
+    
     } catch (error) {
       console.error("Error occurred while processing request: ", error);
       await log({
