@@ -7,7 +7,7 @@ export default class Mojo {
     const url = new URL(req.url);
     const query = (q) => url.searchParams.get(q);
 
-    const body = method === "get"?[] : await req.json() || [];
+    const body = method === "get" ? [] : (await req.json()) || [];
     const json = (data: any, status = 200) => {
       return new Response(JSON.stringify(data), {
         status,
@@ -44,12 +44,15 @@ export default class Mojo {
       }
     };
     //get data endpoint in db
-//console.log("params",ctx.params)
+    //console.log("params",ctx.params)
     try {
       let { data: mojoData, error } = await db.supabase
         .from("mojos")
         .select("*")
-        .eq("endpoint", ctx.params.land || query ("endpoint")||body?.endpoint || "intial")
+        .eq(
+          "endpoint",
+          ctx.params.land || query("endpoint") || body?.endpoint || "intial"
+        )
         //  .eq("is_active",true)
         .single();
       if (error) throw error;
@@ -112,47 +115,47 @@ export default class Mojo {
       //get
       if (mojoData.method === "read") {
         //body.insert.user_id = 1;
-        const query_= db.supabase
-          .from(mojoData.table)
-          .select(mojoData.select);
-if(query("id"){
-query_.iq("id", query("id"));
-query.single()
-}
-        let { data = [], error } = await= query_
+
+        const _query = db.supabase.from(mojoData.table).select(mojoData.select);
+
+        if (query("id")) {
+          _query.eq("uuid", query("id"));
+          _query.single();
+        }
+        let { data = [], error } = await _query;
 
         if (error) throw error;
         //  return json({error:"Something went wrong!"+error.message}, 500);
         return json(data);
       }
-//update
-if (mojoData.method === "update") {
-  //body.insert.user_id = 1;
-  let { data = [], error } = await db.supabase
-    .from(mojoData.table)
-    .update(body?.update)
-    .eq("id",query("id"))
-    .select();
+      //update
+      if (mojoData.method === "update") {
+       
+        let { data = [], error } = await db.supabase
+          .from(mojoData.table)
+          .update(body?.update)
+          .eq("uuid", query("id"))
+            // .eq("user_id",ctx.state.user_id )
+          .select();
 
-  if (error) throw error;
-  //  return json({error:"Something went wrong!"+error.message}, 500);
-  return json(data);
-}
-//update
-if (mojoData.method === "delete") {
-  //body.insert.user_id = 1;
-  let { data = [], error } = await db.supabase
-    .from(mojoData.table)
-    .delete()
-    .eq("id",query("id"))
-   // .eq("user_id",ctx.state.user_id )
-    .select();
+        if (error) throw error;
+        //  return json({error:"Something went wrong!"+error.message}, 500);
+        return json(data);
+      }
+      //update
+      if (mojoData.method === "delete") {
+        //body.insert.user_id = 1;
+        let { data = [], error } = await db.supabase
+          .from(mojoData.table)
+          .delete()
+          .eq("uuid", query("id"))
+          // .eq("user_id",ctx.state.user_id )
+          .select();
 
-  if (error) throw error;
-  //  return json({error:"Something went wrong!"+error.message}, 500);
-  return json(data);
-}
-
+        if (error) throw error;
+        //  return json({error:"Something went wrong!"+error.message}, 500);
+        return json(data);
+      }
     } catch (error) {
       console.error("Error occurred while processing request: ", error);
       await log({

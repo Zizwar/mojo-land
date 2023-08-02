@@ -43,13 +43,13 @@ class Database {
           products(*,
             categories:products_categories(name),
             images:products_images(alt,src),
-            links:products_links(url,description),
+            links:links(url,description),
             options:products_options(key,value),
             attributes:products_attributes(key,value)
             ),
           categories:stores_category_associations(categorie:stores_categories(name)),
           images:stores_images(alt,src),
-          links:stores_links(url,description),
+          links:links(url,description),
           hours:stores_hours(*)  `
       );
       //;
@@ -95,13 +95,13 @@ class Database {
           products(*,
             categories:products_categories(name),
             images:products_images(alt,src),
-            links:products_links(url,description),
+            links(url,description),
             options:products_options(key,value),
             attributes:products_attributes(key,value)
             ),
           categories:stores_category_associations(categorie:stores_categories(name)),
           images:stores_images(alt,src),
-          links:stores_links(url,description),
+          links(url,description),
           hours:stores_hours(*)  `
       );
       //;
