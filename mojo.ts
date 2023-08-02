@@ -1,4 +1,3 @@
-import { Statement } from "https://deno.land/x/ts_morph@17.0.1/ts_morph.js";
 
 export default class Mojo {
   async render(req, ctx, method) {
@@ -108,6 +107,14 @@ export default class Mojo {
           .insert(body?.insert)
           .select(mojoData.select||"uuid");
 
+        if (error) throw error;
+        //  return json({error:"Something went wrong!"+error.message}, 500);
+        return json(data);
+      }
+      if (mojoData.method === "rpc") {
+        body.insert.user_id = 1;
+        let { data = [], error } = await db.supabase
+          .rpc(mojoData.rpc,body)
         if (error) throw error;
         //  return json({error:"Something went wrong!"+error.message}, 500);
         return json(data);
