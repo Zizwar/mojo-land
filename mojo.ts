@@ -1,4 +1,3 @@
-
 export default class Mojo {
   async render(req, ctx, method) {
     const { gpt, db, filter } = ctx.state;
@@ -60,7 +59,27 @@ export default class Mojo {
 
       //  console.log("okkk", mojoData);
       //   const methods = mojoData.method?.split(",")?.trim() || [];
-       
+
+      const validColumns = (body: any) => {
+        console.log({body, columns:mojoData?.columns})
+        if (mojoData?.columns) {
+
+          const { columns } = mojoData;
+          if (columns === "*") return "*";
+
+          if (columns === "all") return body;
+
+          else {
+            const arrColumns = columns.split(",");
+            console.log({arrColumns})
+            const validBody = Object.fromEntries(
+              Object.entries(body).filter(([key]) => arrColumns.includes(key))
+            );
+            return validBody;
+          }
+        }
+      };
+
       if (mojoData.method === "function") {
         const codeFunction = mojoData?.function;
         const content = SystemRoleContenet;
@@ -89,7 +108,7 @@ export default class Mojo {
             content,
             db,
             log,
-            endpoint:ctx.params.land,
+            endpoint: ctx.params.land,
           });
         } catch (error) {
           console.error("Error In FunctionDynamique Mojo.Land: ", error);
@@ -103,20 +122,19 @@ export default class Mojo {
       }
       //add
       if (mojoData.method === "create") {
-       // body.insert.user_id = 1;
+        // body.insert.user_id = 1;
         let { data = [], error } = await db.supabase
           .from(mojoData.table)
           .insert(body?.insert)
-          .select(mojoData.select||"uuid");
+          .select(mojoData.select || "uuid");
 
         if (error) throw error;
         //  return json({error:"Something went wrong!"+error.message}, 500);
         return json(data);
       }
       if (mojoData.method === "rpc") {
-      //  body.insert.user_id = 1;
-        let { data = [], error } = await db.supabase
-          .rpc(mojoData.rpc,body)
+        //  body.insert.user_id = 1;
+        let { data = [], error } = await db.supabase.rpc(mojoData.rpc, body);
         if (error) throw error;
         //  return json({error:"Something went wrong!"+error.message}, 500);
         return json(data);
@@ -125,7 +143,7 @@ export default class Mojo {
       if (mojoData.method === "read") {
         //body.insert.user_id = 1;
 
-        const _query = db.supabase.from(mojoData.table).select(mojoData.select);
+        const _query = db.supabase.from(mojoData.table).select(mojoData.select ?? mojoData.columns);
 
         if (query("id")) {
           _query.eq("uuid", query("id"));
@@ -139,13 +157,15 @@ export default class Mojo {
       }
       //update
       if (mojoData.method === "update") {
-       
+        const valideBodyUpdate = validColumns(body?.update)
+        if(!valideBodyUpdate) return text("not data update inert in body.insert",402)
+        console.log("valide==",valideBodyUpdate)
         let { data = [], error } = await db.supabase
           .from(mojoData.table)
-          .update(body?.update)
+          .update(valideBodyUpdate)
           .eq("uuid", query("id"))
-            // .eq("user_id",ctx.state.user_id )
-          .select();
+          // .eq("user_id",ctx.state.user_id )
+          .select(mojoData.select || mojoData.columns || "uuid");
 
         if (error) throw error;
         //  return json({error:"Something went wrong!"+error.message}, 500);
@@ -169,7 +189,6 @@ export default class Mojo {
         //body.insert.user_id = 1;
         return text(mojoData.data);
       }
-    
     } catch (error) {
       console.error("Error occurred while processing request: ", error);
       await log({

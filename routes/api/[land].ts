@@ -8,7 +8,7 @@ export const handler: Handlers = {
   },
 
   async PUT(req, ctx): Promise<Response> {
-    return await mojo.render(req, ctx, "post");
+    return await mojo.render(req, ctx, "update");
   },
   async GET(req, ctx): Promise<Response> {
    return await mojo.render(req, ctx, "get");
