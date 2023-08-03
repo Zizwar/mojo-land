@@ -133,8 +133,9 @@ export default class Mojo {
         return json(data);
       }
       if (mojoData.method === "rpc") {
+
         //  body.insert.user_id = 1;
-        let { data = [], error } = await db.supabase.rpc(mojoData.rpc, body);
+        let { data = [], error } = await db.supabase.rpc(mojoData.rpc, body)
         if (error) throw error;
         //  return json({error:"Something went wrong!"+error.message}, 500);
         return json(data);
