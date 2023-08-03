@@ -67,7 +67,7 @@ export default class Mojo {
         const dynamicFunction = new Function(
           "mojo",
           `
-       const {gpt,filter,body,db} = mojo;
+       const {gpt,filter,body,db,endpoint} = mojo;
        let {content}=mojo
         return (async () => {
           //
@@ -88,6 +88,7 @@ export default class Mojo {
             content,
             db,
             log,
+            endpoint:ctx.params.land,
           });
         } catch (error) {
           console.error("Error In FunctionDynamique Mojo.Land: ", error);

@@ -28,7 +28,7 @@ class Database {
   }
   async searchStoreProduct({
     id,
-    slug,
+    slug:_slug,
     term,
   }: {
     id: number;
@@ -36,8 +36,16 @@ class Database {
     term: string;
   }): Promise<any> {
     try {
-      const query = supabase.from("stores").select(
-        `* ,
+      const query = supabase.from("slugs").select(`*`);
+      query.eq("slug", "ahmad-fashion");
+
+      const { data = [], error } = await query.single();
+      // if (data.products?.length)
+      console.log("~#slug here", { data });
+      const { slug, product_id, link_id, store_id } = data;
+      if (store_id) {
+        const query = supabase.from("stores").select(
+          `* ,
           head(*),
           masks(prompts(content,role)),
           products(*,
@@ -51,23 +59,30 @@ class Database {
           images:stores_images(alt,src),
           links:links(url,description),
           hours:stores_hours(*)  `
-      );
-      //;
-      if (id) query.eq("id", id);
-      if (slug) query.eq("slug", slug);
-      if (term)
-        query.textSearch("products.description,products.name", term, {
-          config: "english",
-          //  type: "phrase",
-          desc: true,
-          ts_rank: true,
-        });
-      const { data, error } = await query.single();
-      if (data.products.length)
+        );
+        query.eq("id", store_id);
+        if (product_id) query.eq("products.id", product_id);
+        if (term)
+          query.textSearch("products.description,products.name", term, {
+            config: "english",
+            //  type: "phrase",
+            desc: true,
+            ts_rank: true,
+          });
+        const { data, error } = await query; //.single();
+      // console.log("products", data[0]?.products)
+        //if (data.products?.length)
         if (error) {
           ///return error //{error:error.message}
           throw error;
         }
+
+        return data;
+      }
+      if (error) {
+        ///return error //{error:error.message}
+        throw error;
+      }
       //if(!data.products.length)
       return data;
     } catch (error) {
@@ -97,7 +112,8 @@ class Database {
             images:products_images(alt,src),
             links(url,description),
             options:products_options(key,value),
-            attributes:products_attributes(key,value)
+            attributes:products_attributes(key,value),
+            masks(*)
             ),
           categories:stores_category_associations(categorie:stores_categories(name)),
           images:stores_images(alt,src),
@@ -115,7 +131,7 @@ class Database {
           ts_rank: true,
         });
       const { data, error } = await query.single();
-      if (data.products.length)
+      if (data.products?.length)
         if (error) {
           ///return error //{error:error.message}
           throw error;
@@ -186,9 +202,9 @@ products_links(*)
     const { data, error } = await supabase
       .from("mojos")
       .select("function")
-      .eq("endpoint", end)
+      .eq("endpoint", end);
     if (error) throw error;
-    return data[0]
+    return data[0];
   }
   async getStoreBySlug(slug: string) {
     try {
