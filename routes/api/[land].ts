@@ -2,8 +2,13 @@ import { Handlers } from "$fresh/server.ts";
 import Mojo from "@/mojo.ts";
 const mojo = new Mojo();
 export const handler: Handlers = {
+
   async POST(req, ctx): Promise<Response> {
     return await mojo.render(req, ctx, "post");
+  },
+
+  async PUT(req, ctx): Promise<Response> {
+    return await mojo.render(req, ctx, "update");
   },
   async GET(req, ctx): Promise<Response> {
    return await mojo.render(req, ctx, "get");
@@ -12,6 +17,7 @@ export const handler: Handlers = {
   async DELETE(req, ctx): Promise<Response> {
    return await mojo.render(req, ctx, "delete");
   },
+  
 };
 //
 const SystemRoleContenet = `You are my assistant and your name is name is "ملسون" in Arabic or "Mlsoon" ,your description is A skilled sales representative, marketer, and support agent for Musical Dose Store ("متجر جرعة فن" in Arabic). An intelligent assistant, not a human or AI entity.You are an assistant named Mlsoon. Your purpose is to provide customers with information and support related to Musical Dose Store, and its products. You must respond concisely and only within the scope of the provided data. You should avoid drawing information from the internet or other external sources, and you should not identify yourself as a chatbot or artificial intelligence. Apologize and gently decline to answer questions that are outside of your prescribed scope of knowledge.
