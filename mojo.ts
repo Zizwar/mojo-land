@@ -60,6 +60,7 @@ export default class Mojo {
 
       //  console.log("okkk", mojoData);
       //   const methods = mojoData.method?.split(",")?.trim() || [];
+       
       if (mojoData.method === "function") {
         const codeFunction = mojoData?.function;
         const content = SystemRoleContenet;
@@ -102,7 +103,7 @@ export default class Mojo {
       }
       //add
       if (mojoData.method === "create") {
-        body.insert.user_id = 1;
+       // body.insert.user_id = 1;
         let { data = [], error } = await db.supabase
           .from(mojoData.table)
           .insert(body?.insert)
@@ -113,7 +114,7 @@ export default class Mojo {
         return json(data);
       }
       if (mojoData.method === "rpc") {
-        body.insert.user_id = 1;
+      //  body.insert.user_id = 1;
         let { data = [], error } = await db.supabase
           .rpc(mojoData.rpc,body)
         if (error) throw error;

@@ -1,3 +1,4 @@
+
 import { createClient } from "https://cdn.skypack.dev/@supabase/supabase-js?dts";
 
 const supabase = createClient(
@@ -93,58 +94,20 @@ class Database {
       throw error;
     }
   }
-  async getAllProductsByStoreId({
-    id,
-    slug,
-    term,
-  }: {
-    id: number;
-    slug: string;
-    term: string;
-  }): Promise<any> {
-    try {
-      const query = supabase.from("stores").select(
-        `* ,
-          head(*),
-          masks(prompts(content,role)),
-          products(*,
-            categories:products_categories(name),
-            images:products_images(alt,src),
-            links(url,description),
-            options:products_options(key,value),
-            attributes:products_attributes(key,value),
-            masks(*)
-            ),
-          categories:stores_category_associations(categorie:stores_categories(name)),
-          images:stores_images(alt,src),
-          links(url,description),
-          hours:stores_hours(*)  `
-      );
-      //;
-      if (id) query.eq("id", id);
-      if (slug) query.eq("slug", slug);
-      if (term)
-        query.textSearch("products.description,products.name", term, {
-          config: "english",
-          //  type: "phrase",
-          desc: true,
-          ts_rank: true,
-        });
-      const { data, error } = await query.single();
-      if (data.products?.length)
-        if (error) {
-          ///return error //{error:error.message}
-          throw error;
-        }
-      //if(!data.products.length)
-      return data;
-    } catch (error) {
-      console.error(
-        "An error occurred while fetching the data:",
-        error.message
-      );
-      throw error;
+  async getUserByAccessToken(
+    accessToken: string
+  ) {
+    const { data, error } = await supabase
+      .from("users")
+      .select("id,uuid,username,is_active,roles(role(name))")
+      .eq("token", accessToken).single();
+    if (error) {
+      throw new Error(error.message);
     }
+    if (data.length === 0) {
+      return undefined;
+    }
+    return data
   }
   async getStoresMask() {
     try {
