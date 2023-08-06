@@ -10,7 +10,7 @@ export const handler = async (req: Request, ctx: MiddlewareHandlerContext) => {
   const db = new database();
 
   const url = new URL(req.url);
-  const paramToken = url.searchParams.get("mojo_token");
+  const paramToken = url.searchParams.get("token");
 //  const body = await req.json();
   const accessToken = getCookies(req.headers)["mojo_token"] || paramToken// || body?.mojo_token;
   if (accessToken) {

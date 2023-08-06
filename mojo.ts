@@ -79,22 +79,26 @@ export default class Mojo {
         }
       };
 
-      const checkPermession = () => {
+      const checkPermission = () => {
+      
         if (!mojoData.method) return null;
-        const permession = mojoData?.permessions[method];
-        if (!permession) return null;
-        const rolesArray = permession.split(",") || [];
-        const found = ctx.state?.user?.roles.some(
+        const permission = mojoData?.permissions?mojoData.permissions[mojoData.method]:null
+//console.log({permission});
+
+        if (!permission) return null;
+        const rolesArray = permission.split(",") || [];
+       // console.log({permission,rolesArray})
+        const found = ctx.state?.user?.roles.some(  
           (roleObj: { role: { name: string } }) =>
             rolesArray.includes(roleObj?.role.name)
         );
 
-        console.log(found);
+        console.log({found});
         return found;
       };
       ///
       const mojoFilter = async (mojoDB) => {
-        if (!checkPermession()) return json({ error: "not permession!" }, 403);
+        if (!checkPermission()) return json({ error: "not permession!" }, 403);
         //
         const id = query("id");
         const uuid = query("uuid");
@@ -109,6 +113,24 @@ export default class Mojo {
         if (mojoData.single) mojoDB.single();
         if (limit) mojoDB.limit(limit);
         if (page) mojoDB.range(page - 1, page + limit || 10);
+
+        /*
+
+          .eq('column', 'Equal to')
+            .gt('column', 'Greater than')
+              .lt('column', 'Less than')
+                .gte('column', 'Greater than or equal to')
+                  .lte('column', 'Less than or equal to')
+                    .like('column', '%CaseSensitive%')
+                      .ilike('column', '%CaseInsensitive%')
+                        .is('column', null)
+                          .in('column', ['Array', 'Values'])
+                            .neq('column', 'Not equal to')
+
+                              // Arrays
+                                .cs('array_column', ['array', 'contains'])
+                                  .cd('array_column', ['contained', 'by'])
+        */
 
         let { data = [], error } = await mojoDB;
 
@@ -189,7 +211,7 @@ export default class Mojo {
       //get
       if (mojoData.method === "read") {
         //body.insert.user_id = 1;
-        if (!checkPermession()) return json({ message: "not permession" }, 402);
+        if (!checkPermission()) return json({ message: "not permession" }, 402);
         const _query = db.supabase
           .from(mojoData.table)
           .select(mojoData.select ?? mojoData.columns);
