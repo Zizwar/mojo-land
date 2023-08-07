@@ -45,7 +45,7 @@ export default class Mojo {
     //get data endpoint in db
     //console.log("params",ctx.params)
     try {
-      let { data: mojoData, error } = await db.supabase
+      let { data: mojoDATA, error } = await db.supabase
         .from("mojos")
         .select("*")
         .eq(
@@ -58,13 +58,13 @@ export default class Mojo {
 
       // const mojoLands = await db.endpoint("intial")
 
-      //  console.log("okkk", mojoData);
-      //   const methods = mojoData.method?.split(",")?.trim() || [];
+      //  console.log("okkk", mojoDATA);
+      //   const methods = mojoDATA.method?.split(",")?.trim() || [];
 
       const validColumns = (body: any) => {
-        console.log({ body, columns: mojoData?.columns });
-        if (mojoData?.columns) {
-          const { columns } = mojoData;
+        console.log({ body, columns: mojoDATA?.columns });
+        if (mojoDATA?.columns) {
+          const { columns } = mojoDATA;
           if (columns === "*") return "*";
 
           if (columns === "all") return body;
@@ -80,24 +80,24 @@ export default class Mojo {
       };
 
       const checkPermission = () => {
-      
-        if (!mojoData.method) return null;
-        const permission = mojoData?.permissions?mojoData.permissions[mojoData.method]:null
-//console.log({permission});
+
+        if (!mojoDATA.method) return null;
+        const permission = mojoDATA?.permissions ? mojoDATA.permissions[mojoDATA.method] : null
+        //console.log({permission});
 
         if (!permission) return null;
         const rolesArray = permission.split(",") || [];
-       // console.log({permission,rolesArray})
-        const found = ctx.state?.user?.roles.some(  
+        // console.log({permission,rolesArray})
+        const found = ctx.state?.user?.roles.some(
           (roleObj: { role: { name: string } }) =>
             rolesArray.includes(roleObj?.role.name)
         );
 
-        console.log({found});
+        console.log({ found });
         return found;
       };
       ///
-      const mojoFilter = async (mojoDB) => {
+      const mojoFilter = async (mojoDB: any) => {
         if (!checkPermission()) return json({ error: "not permession!" }, 403);
         //
         const id = query("id");
@@ -105,38 +105,45 @@ export default class Mojo {
         const limit = query("limit");
         const page = query("page");
 
-        mojoDB
-          .from(mojoData.table)
-          .select(mojoData.select ?? mojoData.columns ?? "uuid");
+        if (!mojoDB)
+          mojoDB = await db.supabase.from(mojoDATA.table)
+            .select(mojoDATA.select ?? mojoDATA.columns ?? "uuid");
 
-        if (id) mojoDB.eq("uuid", id || uuid);
-        if (mojoData.single) mojoDB.single();
+        if (id) mojoDB.eq("uuid", id || uuid); else if (uuid) mojoDB.eq("uuid", uuid);
+        if (mojoDATA.single) mojoDB.single();
         if (limit) mojoDB.limit(limit);
-        if (page) mojoDB.range(page - 1, page + limit || 10);
+        if (page && mojoDATA?.pagination) mojoDB.range(page - 1, page + limit || 10);
+        //
+        if (body?.filters && mojoDB?.filters) {
+          const validFilters: any = [];
+          for (const key in mojoDB.filters) {
+            if (Object.prototype.hasOwnProperty.call(mojoDB.filters, key)) {
+              const properties = mojoDB.filters[key].map((prop: string | number) => [prop, body.filters[key][prop]]);
+              validFilters[key] = properties;
+            }
+          }
 
-        /*
+          const supportedFilters = [
+            "eq", "gt", "lt", "gte", "lte", "like", "ilike", "is", "in", "neq", "cs", "cd"
+          ];
 
-          .eq('column', 'Equal to')
-            .gt('column', 'Greater than')
-              .lt('column', 'Less than')
-                .gte('column', 'Greater than or equal to')
-                  .lte('column', 'Less than or equal to')
-                    .like('column', '%CaseSensitive%')
-                      .ilike('column', '%CaseInsensitive%')
-                        .is('column', null)
-                          .in('column', ['Array', 'Values'])
-                            .neq('column', 'Not equal to')
+          for (const filter in validFilters) {
+            if (filter in supportedFilters) {
+              for (const [key, value] of validFilters[filter]) {
+                mojoDB[filter](key, value);
+              }
+            } else {
+              console.log(`Unsupported filter: ${filter}`);
+            }
+          }
+        }
 
-                              // Arrays
-                                .cs('array_column', ['array', 'contains'])
-                                  .cd('array_column', ['contained', 'by'])
-        */
 
         let { data = [], error } = await mojoDB;
 
         if (error) {
           await log({
-            status: mojoData.method,
+            status: mojoDATA.method,
             error,
             log: "Error In mOjO Land",
           });
@@ -146,8 +153,8 @@ export default class Mojo {
         return json(data);
       };
       ///
-      if (mojoData.method === "function") {
-        const codeFunction = mojoData?.function;
+      if (mojoDATA.method === "function") {
+        const codeFunction = mojoDATA?.function;
         const content = SystemRoleContenet;
 
         const dynamicFunction = new Function(
@@ -187,67 +194,53 @@ export default class Mojo {
         }
       }
       //add
-      if (mojoData.method === "create") {
+      if (mojoDATA.method === "create") {
         // body.insert.user_id = 1;
         const valideBodyInsert = validColumns(body?.insert);
         if (!valideBodyInsert)
           return text("not data Insert inert in body.insert", 402);
         let { data = [], error } = await db.supabase
-          .from(mojoData.table)
+          .from(mojoDATA.table)
           .insert(valideBodyInsert)
-          .select(mojoData.select || "uuid");
+          .select(mojoDATA.select || "uuid");
 
         if (error) throw error;
         //  return json({error:"Something went wrong!"+error.message}, 500);
         return json(data);
       }
-      if (mojoData.method === "rpc") {
+      if (mojoDATA.method === "rpc") {
         //  body.insert.user_id = 1;
-        let { data = [], error } = await db.supabase.rpc(mojoData.rpc, body);
+        let { data = [], error } = await db.supabase.rpc(mojoDATA.rpc, body);
         if (error) throw error;
         //  return json({error:"Something went wrong!"+error.message}, 500);
         return json(data);
       }
       //get
-      if (mojoData.method === "read") {
+      if (mojoDATA.method === "read") {
         //body.insert.user_id = 1;
-        if (!checkPermission()) return json({ message: "not permession" }, 402);
-        const _query = db.supabase
-          .from(mojoData.table)
-          .select(mojoData.select ?? mojoData.columns);
-
-        if (query("id")) {
-          _query.eq("uuid", query("id"));
-          _query.single();
-        }
-        let { data = [], error } = await _query;
-
-        if (error) throw error;
-        //  return json({error:"Something went wrong!"+error.message}, 500);
-        return json(data);
+        //const mojoDB = db.supabase
+        return await mojoFilter(null)
       }
       //update
-      if (mojoData.method === "update") {
+      if (mojoDATA.method === "update") {
         const valideBodyUpdate = validColumns(body?.update);
         if (!valideBodyUpdate)
           return text("not data update inert in body.insert", 402);
         console.log("valide==", valideBodyUpdate);
-        let { data = [], error } = await db.supabase
-          .from(mojoData.table)
+        const mojoDB = db.supabase
+          .from(mojoDATA.table)
           .update(valideBodyUpdate)
-          .eq("uuid", query("id"))
+          //.eq("uuid", query("id"))
           // .eq("user_id",ctx.state.user_id )
-          .select(mojoData.select || mojoData.columns || "uuid");
+          .select(mojoDATA.select || mojoDATA.columns || "uuid");
 
-        if (error) throw error;
-        //  return json({error:"Something went wrong!"+error.message}, 500);
-        return json(data);
+        return await mojoFilter(mojoDB)
       }
       //update
-      if (mojoData.method === "delete") {
+      if (mojoDATA.method === "delete") {
         //body.insert.user_id = 1;
         let { data = [], error } = await db.supabase
-          .from(mojoData.table)
+          .from(mojoDATA.table)
           .delete()
           .eq("uuid", query("id"))
           // .eq("user_id",ctx.state.user_id )
@@ -257,9 +250,9 @@ export default class Mojo {
         //  return json({error:"Something went wrong!"+error.message}, 500);
         return json(data);
       }
-      if (mojoData.method === "data") {
+      if (mojoDATA.method === "data") {
         //body.insert.user_id = 1;
-        return text(mojoData.data);
+        return text(mojoDATA.data);
       }
     } catch (error) {
       console.error("Error occurred while processing request: ", error);
