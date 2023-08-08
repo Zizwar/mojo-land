@@ -5,8 +5,15 @@ export default class Mojo {
 
     const url = new URL(req.url);
     const query = (q) => url.searchParams.get(q);
+    let body = []
+    try {
+      body = method === "get" ? [] : (await req.json()) || [];
 
-    const body = method === "get" ? [] : (await req.json()) || [];
+    } catch (error) {
+      body = []
+      // Handle the error appropriately, such as sending an error response to the client.
+    }
+
     const json = (data: any, status = 200) => {
       return new Response(JSON.stringify(data), {
         status,
@@ -43,7 +50,7 @@ export default class Mojo {
       }
     };
     //get data endpoint in db
-    //console.log("params",ctx.params)
+    //console.log("endpoint",ctx.params.land)
     try {
       let { data: mojoDATA, error } = await db.supabase
         .from("mojos")
@@ -58,21 +65,19 @@ export default class Mojo {
 
       // const mojoLands = await db.endpoint("intial")
 
-      //  console.log("okkk", mojoDATA);
+      //console.log("okkk", mojoDATA);
       //   const methods = mojoDATA.method?.split(",")?.trim() || [];
 
-      const validColumns = (body: any) => {
-        console.log({ body, columns: mojoDATA?.columns });
+      const validColumns = (bodyData: any) => {
+        console.log({ bodyData, columns: mojoDATA?.columns });
         if (mojoDATA?.columns) {
           const { columns } = mojoDATA;
-          if (columns === "*") return "*";
-
-          if (columns === "all") return body;
+               if (columns === "all" || columns === "*") return bodyData;
           else {
             const arrColumns = columns.split(",");
-            console.log({ arrColumns });
+            //  console.log({ arrColumns });
             const validBody = Object.fromEntries(
-              Object.entries(body).filter(([key]) => arrColumns.includes(key))
+              Object.entries(bodyData).filter(([key]) => arrColumns.includes(key))
             );
             return validBody;
           }
@@ -108,21 +113,32 @@ export default class Mojo {
         if (!mojoDB)
           mojoDB = await db.supabase.from(mojoDATA.table)
             .select(mojoDATA.select ?? mojoDATA.columns ?? "uuid");
+        // check role id
 
+
+
+        //
         if (id) mojoDB.eq("uuid", id || uuid); else if (uuid) mojoDB.eq("uuid", uuid);
         if (mojoDATA.single) mojoDB.single();
         if (limit) mojoDB.limit(limit);
         if (page && mojoDATA?.pagination) mojoDB.range(page - 1, page + limit || 10);
         //
         if (body?.filters && mojoDB?.filters) {
+          /*  const validFilters: any = [];
+            
+            for (const key in mojoDB.filters) {
+              if (Object.prototype.hasOwnProperty.call(mojoDB.filters, key)) {
+                const properties = mojoDB.filters[key].map((prop: string | number) => [prop, body.filters[key][prop]]);
+                validFilters[key] = properties;
+              }
+            }
+  */
           const validFilters: any = [];
-          for (const key in mojoDB.filters) {
-            if (Object.prototype.hasOwnProperty.call(mojoDB.filters, key)) {
-              const properties = mojoDB.filters[key].map((prop: string | number) => [prop, body.filters[key][prop]]);
-              validFilters[key] = properties;
+          for (const key of Object.keys(mojoDB.filters)) {
+            if (body.filters && key in body.filters) {
+              validFilters[key] = Object.entries(body.filters[key]).map(([prop, value]) => [prop, value]);
             }
           }
-
           const supportedFilters = [
             "eq", "gt", "lt", "gte", "lte", "like", "ilike", "is", "in", "neq", "cs", "cd"
           ];
@@ -138,8 +154,14 @@ export default class Mojo {
           }
         }
 
+        /*
+        //user_id role
+        if (mojoDATA.role && ctx.state.user?.id)
+          mojoDB.eq(mojoDATA.role, ctx.state.user.id);
+        */
 
-        let { data = [], error } = await mojoDB;
+
+        const { data = [], error } = await mojoDB;
 
         if (error) {
           await log({
@@ -222,11 +244,18 @@ export default class Mojo {
         return await mojoFilter(null)
       }
       //update
+      if (mojoDATA.method === "post") {
+        return await mojoFilter(null)
+      }
+      //update
       if (mojoDATA.method === "update") {
+        console.log('body',body);
+        
         const valideBodyUpdate = validColumns(body?.update);
+        console.log("valide==", valideBodyUpdate);
         if (!valideBodyUpdate)
           return text("not data update inert in body.insert", 402);
-        console.log("valide==", valideBodyUpdate);
+     
         const mojoDB = db.supabase
           .from(mojoDATA.table)
           .update(valideBodyUpdate)
@@ -263,7 +292,7 @@ export default class Mojo {
       });
       return new Response("Something went wrong!", { status: 500 });
     }
-    return new Response("crud not endpoint here!", { status: 500 });
+    return new Response("crud not endpoint here!", { status: 403 });
     // end get endpoint
     //get data endpoint in db
   }
