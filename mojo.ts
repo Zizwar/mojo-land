@@ -69,7 +69,7 @@ export default class Mojo {
       //   const methods = mojoDATA.method?.split(",")?.trim() || [];
 
       const validColumns = (bodyData: any) => {
-        console.log({ bodyData, columns: mojoDATA?.columns });
+       // console.log({ bodyData, columns: mojoDATA?.columns });
         if (mojoDATA?.columns) {
           const { columns } = mojoDATA;
                if (columns === "all" || columns === "*") return bodyData;
@@ -98,7 +98,7 @@ export default class Mojo {
             rolesArray.includes(roleObj?.role.name)
         );
 
-        console.log({ found });
+       // console.log({ found });
         return found;
       };
       ///
@@ -123,35 +123,92 @@ export default class Mojo {
         if (limit) mojoDB.limit(limit);
         if (page && mojoDATA?.pagination) mojoDB.range(page - 1, page + limit || 10);
         //
-        if (body?.filters && mojoDB?.filters) {
-          /*  const validFilters: any = [];
+        console.log("----",body?.filters , mojoDATA?.filters);
+        
+        if (body?.filters && mojoDATA?.filters) {
+   
             
-            for (const key in mojoDB.filters) {
-              if (Object.prototype.hasOwnProperty.call(mojoDB.filters, key)) {
-                const properties = mojoDB.filters[key].map((prop: string | number) => [prop, body.filters[key][prop]]);
-                validFilters[key] = properties;
-              }
-            }
-  */
-          const validFilters: any = [];
-          for (const key of Object.keys(mojoDB.filters)) {
-            if (body.filters && key in body.filters) {
-              validFilters[key] = Object.entries(body.filters[key]).map(([prop, value]) => [prop, value]);
-            }
-          }
+           const validFilters = {};
+           for (const key in mojoDATA?.filters) {
+             if (Object.prototype.hasOwnProperty.call(mojoDATA?.filters, key)) {
+               const properties = mojoDATA?.filters[key].map(prop => {
+                 if (body.filters[key] && body.filters[key][prop] !== undefined) {
+                   return [prop, body.filters[key][prop]];
+                 } else {
+                   console.log(`Invalid key "${prop}" or missing value for filter "${key}"`);
+                   return null;
+                 }
+               }).filter(Boolean); 
+               validFilters[key] = properties;
+             }
+           }
+ //console.log("----",validFilters)
           const supportedFilters = [
             "eq", "gt", "lt", "gte", "lte", "like", "ilike", "is", "in", "neq", "cs", "cd"
           ];
-
+          //
           for (const filter in validFilters) {
-            if (filter in supportedFilters) {
+            if (supportedFilters.includes(filter)) {
               for (const [key, value] of validFilters[filter]) {
-                mojoDB[filter](key, value);
+                console.log("----",{filter},{key,value})
+                switch (filter) {
+                  case "eq":
+                    mojoDB.eq(key, value);
+                    break;
+                  case "gt":
+                    mojoDB.gt(key, value);
+                    break;
+                  case "lt":
+                    mojoDB.lt(key, value);
+                    break;
+                  case "gte":
+                    mojoDB.greaterThanOrEqual(key, value);
+                    break;
+                  case "lte":
+                    mojoDB.lessThanOrEqual(key, value);
+                    break;
+                  case "like":
+                    mojoDB.like(key, value);
+                    break;
+                  case "ilike":
+                    mojoDB.ilike(key, value);
+                    break;
+                  case "is":
+                    mojoDB.is(key, value);
+                    break;
+                  case "in":
+                    mojoDB.in(key, value);
+                    break;
+                  case "neq":
+                    mojoDB.neq(key, value);
+                    break;
+                  case "cs":
+                    mojoDB.cs(key, value);
+                    break;
+                  case "cd":
+                    mojoDB.cd(key, value);
+                    break;
+                  default:
+                    console.log(`Unsupported filter: ${filter}`);
+                    break;
+                }
               }
             } else {
               console.log(`Unsupported filter: ${filter}`);
             }
           }
+/*
+          for (const filter in validFilters) {
+            if (supportedFilters.includes(filter)) {
+              for (const [key, value] of validFilters[filter]) {
+                console.log("----",{filter},key,value)
+               mojoDB[filter](key, value);
+              }
+            } else {
+              console.log(`Unsupported filter: ${filter}`);
+            }
+          }
+          */
         }
 
         /*
@@ -245,14 +302,17 @@ export default class Mojo {
       }
       //update
       if (mojoDATA.method === "post") {
-        return await mojoFilter(null)
+        const mojoDB = db.supabase
+        .from(mojoDATA.table)
+        .select(mojoDATA.select || mojoDATA.columns || "uuid");
+        return await mojoFilter(mojoDB)
       }
       //update
       if (mojoDATA.method === "update") {
         console.log('body',body);
         
         const valideBodyUpdate = validColumns(body?.update);
-        console.log("valide==", valideBodyUpdate);
+        //console.log("valide==", valideBodyUpdate);
         if (!valideBodyUpdate)
           return text("not data update inert in body.insert", 402);
      
