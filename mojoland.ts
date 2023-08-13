@@ -1,17 +1,18 @@
-export default class Mojo {
+
+export default class Mojoland {
   async render(req, ctx, method) {
     const { gpt, db, filter } = ctx.state;
 
     const url = new URL(req.url);
     const query = (q) => url.searchParams.get(q);
-    let body = [];
+    let body = []
     try {
       body = method === "get" ? [] : (await req.json()) || [];
+
     } catch (error) {
-      body = [];
-      // Handle the error appropriately, such as sending an error response to the client.
-    }
-const selectedColumns = (columns)=>columns.split(",").map((column: string) => column.trim()) || [];
+      body = []
+     }
+
     const json = (data: any, status = 200) => {
       return new Response(JSON.stringify(data), {
         status,
@@ -47,99 +48,108 @@ const selectedColumns = (columns)=>columns.split(",").map((column: string) => co
         throw error;
       }
     };
+    //get data endpoint in db
+    //console.log("endpoint",ctx.params.land)
     try {
-      let { data: databaseData, error } = await db.supabase
+      let { data: mojoDATA, error } = await db.supabase
         .from("mojos")
         .select("*")
         .eq(
           "endpoint",
           ctx.params.land || query("endpoint") || body?.endpoint || "intial"
         )
-        .eq("status", "active")
+        //  .eq("status","active")
         .single();
       if (error) throw error;
 
-      const filterValidColumns = (bodyData: any) => {
-        if (databaseData?.columns) {
-          const { columns } = databaseData;
-          if (columns === "all" || columns === "*") return bodyData;
+      // const mojoLands = await db.endpoint("intial")
+
+      //console.log("okkk", mojoDATA);
+      //   const methods = mojoDATA.method?.split(",")?.trim() || [];
+
+      const validColumns = (bodyData: any) => {
+       // console.log({ bodyData, columns: mojoDATA?.columns });
+        if (mojoDATA?.columns) {
+          const { columns } = mojoDATA;
+               if (columns === "all" || columns === "*") return bodyData;
           else {
-            const selectedNames = selectedColumns(columns)
+            const arrColumns = columns.split(",");
+            //  console.log({ arrColumns });
             const validBody = Object.fromEntries(
-              Object.entries(bodyData).filter(([key]) =>
-              selectedNames.includes(key)
-              )
+              Object.entries(bodyData).filter(([key]) => arrColumns.includes(key))
             );
             return validBody;
           }
         }
       };
-      const hasPermission = () => {
-        if (!databaseData.method) return null;
-        const permission = databaseData?.permissions
-          ? databaseData.permissions[databaseData.method]
-          : null;
+
+      const checkPermission = () => {
+
+        if (!mojoDATA.method) return null;
+        const permission = mojoDATA?.permissions ? mojoDATA.permissions[mojoDATA.method] : null
+        //console.log({permission});
+
         if (!permission) return null;
-        const selectedColumnsroles = selectedColumns(permission)
+        const rolesArray = permission.split(",") || [];
+        // console.log({permission,rolesArray})
         const found = ctx.state?.user?.roles.some(
           (roleObj: { role: { name: string } }) =>
-            selectedColumnsroles.includes(roleObj?.role.name)
+            rolesArray.includes(roleObj?.role.name)
         );
+
+       // console.log({ found });
         return found;
       };
-      const applyDataFilter = async (mojoDB: any) => {
+      ///
+      const mojoFilter = async (mojoDB: any) => {
+        if (!checkPermission()) return json({ error: "not permession!" }, 403);
+        //
         const id = query("id");
         const uuid = query("uuid");
         const limit = query("limit");
         const page = query("page");
 
         if (!mojoDB)
-          mojoDB = await db.supabase
-            .from(databaseData.table)
-            .select(databaseData.select ?? databaseData.columns ?? "uuid");
+          mojoDB = await db.supabase.from(mojoDATA.table)
+            .select(mojoDATA.select ?? mojoDATA.columns ?? "uuid");
+        // check role id
 
-        if (id) mojoDB.eq("uuid", id || uuid);
-        else if (uuid) mojoDB.eq("uuid", uuid);
-        if (databaseData.single) mojoDB.single();
+
+
+        //
+        if (id) mojoDB.eq("uuid", id || uuid); else if (uuid) mojoDB.eq("uuid", uuid);
+        if (mojoDATA.single) mojoDB.single();
         if (limit) mojoDB.limit(limit);
-        if (page && databaseData?.pagination)
-          mojoDB.range(page - 1, page + limit || 10);
-
-        if (body?.filters && databaseData?.filters) {
-          const validFilters: any = {};
-          for (const key in databaseData?.filters) {
-            if (Object.prototype.hasOwnProperty.call(databaseData?.filters, key)) {
-              const properties = databaseData?.filters[key]
-                .map((prop) => {
-                  if (
-                    body.filters[key] &&
-                    body.filters[key][prop] !== undefined
-                  ) {
-                    return [prop, body.filters[key][prop]];
-                  } else return null;
-                })
-                .filter(Boolean);
-              validFilters[key] = properties;
-            }
-          }
+        if (page && mojoDATA?.pagination) mojoDB.range(page - 1, page + limit || 10);
+        //
+      //  console.log("----",body?.filters , mojoDATA?.filters);
+        
+        if (body?.filters && mojoDATA?.filters) {
+   
+            
+           const validFilters = {};
+           for (const key in mojoDATA?.filters) {
+             if (Object.prototype.hasOwnProperty.call(mojoDATA?.filters, key)) {
+               const properties = mojoDATA?.filters[key].map(prop => {
+                 if (body.filters[key] && body.filters[key][prop] !== undefined) {
+                   return [prop, body.filters[key][prop]];
+                 } else {
+                   console.log(`Invalid key "${prop}" or missing value for filter "${key}"`);
+                   return null;
+                 }
+               }).filter(Boolean); 
+               validFilters[key] = properties;
+             }
+           }
+ //console.log("----",validFilters)
           const supportedFilters = [
-            "eq",
-            "gt",
-            "lt",
-            "gte",
-            "lte",
-            "like",
-            "ilike",
-            "is",
-            "in",
-            "neq",
-            "cs",
-            "cd",
+            "eq", "gt", "lt", "gte", "lte", "like", "ilike", "is", "in", "neq", "cs", "cd"
           ];
           //
           for (const filter in validFilters) {
             if (supportedFilters.includes(filter)) {
               for (const [key, value] of validFilters[filter]) {
+                console.log("----",{filter},{key,value})
                 switch (filter) {
                   case "eq":
                     mojoDB.eq(key, value);
@@ -186,42 +196,60 @@ const selectedColumns = (columns)=>columns.split(",").map((column: string) => co
               console.log(`Unsupported filter: ${filter}`);
             }
           }
+/*
+          for (const filter in validFilters) {
+            if (supportedFilters.includes(filter)) {
+              for (const [key, value] of validFilters[filter]) {
+                console.log("----",{filter},key,value)
+               mojoDB[filter](key, value);
+              }
+            } else {
+              console.log(`Unsupported filter: ${filter}`);
+            }
+          }
+          */
         }
-        if (databaseData.role && ctx.state.user?.id)
-          mojoDB.eq(databaseData.role, ctx.state.user.id);
+
+        /*
+        //user_id role
+        if (mojoDATA.role && ctx.state.user?.id)
+          mojoDB.eq(mojoDATA.role, ctx.state.user.id);
+        */
+
 
         const { data = [], error } = await mojoDB;
 
         if (error) {
           await log({
-            status: databaseData.method,
+            status: mojoDATA.method,
             error,
             log: "Error In mOjO Land",
           });
           return json({ message: "Something went wrong!", error }, 500);
         }
+        //
         return json(data);
       };
-      if (!hasPermission()) return json({ error: "not permession!" }, 403);
-      if (databaseData.method === "function") {
-        const dynamicFunctionCode = databaseData?.function;
+      ///
+      if (mojoDATA.method === "function") {
+        const codeFunction = mojoDATA?.function;
         const content = SystemRoleContenet;
 
-        const executeDynamicFunction = new Function(
+        const dynamicFunction = new Function(
           "mojo",
           `
        const {gpt,filter,body,db,endpoint} = mojo;
        let {content}=mojo
         return (async () => {
           //
-          ${dynamicFunctionCode}
+          ${codeFunction}
       //
       })();
     `
         );
 
         try {
-          return await executeDynamicFunction({
+          return await dynamicFunction({
             gpt,
             body,
             filter,
@@ -244,55 +272,77 @@ const selectedColumns = (columns)=>columns.split(",").map((column: string) => co
         }
       }
       //add
-      if (databaseData.method === "create") {
-        const valideBodyInsert = filterValidColumns(body?.insert);
+      if (mojoDATA.method === "create") {
+        // body.insert.user_id = 1;
+        valideBodyInsert.user_id = ctx.params.user.id;
         if (!valideBodyInsert)
           return text("not data Insert inert in body.insert", 402);
-        if (databaseData.role && ctx.params.user?.id)
-          valideBodyInsert[databaseData.role] = ctx.params.user?.id;
-        let { data = [], error } = await db.supabase
-          .from(databaseData.table)
-          .insert(valideBodyInsert)
-          .select(databaseData.select || "uuid");
 
-        if (error)
-          return json({ error: "Something went wrong!" + error.message }, 500);
+valideBodyInsert.user_id = ctx.params.user.id;
+        let { data = [], error } = await db.supabase
+          .from(mojoDATA.table)
+          .insert(valideBodyInsert)
+          .select(mojoDATA.select || "uuid");
+
+        if (error) throw error;
+        //  return json({error:"Something went wrong!"+error.message}, 500);
         return json(data);
       }
-      if (databaseData.method === "rpc") {
-        const mojoDB = db.supabase.rpc(databaseData.rpc, body);
-        return await applyDataFilter(mojoDB);
+      if (mojoDATA.method === "rpc") {
+        //  body.insert.user_id = 1;
+        let { data = [], error } = await db.supabase.rpc(mojoDATA.rpc, body);
+        if (error) throw error;
+        //  return json({error:"Something went wrong!"+error.message}, 500);
+        return json(data);
       }
       //get
-      if (databaseData.method === "read") {
-        return await applyDataFilter(null);
+      if (mojoDATA.method === "read") {
+        //body.insert.user_id = 1;
+        //const mojoDB = db.supabase
+        return await mojoFilter(null)
       }
       //update
-      if (databaseData.method === "post") {
+      if (mojoDATA.method === "post") {
         const mojoDB = db.supabase
-          .from(databaseData.table)
-          .select(databaseData.select || databaseData.columns || "uuid");
-        return await applyDataFilter(mojoDB);
+        .from(mojoDATA.table)
+        .select(mojoDATA.select || mojoDATA.columns || "uuid");
+        return await mojoFilter(mojoDB)
       }
       //update
-      if (databaseData.method === "update") {
-        const valideBodyUpdate = filterValidColumns(body?.update);
+      if (mojoDATA.method === "update") {
+        console.log('body',body);
+        
+        const valideBodyUpdate = validColumns(body?.update);
+        //console.log("valide==", valideBodyUpdate);
         if (!valideBodyUpdate)
           return text("not data update inert in body.insert", 402);
-
+     
         const mojoDB = db.supabase
-          .from(databaseData.table)
+          .from(mojoDATA.table)
           .update(valideBodyUpdate)
-          .select(databaseData.select || databaseData.columns || "uuid");
-        return await applyDataFilter(mojoDB);
+          //.eq("uuid", query("id"))
+          // .eq("user_id",ctx.state.user_id )
+          .select(mojoDATA.select || mojoDATA.columns || "uuid");
+
+        return await mojoFilter(mojoDB)
       }
       //update
-      if (databaseData.method === "delete") {
-        const mojoDB = db.supabase.from(databaseData.table).delete().select();
-        return await applyDataFilter(mojoDB);
+      if (mojoDATA.method === "delete") {
+        //body.insert.user_id = 1;
+        let { data = [], error } = await db.supabase
+          .from(mojoDATA.table)
+          .delete()
+          .eq("uuid", query("id"))
+          // .eq("user_id",ctx.state.user_id )
+          .select();
+
+        if (error) throw error;
+        //  return json({error:"Something went wrong!"+error.message}, 500);
+        return json(data);
       }
-      if (databaseData.method === "data") {
-        return text(databaseData.data);
+      if (mojoDATA.method === "data") {
+        //body.insert.user_id = 1;
+        return text(mojoDATA.data);
       }
     } catch (error) {
       console.error("Error occurred while processing request: ", error);
@@ -304,6 +354,8 @@ const selectedColumns = (columns)=>columns.split(",").map((column: string) => co
       return new Response("Something went wrong!", { status: 500 });
     }
     return new Response("crud not endpoint here!", { status: 403 });
+    // end get endpoint
+    //get data endpoint in db
   }
 }
 
