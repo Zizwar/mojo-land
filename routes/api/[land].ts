@@ -1,6 +1,13 @@
 import { Handlers } from "$fresh/server.ts";
+import { createClient,SupabaseClient  } from "https://cdn.skypack.dev/@supabase/supabase-js?dts";
 import Mojo from "@/mojo.ts";
-const mojo = new Mojo();
+
+const supabase = createClient(
+  Deno.env.get("SUPABASE_API_URL2")!,
+  Deno.env.get("SUPABASE_ANON_KEY2")!
+);
+const config = {supabase}
+const mojo = new Mojo(config);
 export const handler: Handlers = {
 
   async POST(req, ctx): Promise<Response> {

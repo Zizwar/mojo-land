@@ -9,9 +9,10 @@ export default class Mojo {
       body = method === "get" ? [] : (await req.json()) || [];
     } catch (error) {
       body = [];
-      // Handle the error appropriately, such as sending an error response to the client.
     }
-const selectedColumns = (columns)=>columns.split(",").map((column: string) => column.trim()) || [];
+
+    const extractColumns = (columns) =>
+      columns.split(",").map((column: string) => column.trim()) || [];
     const json = (data: any, status = 200) => {
       return new Response(JSON.stringify(data), {
         status,
@@ -26,11 +27,11 @@ const selectedColumns = (columns)=>columns.split(",").map((column: string) => co
     };
     //set logger
     const log = async ({
-      status,
+      status = "none",
       module = "mojo",
       action = "log",
-      error: _error,
-      log,
+      error: _error = {},
+      log = "",
     }) => {
       if (_error) action = "error";
       try {
@@ -41,10 +42,8 @@ const selectedColumns = (columns)=>columns.split(",").map((column: string) => co
         if (error) {
           throw JSON.stringify(error);
         }
-        console.log("add log in db");
       } catch (error) {
-        console.error("An error unsert data:", error.message);
-        throw error;
+          throw error;
       }
     };
     try {
@@ -58,57 +57,65 @@ const selectedColumns = (columns)=>columns.split(",").map((column: string) => co
         .eq("status", "active")
         .single();
       if (error) throw error;
-
+      method = databaseData.method ?? body?.method ?? method;
+      if (databaseData?.log)
+        await log({
+          module: "tracker",
+          status: method,
+          log: JSON.stringify({ user: ctx.params.user, body, query }),
+        });
       const filterValidColumns = (bodyData: any) => {
         if (databaseData?.columns) {
           const { columns } = databaseData;
           if (columns === "all" || columns === "*") return bodyData;
           else {
-            const selectedNames = selectedColumns(columns)
+            const selectedNames = extractColumns(columns);
             const validBody = Object.fromEntries(
               Object.entries(bodyData).filter(([key]) =>
-              selectedNames.includes(key)
+                selectedNames.includes(key)
               )
             );
             return validBody;
           }
         }
       };
-      const hasPermission = () => {
+      const isAuthorized = () => {
         if (!databaseData.method) return null;
         const permission = databaseData?.permissions
           ? databaseData.permissions[databaseData.method]
           : null;
         if (!permission) return null;
-        const selectedColumnsroles = selectedColumns(permission)
+        const extractColumnsRoles = extractColumns(permission);
         const found = ctx.state?.user?.roles.some(
           (roleObj: { role: { name: string } }) =>
-            selectedColumnsroles.includes(roleObj?.role.name)
+            extractColumnsRoles.includes(roleObj?.role.name)
         );
         return found;
       };
-      const applyDataFilter = async (mojoDB: any) => {
+      const applyDataFilter = async (queryBuilder: any) => {
         const id = query("id");
         const uuid = query("uuid");
         const limit = query("limit");
         const page = query("page");
 
-        if (!mojoDB)
-          mojoDB = await db.supabase
+        if (!queryBuilder)
+          queryBuilder = await db.supabase
             .from(databaseData.table)
             .select(databaseData.select ?? databaseData.columns ?? "uuid");
 
-        if (id) mojoDB.eq("uuid", id || uuid);
-        else if (uuid) mojoDB.eq("uuid", uuid);
-        if (databaseData.single) mojoDB.single();
-        if (limit) mojoDB.limit(limit);
+        if (id) queryBuilder.eq("uuid", id || uuid);
+        else if (uuid) queryBuilder.eq("uuid", uuid);
+        if (databaseData.single) queryBuilder.single();
+        if (limit) queryBuilder.limit(limit);
         if (page && databaseData?.pagination)
-          mojoDB.range(page - 1, page + limit || 10);
+          queryBuilder.range(page - 1, page + limit || 10);
 
         if (body?.filters && databaseData?.filters) {
           const validFilters: any = {};
           for (const key in databaseData?.filters) {
-            if (Object.prototype.hasOwnProperty.call(databaseData?.filters, key)) {
+            if (
+              Object.prototype.hasOwnProperty.call(databaseData?.filters, key)
+            ) {
               const properties = databaseData?.filters[key]
                 .map((prop) => {
                   if (
@@ -142,44 +149,45 @@ const selectedColumns = (columns)=>columns.split(",").map((column: string) => co
               for (const [key, value] of validFilters[filter]) {
                 switch (filter) {
                   case "eq":
-                    mojoDB.eq(key, value);
+                    queryBuilder.eq(key, value);
                     break;
                   case "gt":
-                    mojoDB.gt(key, value);
+                    queryBuilder.gt(key, value);
                     break;
                   case "lt":
-                    mojoDB.lt(key, value);
+                    queryBuilder.lt(key, value);
                     break;
                   case "gte":
-                    mojoDB.gte(key, value);
+                    queryBuilder.gte(key, value);
                     break;
                   case "lte":
-                    mojoDB.lte(key, value);
+                    queryBuilder.lte(key, value);
                     break;
                   case "like":
-                    mojoDB.like(key, value);
+                    queryBuilder.like(key, value);
                     break;
                   case "ilike":
-                    mojoDB.ilike(key, value);
+                    queryBuilder.ilike(key, value);
                     break;
                   case "is":
-                    mojoDB.is(key, value);
+                    queryBuilder.is(key, value);
                     break;
                   case "in":
-                    mojoDB.in(key, value);
+                    queryBuilder.in(key, value);
                     break;
                   case "neq":
-                    mojoDB.neq(key, value);
+                    queryBuilder.neq(key, value);
                     break;
                   case "cs":
-                    mojoDB.cs(key, value);
+                    queryBuilder.cs(key, value);
                     break;
                   case "cd":
-                    mojoDB.cd(key, value);
+                    queryBuilder.cd(key, value);
                     break;
-                  default:
+                /*  default:
                     console.log(`Unsupported filter: ${filter}`);
                     break;
+                    */
                 }
               }
             } else {
@@ -188,9 +196,9 @@ const selectedColumns = (columns)=>columns.split(",").map((column: string) => co
           }
         }
         if (databaseData.role && ctx.state.user?.id)
-          mojoDB.eq(databaseData.role, ctx.state.user.id);
+          queryBuilder.eq(databaseData.role, ctx.state.user.id);
 
-        const { data = [], error } = await mojoDB;
+        const { data = [], error } = await queryBuilder;
 
         if (error) {
           await log({
@@ -202,7 +210,7 @@ const selectedColumns = (columns)=>columns.split(",").map((column: string) => co
         }
         return json(data);
       };
-      if (!hasPermission()) return json({ error: "not permession!" }, 403);
+      if (!isAuthorized()) return json({ error: "not permession!" }, 403);
       if (databaseData.method === "function") {
         const dynamicFunctionCode = databaseData?.function;
         const content = SystemRoleContenet;
@@ -260,19 +268,19 @@ const selectedColumns = (columns)=>columns.split(",").map((column: string) => co
         return json(data);
       }
       if (databaseData.method === "rpc") {
-        const mojoDB = db.supabase.rpc(databaseData.rpc, body);
-        return await applyDataFilter(mojoDB);
+        const queryBuilder = db.supabase.rpc(databaseData.rpc, body);
+        return await applyDataFilter(queryBuilder);
       }
       //get
       if (databaseData.method === "read") {
         return await applyDataFilter(null);
       }
-      //update
+      //post
       if (databaseData.method === "post") {
-        const mojoDB = db.supabase
+        const queryBuilder = db.supabase
           .from(databaseData.table)
           .select(databaseData.select || databaseData.columns || "uuid");
-        return await applyDataFilter(mojoDB);
+        return await applyDataFilter(queryBuilder);
       }
       //update
       if (databaseData.method === "update") {
@@ -280,16 +288,19 @@ const selectedColumns = (columns)=>columns.split(",").map((column: string) => co
         if (!valideBodyUpdate)
           return text("not data update inert in body.insert", 402);
 
-        const mojoDB = db.supabase
+        const queryBuilder = db.supabase
           .from(databaseData.table)
           .update(valideBodyUpdate)
           .select(databaseData.select || databaseData.columns || "uuid");
-        return await applyDataFilter(mojoDB);
+        return await applyDataFilter(queryBuilder);
       }
       //update
       if (databaseData.method === "delete") {
-        const mojoDB = db.supabase.from(databaseData.table).delete().select();
-        return await applyDataFilter(mojoDB);
+        const queryBuilder = db.supabase
+          .from(databaseData.table)
+          .delete()
+          .select();
+        return await applyDataFilter(queryBuilder);
       }
       if (databaseData.method === "data") {
         return text(databaseData.data);
@@ -301,9 +312,9 @@ const selectedColumns = (columns)=>columns.split(",").map((column: string) => co
         error,
         log: "Error occurred while processing request:",
       });
-      return new Response("Something went wrong!", { status: 500 });
+      return json({ message: "Something went wrong!" }, 500);
     }
-    return new Response("crud not endpoint here!", { status: 403 });
+    return json({ message: "crud not endpoint here!" }, 403);
   }
 }
 

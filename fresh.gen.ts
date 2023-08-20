@@ -14,8 +14,8 @@ import * as $8 from "./routes/api/send.ts";
 import * as $9 from "./routes/api/sendz.ts";
 import * as $10 from "./routes/api/test.ts";
 import * as $11 from "./routes/index.tsx";
-import * as $12 from "./routes/s/[slug].tsx";
-import * as $13 from "./routes/sa.tsx";
+import * as $12 from "./routes/mojo.tsx";
+import * as $13 from "./routes/s/[slug].tsx";
 import * as $$0 from "./islands/Counter.tsx";
 
 const manifest = {
@@ -32,8 +32,8 @@ const manifest = {
     "./routes/api/sendz.ts": $9,
     "./routes/api/test.ts": $10,
     "./routes/index.tsx": $11,
-    "./routes/s/[slug].tsx": $12,
-    "./routes/sa.tsx": $13,
+    "./routes/mojo.tsx": $12,
+    "./routes/s/[slug].tsx": $13,
   },
   islands: {
     "./islands/Counter.tsx": $$0,
