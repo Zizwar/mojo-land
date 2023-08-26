@@ -25,15 +25,21 @@ const generateRandomProjects = () => {
 export default function Sa() {
   
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
   const [projects, setProjects] = useState(generateRandomProjects());
 
-  const openDeleteModal = () => {
+  const [selectedProjectIndex, setSelectedProjectIndex] = useState(null);
+
+  const openDeleteModal = (index) => {
+    setSelectedProjectIndex(index);
     setIsDeleteModalOpen(true);
   };
 
   const closeDeleteModal = () => {
+    setSelectedProjectIndex(null);
     setIsDeleteModalOpen(false);
   };
+
 
   return (
     <div class="bg-gray-100 p-8">
@@ -60,7 +66,8 @@ export default function Sa() {
                 <td class="py-2 px-4 border">{project.date}</td>
                 <td class="py-2 px-4 border">
                   <button class="text-blue-500 hover:text-blue-700"><i class="fas fa-edit">edit</i></button>
-                  <button class="text-red-500 hover:text-red-700 ml-2" onClick={openDeleteModal}>del<i class="fas fa-trash"></i></button>
+                  <button class="text-red-500 hover:text-red-700 ml-2" onClick={() => openDeleteModal(index)}>
+                 del<i class="fas fa-trash"></i></button>
                 </td>
               </tr>
             ))}
