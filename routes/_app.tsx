@@ -29,6 +29,10 @@ export default function App({ Component }: AppProps) {
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.1.2/css/material-design-iconic-font.min.css"
         />
+           <link
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+          rel="stylesheet"
+        />
         <link
           rel="stylesheet"
           href="https://rawgit.com/marvelapp/devices.css/master/assets/devices.min.css"

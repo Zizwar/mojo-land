@@ -1,35 +1,36 @@
+import { useEffect } from "preact/hooks";
 export default function Admin() {
-  /*
-  const handleSubmit = async (event: { preventDefault: () => void; target: HTMLFormElement|undefined; }) => {
-    event.preventDefault();
 
-    const formData = new FormData(event.target);
-    const data = {};
+    const handleSubmit = async (e) => {
+      e.preventDefault();
 
-    formData.forEach((value, key) => {
-      data[key] = value;
-    });
-    console.log({ data });
-    try {
-      const response = await fetch("/api/mojo", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      const formData = new FormData(e.target);
+      const data = {};
 
-      if (response.ok) {
-        console.log("تم إرسال البيانات بنجاح");
-      } else {
-        console.error("حدث خطأ أثناء إرسال البيانات");
+      for (let [name, value] of formData.entries()) {
+        data[name] = value;
       }
-    } catch (error) {
-      console.error("حدث خطأ أثناء الاتصال بالخادم", error);
-    }
-  };
-  */
-  //
+      
+      console.log("start", { data });
+
+      try {
+        const response = await fetch("api/mojo", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
+
+        const responseData = await response.json();
+        console.log({ responseData });
+        // Handle response from the API
+      } catch (error) {
+        console.log({ error });
+        // Handle error
+      }
+    };
+ //
   const FormField = ({ name, label, type }) => {
     const id = `field-${name}`;
     return (
@@ -54,7 +55,7 @@ export default function Admin() {
             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id={id}
             name={name}
-            rows="3"
+            rows={3}
           />
         ) : (
           <input
@@ -95,7 +96,7 @@ export default function Admin() {
         <div class="max-w-md mx-auto bg-white p-4 rounded shadow-md">
           <h2 class="text-xl font-semibold mb-4">Mojo Land</h2>
           <div class="p-4">
-            <form class="bg-white shadow-md rounded px-4 pt-6 pb-8 mb-4">
+            <form onSubmit={handleSubmit} class="bg-white shadow-md rounded px-4 pt-6 pb-8 mb-4">
               {fields.map((field) => (
                 <FormField
                   name={field.name}
@@ -116,7 +117,7 @@ export default function Admin() {
           </div>
         </div>
       </div>
-      <script src="/js/mojo-form.js"></script>
+      
     </>
   );
 }
