@@ -31,64 +31,65 @@ export default function Admin() {
       }
     };
  //
-  const FormField = ({ name, label, type }) => {
-    const id = `field-${name}`;
-    return (
-      <div class="mb-4">
-        <div class="flex justify-between">
-          <label class="block text-gray-700 text-sm font-bold mb-2" for={id}>
-            {name}
-          </label>
-          <label class="block text-gray-700 text-sm font-bold mb-2" for={id}>
-            {label}
-          </label>
+ const FormField = ({ name, label, type, icon }) => {
+      const id = `field-${name}`;
+      return (
+        <div class="mb-4">
+          <div class="flex justify-between">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for={id}>
+              {icon && <i class={`fas ${icon} mr-1`}></i>}
+              {label}
+            </label>
+          </div>
+          {type === "checkbox" ? (
+            <input
+              class="mr-2 leading-tight"
+              type="checkbox"
+              id={id}
+              name={name}
+            />
+          ) : type === "textarea" ? (
+            <textarea
+              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id={id}
+              name={name}
+              rows={3}
+            />
+          ) : (
+            <input
+              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id={id}
+              type={type}
+              name={name}
+            />
+          )}
         </div>
-        {type === "checkbox" ? (
-          <input
-            class="mr-2 leading-tight"
-            type="checkbox"
-            id={id}
-            name={name}
-          />
-        ) : type === "textarea" ? (
-          <textarea
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id={id}
-            name={name}
-            rows={3}
-          />
-        ) : (
-          <input
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id={id}
-            type={type}
-            name={name}
-          />
-        )}
-      </div>
-    );
-  };
-  const fields = [
-    { name: "status", label: "الحالة", type: "text" },
-    { name: "title_ar", label: "العنوان (عربي)", type: "text" },
-    { name: "title_en", label: "العنوان (إنجليزي)", type: "text" },
-    { name: "comment", label: "التعليق", type: "textarea" },
-    { name: "method", label: "الطريقة", type: "text" },
-    { name: "endpoint", label: "النقطة النهائية", type: "text" },
-    { name: "table", label: "الجدول", type: "text" },
-    { name: "columns", label: "الأعمدة", type: "text" },
-    { name: "prefix", label: "البادئة", type: "text" },
-    { name: "single", label: "واحد فقط", type: "checkbox" },
+      );
+    };
+///
 
-    { name: "role", label: "الدور", type: "text" },
-    { name: "filters", label: "الفلاتر", type: "textarea" },
-    { name: "select", label: "الاختيار", type: "text" },
-    { name: "function", label: "الدالة", type: "textarea" },
-    { name: "rpc", label: "RPC", type: "text" },
-    { name: "data", label: "البيانات", type: "textarea" },
-    { name: "raw", label: "استعلام مخصص", type: "text" },
-    { name: "log", label: "السجل", type: "checkbox" },
-  ];
+  const fields = [
+  { name: "status", label: "الحالة", type: "text", icon: "fa-flag" },
+  { name: "title_ar", label: "العنوان (عربي)", type: "text", icon: "fa-heading" },
+  { name: "title_en", label: "العنوان (إنجليزي)", type: "text", icon: "fa-heading" },
+  { name: "comment", label: "التعليق", type: "textarea", icon: "fa-comment" },
+  { name: "method", label: "الطريقة", type: "text", icon: "fa-code" },
+  { name: "endpoint", label: "النقطة النهائية", type: "text", icon: "fa-link" },
+  { name: "table", label: "الجدول", type: "text", icon: "fa-table" },
+  { name: "columns", label: "الأعمدة", type: "text", icon: "fa-columns" },
+  { name: "prefix", label: "البادئة", type: "text", icon: "fa-code-branch" },
+  { name: "single", label: "واحد فقط", type: "checkbox", icon: "fa-check-square" },
+
+  { name: "role", label: "الدور", type: "text", icon: "fa-user" },
+  { name: "filters", label: "الفلاتر", type: "textarea", icon: "fa-filter" },
+  { name: "select", label: "الاختيار", type: "text", icon: "fa-hand-pointer" },
+  { name: "function", label: "الدالة", type: "textarea", icon: "fa-code" },
+  { name: "rpc", label: "RPC", type: "text", icon: "fa-network-wired" },
+  { name: "data", label: "البيانات", type: "textarea", icon: "fa-database" },
+  { name: "raw", label: "استعلام مخصص", type: "text", icon: "fa-terminal" },
+  { name: "log", label: "السجل", type: "checkbox", icon: "fa-file-alt" },
+];
+
 
   return (
     <>
@@ -102,6 +103,7 @@ export default function Admin() {
                   name={field.name}
                   label={field.label}
                   type={field.type}
+                  icon={field.icon}
                   key={field.name}
                 />
               ))}
