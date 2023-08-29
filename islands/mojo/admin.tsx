@@ -35,7 +35,9 @@ export default function Admin() {
       const id = `field-${name}`;
       return (
         <div class="mb-4">
-          <div class="flex justify-between">
+          <div class="flex justify-between"><label class="block text-gray-700 text-sm font-bold mb-2" for={id}>
+            {name}
+          </label>
             <label class="block text-gray-700 text-sm font-bold mb-2" for={id}>
               {icon && <i class={`fas ${icon} mr-1`}></i>}
               {label}
