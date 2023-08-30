@@ -311,7 +311,10 @@ export default class Mojo {
         return await applyDataFilter(queryBuilder);
       }
       if (dbEndpointData.method === "data") {
-        return text(dbEndpointData.data);
+        return json(dbEndpointData.data);
+      }
+      if (dbEndpointData.method === "text") {
+        return json(dbEndpointData.text);
       }
     } catch (error) {
       console.error("Error occurred while processing request: ", error);
