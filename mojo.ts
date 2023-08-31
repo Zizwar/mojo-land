@@ -43,7 +43,7 @@ export default class Mojo {
           throw JSON.stringify(error);
         }
       } catch (error) {
-          throw error;
+        throw error;
       }
     };
     try {
@@ -57,6 +57,9 @@ export default class Mojo {
         .eq("status", "active")
         .single();
       if (error) throw error;
+      console.log({dbEndpointData})
+      if (!dbEndpointData.length)
+        return json({ message: "not endpont here" }, 402);
       method = dbEndpointData.method ?? body?.method ?? method;
       if (dbEndpointData?.log)
         await log({
@@ -135,6 +138,7 @@ export default class Mojo {
             "lt",
             "gte",
             "lte",
+            "or",
             "like",
             "ilike",
             "is",
@@ -142,7 +146,7 @@ export default class Mojo {
             "neq",
             "cs",
             "cd",
-            "ts"
+            "ts",
           ];
           //
           for (const filter in validFilters) {
@@ -184,8 +188,11 @@ export default class Mojo {
                     break;
                   case "cd":
                     queryBuilder.cd(key, value);
-                    break;  
-                    case "ts":
+                    break;
+                  case "or":
+                    queryBuilder.or(value);
+                    break;
+                  case "ts":
                     queryBuilder.textSearch(key, value, {
                       config: "english",
                       //  type: "phrase",
@@ -193,7 +200,7 @@ export default class Mojo {
                       ts_rank: true,
                     });
                     break;
-                /*  default:
+                  /*  default:
                     console.log(`Unsupported filter: ${filter}`);
                     break;
                     */
@@ -234,7 +241,8 @@ export default class Mojo {
           ${dynamicFunctionCode}
       //
       })();
-    ` );
+    `
+        );
 
         try {
           return await executeDynamicFunction({
