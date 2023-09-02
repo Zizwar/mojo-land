@@ -47,7 +47,7 @@ export default class Mojo {
       }
     };
     try {
-      let { data: dbEndpointData, error } = await db.supabase
+      let { data: dbData, error } = await db.supabase
         .from("mojos")
         .select("*")
         .eq(
@@ -56,20 +56,18 @@ export default class Mojo {
         )
         .eq("status", "active")
         .single();
-      if (error) throw error;
-      console.log({dbEndpointData})
-      if (!dbEndpointData.length)
-        return json({ message: "not endpont here" }, 402);
-      method = dbEndpointData.method ?? body?.method ?? method;
-      if (dbEndpointData?.log)
+      if (error) return json({ message: "not endpont here", error }, 402);
+
+      method = dbData.method ?? body?.method ?? method;
+      if (dbData?.log)
         await log({
           module: "tracker",
           status: method,
           log: JSON.stringify({ user: ctx.params.user, body, query }),
         });
       const filterValidColumns = (bodyData: any) => {
-        if (dbEndpointData?.columns) {
-          const { columns } = dbEndpointData;
+        if (dbData?.columns) {
+          const { columns } = dbData;
           if (columns === "all" || columns === "*") return bodyData;
           else {
             const selectedNames = extractColumns(columns);
@@ -83,9 +81,9 @@ export default class Mojo {
         }
       };
       const isAuthorized = () => {
-        if (!dbEndpointData.method) return null;
-        const permission = dbEndpointData?.permissions
-          ? dbEndpointData.permissions[dbEndpointData.method]
+        if (!dbData.method) return null;
+        const permission = dbData?.permissions
+          ? dbData.permissions[dbData.method]
           : null;
         if (!permission) return null;
         const extractColumnsRoles = extractColumns(permission);
@@ -103,23 +101,21 @@ export default class Mojo {
 
         if (!queryBuilder)
           queryBuilder = await db.supabase
-            .from(dbEndpointData.table)
-            .select(dbEndpointData.select ?? dbEndpointData.columns ?? "uuid");
+            .from(dbData.table)
+            .select(dbData.select ?? dbData.columns ?? "uuid");
 
         if (id) queryBuilder.eq("uuid", id || uuid);
         else if (uuid) queryBuilder.eq("uuid", uuid);
-        if (dbEndpointData.single) queryBuilder.single();
+        if (dbData.single) queryBuilder.single();
         if (limit) queryBuilder.limit(limit);
-        if (page && dbEndpointData?.pagination)
+        if (page && dbData?.pagination)
           queryBuilder.range(page - 1, page + limit || 10);
 
-        if (body?.filters && dbEndpointData?.filters) {
+        if (body?.filters && dbData?.filters) {
           const validFilters: any = {};
-          for (const key in dbEndpointData?.filters) {
-            if (
-              Object.prototype.hasOwnProperty.call(dbEndpointData?.filters, key)
-            ) {
-              const properties = dbEndpointData?.filters[key]
+          for (const key in dbData?.filters) {
+            if (Object.prototype.hasOwnProperty.call(dbData?.filters, key)) {
+              const properties = dbData?.filters[key]
                 .map((prop) => {
                   if (
                     body.filters[key] &&
@@ -138,7 +134,6 @@ export default class Mojo {
             "lt",
             "gte",
             "lte",
-            "or",
             "like",
             "ilike",
             "is",
@@ -146,6 +141,7 @@ export default class Mojo {
             "neq",
             "cs",
             "cd",
+            "or",
             "ts",
           ];
           //
@@ -206,19 +202,22 @@ export default class Mojo {
                     */
                 }
               }
-            } else {
+            }
+            /*
+            else {
               console.log(`Unsupported filter: ${filter}`);
             }
+            */
           }
         }
-        if (dbEndpointData.role && ctx.state.user?.id)
-          queryBuilder.eq(dbEndpointData.role, ctx.state.user.id);
+        if (dbData.role && ctx.state.user?.id)
+          queryBuilder.eq(dbData.role, ctx.state.user.id);
 
         const { data = [], error } = await queryBuilder;
 
         if (error) {
           await log({
-            status: dbEndpointData.method,
+            status: dbData.method,
             error,
             log: "Error In mOjO Land",
           });
@@ -227,8 +226,9 @@ export default class Mojo {
         return json(data);
       };
       if (!isAuthorized()) return json({ error: "not permession!" }, 403);
-      if (dbEndpointData.method === "function") {
-        const dynamicFunctionCode = dbEndpointData?.function;
+      
+      if (dbData.method === "function") {
+        const dynamicFunctionCode = dbData?.function;
         const content = "";
 
         const executeDynamicFunction = new Function(
@@ -268,61 +268,66 @@ export default class Mojo {
         }
       }
       //add
-      if (dbEndpointData.method === "create") {
-        const valideBodyInsert = filterValidColumns(body?.insert || body);
+      if (dbData.method === "create") {
+        const valideBodyInsert = filterValidColumns(body?.insert ?? body);
         if (!valideBodyInsert)
           return text("not data Insert inert in body.insert", 402);
-        if (dbEndpointData.role && ctx.params.user?.id)
-          valideBodyInsert[dbEndpointData.role] = ctx.params.user?.id;
+        if (dbData.role && ctx.params.user?.id)
+          valideBodyInsert[dbData.role] = ctx.params.user?.id;
         let { data = [], error } = await db.supabase
-          .from(dbEndpointData.table)
+          .from(dbData.table)
           .insert(valideBodyInsert)
-          .select(dbEndpointData.select || "uuid");
+          .select(dbData.select || "uuid");
 
         if (error)
           return json({ error: "Something went wrong!" + error.message }, 500);
         return json(data);
       }
-      if (dbEndpointData.method === "rpc") {
-        const queryBuilder = db.supabase.rpc(dbEndpointData.rpc, body);
-        return await applyDataFilter(queryBuilder);
-      }
+
       //get
-      if (dbEndpointData.method === "read") {
+      if (dbData.method === "read") {
         return await applyDataFilter(null);
       }
       //post
-      if (dbEndpointData.method === "post") {
+      if (dbData.method === "post") {
         const queryBuilder = db.supabase
-          .from(dbEndpointData.table)
-          .select(dbEndpointData.select || dbEndpointData.columns || "uuid");
+          .from(dbData.table)
+          .select(dbData.select || dbData.columns || "uuid");
         return await applyDataFilter(queryBuilder);
       }
       //update
-      if (dbEndpointData.method === "update") {
-        const valideBodyUpdate = filterValidColumns(body?.update || body);
+      if (dbData.method === "update") {
+        const valideBodyUpdate = filterValidColumns(body?.update ?? body);
         if (!valideBodyUpdate)
           return text("not data update inert in body.insert", 402);
 
         const queryBuilder = db.supabase
-          .from(dbEndpointData.table)
+          .from(dbData.table)
           .update(valideBodyUpdate)
-          .select(dbEndpointData.select || dbEndpointData.columns || "uuid");
+          .select(dbData.select || dbData.columns || "uuid");
         return await applyDataFilter(queryBuilder);
       }
       //update
-      if (dbEndpointData.method === "delete") {
-        const queryBuilder = db.supabase
-          .from(dbEndpointData.table)
-          .delete()
-          .select();
+      if (dbData.method === "delete") {
+        const queryBuilder = db.supabase.from(dbData.table).delete().select();
         return await applyDataFilter(queryBuilder);
       }
-      if (dbEndpointData.method === "data") {
-        return json(dbEndpointData.data);
+      if (dbData.method === "data") {
+        return json(dbData.data);
       }
-      if (dbEndpointData.method === "text") {
-        return json(dbEndpointData.text);
+      if (dbData.method === "text") {
+        return json(dbData.text);
+      }
+      if (dbData.method === "view") {
+        return json(dbData);
+      }
+      if (dbData.method === "sql") {
+        const queryBuilder = db.supabase.rpc(dbData.sql, body);
+        return await applyDataFilter(queryBuilder);
+      }
+      if (dbData.method === "rpc") {
+        const queryBuilder = db.supabase.rpc(dbData.rpc, body);
+        return await applyDataFilter(queryBuilder);
       }
     } catch (error) {
       console.error("Error occurred while processing request: ", error);

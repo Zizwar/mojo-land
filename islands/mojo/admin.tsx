@@ -14,19 +14,19 @@ export default function Admin() {
     console.log("start", { data });
 
     try {
-      const response = await fetch("api/abrakadabra", {
+      const response = await fetch("/api/abrakadabra", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({insert:data}),
+        body: JSON.stringify(data),
       });
 
       const responseData = await response.json();
-      console.log({ responseData });
+      alert(JSON.stringify ({ responseData }));
       // Handle response from the API
     } catch (error) {
-      console.log({ error });
+      alert(JSON.stringify({ error }));
       // Handle error
     }
   };
@@ -113,7 +113,7 @@ export default function Admin() {
     { name: "function", label: "الدالة", type: "textarea", icon: "fa-code" },
     { name: "rpc", label: "RPC", type: "text", icon: "fa-network-wired" },
     { name: "data", label: "البيانات", type: "textarea", icon: "fa-database" },
-    { name: "raw", label: "استعلام مخصص", type: "text", icon: "fa-terminal" },
+    { name: "sql", label: "استعلام مخصص", type: "text", icon: "fa-terminal" },
     { name: "log", label: "السجل", type: "checkbox", icon: "fa-file-alt" },
   ];
 
