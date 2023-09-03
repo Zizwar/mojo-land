@@ -1,6 +1,29 @@
+import { createClient } from "https://cdn.skypack.dev/@supabase/supabase-js?dts";
+import { getCookies } from "$std/http/cookie.ts";
+
+const supabase = createClient(
+  Deno.env.get("SUPABASE_API_URL2")!,
+  Deno.env.get("SUPABASE_ANON_KEY2")!
+);
+
+const getUserByAccessToken = async (accessToken: string) => {
+  const { data, error } = await supabase
+    .from("users")
+    .select("id,uuid,username,is_active,roles(role(name))")
+    .eq("token", accessToken)
+    .single();
+  if (error) {
+    throw new Error(error.message);
+  }
+  if (data.length === 0) {
+    return {};
+  }
+  return data;
+};
+
 export default class Mojo {
   async render(req, ctx, method) {
-    const { gpt, db, filter } = ctx.state;
+    const { gpt, filter } = ctx.state;
 
     const url = new URL(req.url);
     const query = (q) => url.searchParams.get(q);
@@ -9,6 +32,14 @@ export default class Mojo {
       body = method === "get" ? [] : (await req.json()) || [];
     } catch (error) {
       body = [];
+    }
+    //check user
+    let user = {};
+    const accessToken =
+      getCookies(req.headers)["mojo_token"] || query("token") || body?.token;
+    if (accessToken) {
+      user = await getUserByAccessToken(accessToken);
+      console.log("middle_user=", { user, accessToken });
     }
 
     const extractColumns = (columns) =>
@@ -35,7 +66,7 @@ export default class Mojo {
     }) => {
       if (_error) action = "error";
       try {
-        const { error } = await db.supabase
+        const { error } = await supabase
           .from("logs")
           .insert({ status, module, action, error: _error, log });
 
@@ -47,7 +78,7 @@ export default class Mojo {
       }
     };
     try {
-      let { data: dbData, error } = await db.supabase
+      let { data: dbData, error } = await supabase
         .from("mojos")
         .select("*")
         .eq(
@@ -63,7 +94,7 @@ export default class Mojo {
         await log({
           module: "tracker",
           status: method,
-          log: JSON.stringify({ user: ctx.params.user, body, query }),
+          log: JSON.stringify({ user: user, body, query }),
         });
       const filterValidColumns = (bodyData: any) => {
         if (dbData?.columns) {
@@ -87,9 +118,8 @@ export default class Mojo {
           : null;
         if (!permission) return null;
         const extractColumnsRoles = extractColumns(permission);
-        const found = ctx.state?.user?.roles.some(
-          (roleObj: { role: { name: string } }) =>
-            extractColumnsRoles.includes(roleObj?.role.name)
+        const found = user.roles?.some((roleObj: { role: { name: string } }) =>
+          extractColumnsRoles.includes(roleObj?.role.name)
         );
         return found;
       };
@@ -100,7 +130,7 @@ export default class Mojo {
         const page = query("page");
 
         if (!queryBuilder)
-          queryBuilder = await db.supabase
+          queryBuilder = await supabase
             .from(dbData.table)
             .select(dbData.select ?? dbData.columns ?? "uuid");
 
@@ -210,8 +240,7 @@ export default class Mojo {
             */
           }
         }
-        if (dbData.role && ctx.state.user?.id)
-          queryBuilder.eq(dbData.role, ctx.state.user.id);
+        if (dbData.role && user.id) queryBuilder.eq(dbData.role, user.id);
 
         const { data = [], error } = await queryBuilder;
 
@@ -226,7 +255,7 @@ export default class Mojo {
         return json(data);
       };
       if (!isAuthorized()) return json({ error: "not permession!" }, 403);
-      
+
       if (dbData.method === "function") {
         const dynamicFunctionCode = dbData?.function;
         const content = "";
@@ -234,7 +263,7 @@ export default class Mojo {
         const executeDynamicFunction = new Function(
           "mojo",
           `
-       const {gpt,filter,body,db,endpoint} = mojo;
+       const {gpt,filter,body,supabase,endpoint} = mojo;
        let {content}=mojo
         return (async () => {
           //
@@ -253,7 +282,7 @@ export default class Mojo {
             text,
             query,
             content,
-            db,
+            supabase,
             log,
             endpoint: ctx.params.land,
           });
@@ -272,9 +301,8 @@ export default class Mojo {
         const valideBodyInsert = filterValidColumns(body?.insert ?? body);
         if (!valideBodyInsert)
           return text("not data Insert inert in body.insert", 402);
-        if (dbData.role && ctx.params.user?.id)
-          valideBodyInsert[dbData.role] = ctx.params.user?.id;
-        let { data = [], error } = await db.supabase
+        if (dbData.role && user.id) valideBodyInsert[dbData.role] = user.id;
+        let { data = [], error } = await supabase
           .from(dbData.table)
           .insert(valideBodyInsert)
           .select(dbData.select || "uuid");
@@ -290,7 +318,7 @@ export default class Mojo {
       }
       //post
       if (dbData.method === "post") {
-        const queryBuilder = db.supabase
+        const queryBuilder = supabase
           .from(dbData.table)
           .select(dbData.select || dbData.columns || "uuid");
         return await applyDataFilter(queryBuilder);
@@ -301,7 +329,7 @@ export default class Mojo {
         if (!valideBodyUpdate)
           return text("not data update inert in body.insert", 402);
 
-        const queryBuilder = db.supabase
+        const queryBuilder = supabase
           .from(dbData.table)
           .update(valideBodyUpdate)
           .select(dbData.select || dbData.columns || "uuid");
@@ -309,7 +337,7 @@ export default class Mojo {
       }
       //update
       if (dbData.method === "delete") {
-        const queryBuilder = db.supabase.from(dbData.table).delete().select();
+        const queryBuilder = supabase.from(dbData.table).delete().select();
         return await applyDataFilter(queryBuilder);
       }
       if (dbData.method === "data") {
@@ -322,11 +350,11 @@ export default class Mojo {
         return json(dbData);
       }
       if (dbData.method === "sql") {
-        const queryBuilder = db.supabase.rpc(dbData.sql, body);
+        const queryBuilder = supabase.rpc(dbData.sql, body);
         return await applyDataFilter(queryBuilder);
       }
       if (dbData.method === "rpc") {
-        const queryBuilder = db.supabase.rpc(dbData.rpc, body);
+        const queryBuilder = supabase.rpc(dbData.rpc, body);
         return await applyDataFilter(queryBuilder);
       }
     } catch (error) {
