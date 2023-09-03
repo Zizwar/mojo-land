@@ -14,11 +14,11 @@ import * as $8 from "./routes/api/send.ts";
 import * as $9 from "./routes/api/sendz.ts";
 import * as $10 from "./routes/api/test.ts";
 import * as $11 from "./routes/index.tsx";
-import * as $12 from "./routes/mojo/admin.tsx";
+import * as $12 from "./routes/mojo/edit.tsx";
 import * as $13 from "./routes/mojo/index.tsx";
 import * as $$0 from "./islands/Counter.tsx";
 import * as $$1 from "./islands/mojo/Llists.tsx";
-import * as $$2 from "./islands/mojo/admin.tsx";
+import * as $$2 from "./islands/mojo/edit.tsx";
 
 const manifest = {
   routes: {
@@ -34,13 +34,13 @@ const manifest = {
     "./routes/api/sendz.ts": $9,
     "./routes/api/test.ts": $10,
     "./routes/index.tsx": $11,
-    "./routes/mojo/admin.tsx": $12,
+    "./routes/mojo/edit.tsx": $12,
     "./routes/mojo/index.tsx": $13,
   },
   islands: {
     "./islands/Counter.tsx": $$0,
     "./islands/mojo/Llists.tsx": $$1,
-    "./islands/mojo/admin.tsx": $$2,
+    "./islands/mojo/edit.tsx": $$2,
   },
   baseUrl: import.meta.url,
 };

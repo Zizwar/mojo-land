@@ -1,5 +1,5 @@
 import { useEffect } from "preact/hooks";
-export default function Admin() {
+export default function Admin({data=[]}) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -49,6 +49,7 @@ export default function Admin() {
             type="checkbox"
             id={id}
             name={name}
+            value={data[name]}
           />
         ) : type === "textarea" ? (
           <textarea
@@ -56,6 +57,7 @@ export default function Admin() {
             id={id}
             name={name}
             rows={3}
+            value={data[name]}
           />
         ) : (
           <input
@@ -63,6 +65,7 @@ export default function Admin() {
             id={id}
             type={type}
             name={name}
+            value={data[name]}
           />
         )}
       </div>

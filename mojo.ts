@@ -117,6 +117,7 @@ export default class Mojo {
           ? dbData.permissions[dbData.method]
           : null;
         if (!permission) return null;
+        if (permission === "public") return true;
         const extractColumnsRoles = extractColumns(permission);
         const found = user.roles?.some((roleObj: { role: { name: string } }) =>
           extractColumnsRoles.includes(roleObj?.role.name)
@@ -130,9 +131,9 @@ export default class Mojo {
         const page = query("page");
 
         if (!queryBuilder)
-          queryBuilder = await supabase
+          queryBuilder = supabase
             .from(dbData.table)
-            .select(dbData.select ?? dbData.columns ?? "uuid");
+            .select(dbData.select || dbData.columns || "uuid");
 
         if (id) queryBuilder.eq("uuid", id || uuid);
         else if (uuid) queryBuilder.eq("uuid", uuid);
@@ -314,7 +315,10 @@ export default class Mojo {
 
       //get
       if (dbData.method === "read") {
-        return await applyDataFilter(null);
+        const queryBuilder = supabase
+          .from(dbData.table)
+          .select(dbData.select || dbData.columns || "uuid");
+        return await applyDataFilter(queryBuilder);
       }
       //post
       if (dbData.method === "post") {
