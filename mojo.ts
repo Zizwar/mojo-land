@@ -33,6 +33,8 @@ export default class Mojo {
     } catch (error) {
       body = [];
     }
+    console.log({ body });
+
     //check user
     let user = {};
     const accessToken =
@@ -92,7 +94,8 @@ export default class Mojo {
       method = dbData.method ?? body?.method ?? method;
       if (dbData?.log)
         await log({
-          module: "tracker",
+          action: "log",
+          module: "mojo",
           status: method,
           log: JSON.stringify({ user: user, body, query }),
         });

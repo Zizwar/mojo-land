@@ -13,7 +13,7 @@ export async function handler(
   let response = {};
     console.log("startttt in handelr req",{uuid});
   try {
-    response = await fetch("https://8000-zizwar-jptwhats-tk6e2v42s7c.ws-eu104.gitpod.io/api/api/mojo-read?token=12345666&uuid=" + uuid);
+    response = await fetch("https://8000-zizwar-jptwhats-tk6e2v42s7c.ws-eu104.gitpod.io/api/api/mojo-read?token=abrakadabraTokenZibra23&uuid=" + uuid);
 
     const responseData = await response.json();
     console.log({ responseData });
