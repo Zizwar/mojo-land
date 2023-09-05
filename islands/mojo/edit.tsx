@@ -32,7 +32,7 @@ export default function Edit({ data: { data = [] } }) {
   };
   //
   const FormField = ({ name, label, type, icon }) => {
-    const id = name;
+    const id = `field-${name}`;
     return (
       <div class="mb-4">
         <div class="flex justify-between">
