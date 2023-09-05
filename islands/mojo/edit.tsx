@@ -32,7 +32,7 @@ export default function Edit({ data: { data = [] } }) {
   };
   //
   const FormField = ({ name, label, type, icon }) => {
-    const id = `field-${name}`;
+    const id = name;
     return (
       <div class="mb-4">
         <div class="flex justify-between">
@@ -140,7 +140,7 @@ export default function Edit({ data: { data = [] } }) {
                 />
               ))}
               <div class="flex items-center justify-between mt-4">
-                <input  type="hidden" value={data["uuid"]} />
+                <input id="uuid" type="hidden" value={data["uuid"]} />
                 <button
                   class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                   type="submit"
