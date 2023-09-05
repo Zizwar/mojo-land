@@ -13,8 +13,10 @@ export default function Edit({ data: { data = [] } }) {
 
     console.log("start", { dataSubmit });
 
-    try {
-      const response = await fetch("/api/abrakadabra", {
+const urlFetch = dataSubmit["uuid"]?
+"/api/mojo-update?uuid="+ dataSubmit["uuid"] : "/api/abrakadabra";
+  try {
+      const response = await fetch(urlFetch,{
         method: "POST",
         headers: {
           "Content-Type": "application/json",
