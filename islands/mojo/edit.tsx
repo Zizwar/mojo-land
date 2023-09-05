@@ -1,17 +1,17 @@
 import { useEffect } from "preact/hooks";
-export default function Admin({data=[]}) {
+export default function Edit({ data: { data = [] } }) {
+  console.log("datatatat,", data);
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const formData = new FormData(e.target);
-    const data = {};
+    const dataSubmit = {};
 
     for (let [name, value] of formData.entries()) {
-      if(value)
-      data[name] = value;
+      if (value) dataSubmit[name] = value;
     }
 
-    console.log("start", { data });
+    console.log("start", { dataSubmit });
 
     try {
       const response = await fetch("/api/abrakadabra", {
@@ -19,11 +19,11 @@ export default function Admin({data=[]}) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(dataSubmit),
       });
 
       const responseData = await response.json();
-      alert(JSON.stringify ({ responseData }));
+      alert(JSON.stringify({ responseData }));
       // Handle response from the API
     } catch (error) {
       alert(JSON.stringify({ error }));
@@ -49,7 +49,7 @@ export default function Admin({data=[]}) {
             type="checkbox"
             id={id}
             name={name}
-            value={data[name]}
+            checked={!!data[name]}
           />
         ) : type === "textarea" ? (
           <textarea
@@ -140,6 +140,7 @@ export default function Admin({data=[]}) {
                 />
               ))}
               <div class="flex items-center justify-between mt-4">
+                <input uuid={uuid} type="hidden" value={data["uuid"]} />
                 <button
                   class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                   type="submit"

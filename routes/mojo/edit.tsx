@@ -1,8 +1,9 @@
 import { HandlerContext, PageProps } from "$fresh/server.ts";
 import Edit from "@/islands/mojo/edit.tsx";
+import {getTableMojoBy} from "@/mojo/witch.ts";
 
 export default function Edits({ url, data, params }: PageProps) {
-  return <Edit date={data} />;
+  return <Edit data={data} />;
 }
 export async function handler(
   req: Request,
@@ -10,15 +11,15 @@ export async function handler(
 ): Promise<Response> {
   const url = new URL(req.url);
   const uuid = url.searchParams.get("uuid");
+  const endpoint = url.searchParams.get("endpoint");
   let response = {};
     console.log("startttt in handelr req",{uuid});
   try {
-    response = await fetch("https://8000-zizwar-jptwhats-tk6e2v42s7c.ws-eu104.gitpod.io/api/api/mojo-read?token=abrakadabraTokenZibra23&uuid=" + uuid);
+    response = await getTableMojoBy( {uuid,endpoint});
 
-    const responseData = await response.json();
-    console.log({ responseData });
 
-    response = responseData;
+    console.log({ response });
+
   } catch (error) {
     response = {};
   }

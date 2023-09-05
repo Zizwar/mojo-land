@@ -1,5 +1,5 @@
 import { Handlers } from "$fresh/server.ts";
-import Mojo from "@/mojo.ts";
+import Mojo from "@/mojo/mojo.ts";
 
 const mojo = new Mojo();
 export const handler: Handlers = {
