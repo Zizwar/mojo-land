@@ -10,7 +10,7 @@ export default function Edit({ data: { data = [] } }) {
     for (let [name, value] of formData.entries()) {
       if (value && value!=="token") dataSubmit[name] = value;
     }
-const token = dataSubmit["token"];
+const token = formData["token"];
     console.log("start", { dataSubmit });
 
 const urlFetch = dataSubmit["uuid"]?
