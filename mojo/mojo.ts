@@ -22,6 +22,10 @@ const getUserByAccessToken = async (accessToken: string) => {
 };
 
 export default class Mojo {
+  addons: [] | undefined;
+  use(addon: any) {
+    this.addons = { ...this.addons, ...addon };
+  }
   async render(req, ctx, method) {
     const { gpt, filter } = ctx.state;
 
@@ -289,6 +293,7 @@ export default class Mojo {
             supabase,
             log,
             endpoint: ctx.params.land,
+            ...this.addons
           });
         } catch (error) {
           console.error("Error In FunctionDynamique Mojo.Land: ", error);
