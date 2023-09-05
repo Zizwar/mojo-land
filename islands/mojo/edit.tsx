@@ -8,9 +8,9 @@ export default function Edit({ data: { data = [] } }) {
     const dataSubmit = {};
 
     for (let [name, value] of formData.entries()) {
-      if (value) dataSubmit[name] = value;
+      if (value && value!=="token") dataSubmit[name] = value;
     }
-
+const token = dataSubmit["token"];
     console.log("start", { dataSubmit });
 
 const urlFetch = dataSubmit["uuid"]?
@@ -21,7 +21,7 @@ const urlFetch = dataSubmit["uuid"]?
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(dataSubmit["uuid"]?{update:dataSubmit}:{insert:dataSubmit}),
+        body: JSON.stringify(dataSubmit["uuid"]?{token,update:dataSubmit}:{token,insert:dataSubmit}),
       });
 
       const responseData = await response.json();
