@@ -21,7 +21,7 @@ const urlFetch = dataSubmit["uuid"]?
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(dataSubmit),
+        body: JSON.stringify(dataSubmit["uuid"]?{update:dataSubmit}:{insert:dataSubmit}),
       });
 
       const responseData = await response.json();
