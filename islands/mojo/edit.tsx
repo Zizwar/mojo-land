@@ -76,7 +76,8 @@ const urlFetch = dataSubmit["uuid"]?
   ///
 
   const fields = [
-    { name: "status", label: "الحالة", type: "text", icon: "fa-flag" },
+
+{ name: "token", label: "توكن", type: "text", icon: "fa-key" },    { name: "status", label: "الحالة", type: "text", icon: "fa-flag" },
     {
       name: "title_ar",
       label: "العنوان (عربي)",
