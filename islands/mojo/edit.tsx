@@ -126,7 +126,8 @@ if(UUID) delete dataSubmit.permissions;
 { name: "permissions", label: "التصاريح", type: "textarea", icon: "fa-key" },
     { name: "function", label: "الدالة", type: "textarea", icon: "fa-code" },
     { name: "rpc", label: "RPC", type: "text", icon: "fa-network-wired" },
-    { name: "data", label: "البيانات", type: "textarea", icon: "fa-database" },
+
+{ name: "text", label: "النص", type: "textarea", icon: "fa-note" },    { name: "data", label: "البيانات", type: "textarea", icon: "fa-database" },
     { name: "sql", label: "استعلام مخصص", type: "text", icon: "fa-terminal" },
     { name: "log", label: "السجل", type: "checkbox", icon: "fa-file-alt" },
   ];
