@@ -283,7 +283,7 @@ export default class Mojo {
 
         try {
           return await executeDynamicFunction({
-user_id:user.id
+user_id:user.id,
             gpt,
             body,
             filter,
