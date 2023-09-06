@@ -14,7 +14,7 @@ export default function Edit({ data: { data = [] } }) {
     delete dataSubmit.token
     
     const UUID = dataSubmit.uuid;
-
+//if(UUID)delete dataSubmit.permissions;
     console.log("start", { token,UUID, dataSubmit });
 
     const urlFetch = UUID
@@ -120,7 +120,8 @@ export default function Edit({ data: { data = [] } }) {
       label: "الاختيار",
       type: "text",
       icon: "fa-hand-pointer",
-    },   { name: "permissions", label: "التصاريح", type: "textarea", icon: "fa-key" },
+    },  
+// { name: "permissions", label: "التصاريح", type: "textarea", icon: "fa-key" },
     { name: "function", label: "الدالة", type: "textarea", icon: "fa-code" },
     { name: "rpc", label: "RPC", type: "text", icon: "fa-network-wired" },
     { name: "data", label: "البيانات", type: "textarea", icon: "fa-database" },
