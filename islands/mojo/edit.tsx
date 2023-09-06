@@ -5,23 +5,28 @@ export default function Edit({ data: { data = [] } }) {
     e.preventDefault();
 
     const formData = new FormData(e.target);
-    const dataSubmit = {};
+    const dataSubmit = {token:"",uuid:""};
 
     for (let [name, value] of formData.entries()) {
-      if (value && value!=="token") dataSubmit[name] = value;
+      if (value) dataSubmit[name] = value;
     }
-const token = formData["token"];
-    console.log("start", { dataSubmit });
+    const token = dataSubmit["token"];
+    delete dataSubmit.token
+    
+    const UUID = dataSubmit.uuid;
 
-const urlFetch = dataSubmit["uuid"]?
-"/api/mojo-update?uuid="+ dataSubmit["uuid"] : "/api/abrakadabra";
-  try {
-      const response = await fetch(urlFetch,{
+    console.log("start", { token,UUID, dataSubmit });
+
+    const urlFetch = UUID
+      ? `/api/mojo-update?token=${token}&uuid=${UUID}`
+      : `/api/abrakadabra?token=${token}`;
+    try {
+      const response = await fetch(urlFetch, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(...token,dataSubmit["uuid"]?...({update:dataSubmit}):...({insert:dataSubmit})),
+        body: JSON.stringify(dataSubmit),
       });
 
       const responseData = await response.json();
@@ -76,8 +81,8 @@ const urlFetch = dataSubmit["uuid"]?
   ///
 
   const fields = [
-
-{ name: "token", label: "توكن", type: "text", icon: "fa-key" },    { name: "status", label: "الحالة", type: "text", icon: "fa-flag" },
+    { name: "token", label: "توكن", type: "text", icon: "fa-key" },
+    { name: "status", label: "الحالة", type: "text", icon: "fa-flag" },
     {
       name: "title_ar",
       label: "العنوان (عربي)",
@@ -104,8 +109,8 @@ const urlFetch = dataSubmit["uuid"]?
     {
       name: "single",
       label: "واحد فقط",
-      type: "checkbox",
-      icon: "fa-check-square",
+      type: "checkboxcer",
+      icon: "fa-circle-o-notch",
     },
 
     { name: "role", label: "الدور", type: "text", icon: "fa-user" },
@@ -115,7 +120,7 @@ const urlFetch = dataSubmit["uuid"]?
       label: "الاختيار",
       type: "text",
       icon: "fa-hand-pointer",
-    },
+    },   { name: "permissions", label: "التصاريح", type: "textarea", icon: "fa-key" },
     { name: "function", label: "الدالة", type: "textarea", icon: "fa-code" },
     { name: "rpc", label: "RPC", type: "text", icon: "fa-network-wired" },
     { name: "data", label: "البيانات", type: "textarea", icon: "fa-database" },
@@ -143,7 +148,7 @@ const urlFetch = dataSubmit["uuid"]?
                 />
               ))}
               <div class="flex items-center justify-between mt-4">
-                <input id="uuid" type="hidden" value={data["uuid"]} />
+                <input name="uuid" type="hidden" value={data["uuid"]} />
                 <button
                   class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                   type="submit"

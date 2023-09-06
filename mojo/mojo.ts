@@ -62,6 +62,14 @@ export default class Mojo {
         status,
       });
     };
+    const reply = (message: any) =>
+      json({
+        data: [
+          {
+            message,
+          },
+        ],
+      });
     //set logger
     const log = async ({
       status = "none",
@@ -270,15 +278,7 @@ export default class Mojo {
 
         const executeDynamicFunction = new Function(
           "mojo",
-          `
-       const {gpt,filter,body,supabase,endpoint} = mojo;
-       let {content}=mojo
-        return (async () => {
-          //
-          ${dynamicFunctionCode}
-      //
-      })();
-    `
+          `return (async () => {${dynamicFunctionCode}})();`
         );
 
         try {
@@ -288,12 +288,13 @@ export default class Mojo {
             filter,
             json,
             text,
+            reply,
             query,
             content,
             supabase,
             log,
             endpoint: ctx.params.land,
-            ...this.addons
+            ...this.addons,
           });
         } catch (error) {
           console.error("Error In FunctionDynamique Mojo.Land: ", error);
