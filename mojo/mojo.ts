@@ -294,7 +294,7 @@ user_id:user.id
             content,
             supabase,
             log,
-            endpoint: ctx.params.land,
+            endpointData: dbData,
             ...this.addons,
           });
         } catch (error) {
