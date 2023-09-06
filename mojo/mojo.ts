@@ -257,7 +257,7 @@ export default class Mojo {
           }
         }
         if (dbData.role && user.id) queryBuilder.eq(dbData.role, user.id);
-
+        if (dbData.csv) queryBuilder.csv();
         const { data = [], error } = await queryBuilder;
 
         if (error) {
