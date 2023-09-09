@@ -1,23 +1,7 @@
 import { useState } from 'preact/hooks';
 
 // Data
-const fields = [
-  { name: "token", label: "توكن", type: "text", icon: "fa-key" },
-  { name: "status", label: "الحالة", type: "text", icon: "fa-flag" },
-  {
-    name: "title_ar",
-    label: "العنوان (عربي)",
-    type: "text",
-    icon: "fa-heading",
-  },{ name: "token", label: "توكن", type: "text", icon: "fa-key" },
-  { name: "status", label: "الحالة", type: "text", icon: "fa-flag" },
-  {
-    name: "title_ar",
-    label: "العنوان (عربي)",
-    type: "text",
-    icon: "fa-heading",
-  },
-];
+
 
 export default function lists({ data: { data = [] } }) {
 
