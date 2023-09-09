@@ -17,7 +17,7 @@ export default function lists({ data: { data = [] } }) {
   const closeDeleteModal = () => {
     setIsDeleteModalOpen(false);
   };
-const edit=(endpoint)=>document.location.hred = "/mojo/edit?endpoint="+endpoint;
+const edit=(endpoint)=>document.location.href = "/mojo/edit?endpoint="+endpoint;
 
   return (
     <div class="bg-gray-100 p-8">
