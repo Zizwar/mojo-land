@@ -14,7 +14,7 @@ export async function handler(
 ): Promise<Response> {
     let response = {};
   try {
-    response = await getTableMojoBy();
+    response = await getTableMojoBy({});
 
 
     console.log({ response });
