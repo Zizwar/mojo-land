@@ -12,7 +12,7 @@ export async function handler(
   req: Request,
   ctx: HandlerContext
 ): Promise<Response> {
-  
+    let response = {};
   try {
     response = await getTableMojoBy();
 
