@@ -17,10 +17,8 @@ single,
   const query = supabase.from("mojos").select("*");
   if (uuid) query.eq("uuid", uuid);
   if (endpoint) query.eq("endpoint", endpoint);
-if(single)
-
-query.single();
+if(single) query.single();
   const { data, error } = await query;
-  if (error) return [];
+  if (error) throw error;
   return data;
 };
