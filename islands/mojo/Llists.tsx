@@ -17,6 +17,7 @@ export default function lists({ data: { data = [] } }) {
   const closeDeleteModal = () => {
     setIsDeleteModalOpen(false);
   };
+const edit=(endpoint)=>document.location.hred = "/mojo/edit?endpoint="+endpoint;
 
   return (
     <div class="bg-gray-100 p-8">
@@ -37,12 +38,12 @@ export default function lists({ data: { data = [] } }) {
               <tr class={index % 2 === 0 ? 'bg-gray-200' : ''}>
                 <td class="py-2 px-4 border">{field.id}</td>
                 <td class="py-2 px-4 border">{field.endpoint}</td>
-                <td class="py-2 px-4 border">{field.methode}</td>
+                <td class="py-2 px-4 border">{field.method}</td>
                 <td class="py-2 px-4 border">{field.table}</td>
                 <td class="py-2 px-4 border">
                   <button class="text-blue-500 hover:text-blue-700"><i class="fas fa-edit"></i></button>
                   <button class="text-red-500 hover:text-red-700 ml-2" onClick={openDeleteModal}><i class="fas fa-trash"></i></button>
-                  <button class="text-blue-500 hover:text-blue-700" onClick={openDeleteModal}>
+                  <button class="text-blue-500 hover:text-blue-700" onClick={()=>edit(field.endpoint)}>
                     <i class="fas fa-eye"></i>
                   </button>
                 </td>
