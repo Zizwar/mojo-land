@@ -10,9 +10,6 @@ export const getTableMojoBy = async ({
   uuid,
   endpoint,
 single,
-}: {
-  uuid: string;
-  endpoint: string;
 }) => {
   const query = supabase.from("mojos").select("*");
   if (uuid) query.eq("uuid", uuid);
