@@ -9,6 +9,7 @@ const supabase = createClient(
 export const getTableMojoBy = async ({
   uuid,
   endpoint,
+single,
 }: {
   uuid: string;
   endpoint: string;
@@ -16,7 +17,10 @@ export const getTableMojoBy = async ({
   const query = supabase.from("mojos").select("*");
   if (uuid) query.eq("uuid", uuid);
   if (endpoint) query.eq("endpoint", endpoint);
-  const { data, error } = await query.single();
+if(single)
+
+query.single();
+  const { data, error } = await query;
   if (error) return [];
   return data;
 };
