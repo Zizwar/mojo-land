@@ -1,31 +1,27 @@
-
-
 import { useState } from 'preact/hooks';
 
+// Data
+const fields = [
+  { name: "token", label: "توكن", type: "text", icon: "fa-key" },
+  { name: "status", label: "الحالة", type: "text", icon: "fa-flag" },
+  {
+    name: "title_ar",
+    label: "العنوان (عربي)",
+    type: "text",
+    icon: "fa-heading",
+  },{ name: "token", label: "توكن", type: "text", icon: "fa-key" },
+  { name: "status", label: "الحالة", type: "text", icon: "fa-flag" },
+  {
+    name: "title_ar",
+    label: "العنوان (عربي)",
+    type: "text",
+    icon: "fa-heading",
+  },
+];
 
-const generateRandomDate = () => {
-  const year = Math.floor(Math.random() * 3) + 2021;
-  const month = String(Math.floor(Math.random() * 12) + 1).padStart(2, '0');
-  const day = String(Math.floor(Math.random() * 28) + 1).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-};
-
-const generateRandomProjects = () => {
-  const projects = [];
-  for (let i = 1; i <= 5; i++) {
-    projects.push({
-      name: `Project ${i}`,
-      completed: Math.random() < 0.5,
-      task: `Task ${i}`,
-      date: generateRandomDate()
-    });
-  }
-  return projects;
-};
 export default function Lists() {
-  
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [projects, setProjects] = useState(generateRandomProjects());
+  const [projects, setProjects] = useState(fields);
 
   const openDeleteModal = () => {
     setIsDeleteModalOpen(true);
@@ -42,25 +38,24 @@ export default function Lists() {
         <table class="w-full border-collapse">
           <thead>
             <tr>
-              <th class="py-2 px-4 border">Project</th>
-              <th class="py-2 px-4 border">Completed</th>
-              <th class="py-2 px-4 border">Task</th>
-              <th class="py-2 px-4 border">Date</th>
+              <th class="py-2 px-4 border">Name</th>
+              <th class="py-2 px-4 border">Label</th>
+              <th class="py-2 px-4 border">Type</th>
+              <th class="py-2 px-4 border">Icon</th>
               <th class="py-2 px-4 border">Action</th>
             </tr>
           </thead>
           <tbody>
-            {projects.map((project, index) => (
+            {projects.map((field, index) => (
               <tr class={index % 2 === 0 ? 'bg-gray-200' : ''}>
-                <td class="py-2 px-4 border">{project.name}</td>
-                <td class="py-2 px-4 border">
-                  <i class={project.completed ? 'fas fa-check text-green-500' : 'fas fa-times text-red-500'}></i>
-                </td>
-                <td class="py-2 px-4 border">{project.task}</td>
-                <td class="py-2 px-4 border">{project.date}</td>
+                <td class="py-2 px-4 border">{field.name}</td>
+                <td class="py-2 px-4 border">{field.label}</td>
+                <td class="py-2 px-4 border">{field.type}</td>
+                <td class="py-2 px-4 border">{field.icon}</td>
                 <td class="py-2 px-4 border">
                   <button class="text-blue-500 hover:text-blue-700"><i class="fas fa-edit"></i></button>
-                  <button class="text-red-500 hover:text-red-700 ml-2" onClick={openDeleteModal}><i class="fas fa-trash"></i></button><button class="text-blue-500 hover:text-blue-700" onClick={openDeleteModal}>
+                  <button class="text-red-500 hover:text-red-700 ml-2" onClick={openDeleteModal}><i class="fas fa-trash"></i></button>
+                  <button class="text-blue-500 hover:text-blue-700" onClick={openDeleteModal}>
                     <i class="fas fa-eye"></i>
                   </button>
                 </td>
@@ -86,5 +81,3 @@ export default function Lists() {
     </div>
   );
 }
-
-
