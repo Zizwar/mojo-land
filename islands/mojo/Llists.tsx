@@ -20,7 +20,7 @@ const fields = [
 ];
 
 export default function lists({ data: { data = [] } }) {
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(data || []);
   const [projects, setProjects] = useState(fields);
 
   const openDeleteModal = () => {
@@ -46,7 +46,7 @@ export default function lists({ data: { data = [] } }) {
             </tr>
           </thead>
           <tbody>
-            {data.map((field, index) => (
+            {projects.map((field, index) => (
               <tr class={index % 2 === 0 ? 'bg-gray-200' : ''}>
                 <td class="py-2 px-4 border">{field.id}</td>
                 <td class="py-2 px-4 border">{field.endpoint}</td>
