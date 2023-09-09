@@ -19,7 +19,7 @@ const fields = [
   },
 ];
 
-export default function Lists() {
+export default function lists({ data: { data = [] } }) {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [projects, setProjects] = useState(fields);
 
@@ -38,20 +38,20 @@ export default function Lists() {
         <table class="w-full border-collapse">
           <thead>
             <tr>
-              <th class="py-2 px-4 border">Name</th>
-              <th class="py-2 px-4 border">Label</th>
-              <th class="py-2 px-4 border">Type</th>
-              <th class="py-2 px-4 border">Icon</th>
+              <th class="py-2 px-4 border">ID</th>
+              <th class="py-2 px-4 border">Endpoint</th>
+              <th class="py-2 px-4 border">Methode</th>
+              <th class="py-2 px-4 border">Table</th>
               <th class="py-2 px-4 border">Action</th>
             </tr>
           </thead>
           <tbody>
             {projects.map((field, index) => (
               <tr class={index % 2 === 0 ? 'bg-gray-200' : ''}>
-                <td class="py-2 px-4 border">{field.name}</td>
-                <td class="py-2 px-4 border">{field.label}</td>
-                <td class="py-2 px-4 border">{field.type}</td>
-                <td class="py-2 px-4 border">{field.icon}</td>
+                <td class="py-2 px-4 border">{field.id}</td>
+                <td class="py-2 px-4 border">{field.endpoint}</td>
+                <td class="py-2 px-4 border">{field.methode}</td>
+                <td class="py-2 px-4 border">{field.table}</td>
                 <td class="py-2 px-4 border">
                   <button class="text-blue-500 hover:text-blue-700"><i class="fas fa-edit"></i></button>
                   <button class="text-red-500 hover:text-red-700 ml-2" onClick={openDeleteModal}><i class="fas fa-trash"></i></button>
