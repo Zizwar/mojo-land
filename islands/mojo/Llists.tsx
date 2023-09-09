@@ -8,7 +8,7 @@ export default function lists({ data: { data = [] } }) {
   console.log("datatatat,", data);
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(data || []);
-  const [projects, setProjects] = useState(fields);
+  const [projects, setProjects] = useState(data);
 
   const openDeleteModal = () => {
     setIsDeleteModalOpen(true);
