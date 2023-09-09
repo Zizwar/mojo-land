@@ -15,7 +15,7 @@ export async function handler(
   let response = {};
     console.log("startttt in handelr req",{uuid});
   try {
-    response = await getTableMojoBy( {uuid,endpoint});
+    response = await getTableMojoBy( {uuid,endpoint, single: true});
 
 
     console.log({ response });
