@@ -66,7 +66,7 @@ dataSubmit.permissions = JSON.parse(dataSubmit.permissions);
             id={id}
             name={name}
             rows={3}
-            value={data[name]==="permissions" ? JSON.stringify(data [name]): data [name])}
+            value={data[name]==="permissions" ? JSON.stringify(data [name]): data [name]}
           />
         ) : (
           <input
