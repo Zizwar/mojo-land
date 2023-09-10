@@ -15,7 +15,7 @@ export default function Edit({ data: { data = [] } }) {
     
     const UUID = dataSubmit.uuid;
 
-if(UUID) delete dataSubmit.permissions;
+dataSubmit.permissions = JSON.parse(dataSubmit.permissions);
 
     console.log("start", { token,UUID, dataSubmit });
 
@@ -66,7 +66,7 @@ if(UUID) delete dataSubmit.permissions;
             id={id}
             name={name}
             rows={3}
-            value={data[name]}
+            value={data[name]==="permissions" ? JSON.stringify(data [name]): data [name])}
           />
         ) : (
           <input
