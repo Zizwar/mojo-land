@@ -59,9 +59,15 @@ dataSubmit.permissions = JSON.parse(dataSubmit.permissions);
     name={name}
     value={data[name] ? "true" : "false"}
     onChange={(e) => {
-  
+      
       const newValue = e.target.value === "true";
-   }})
+      
+    }}
+  >
+    <option value="true">True</option>
+    <option value="false">False</option>
+  </select>
+)
    : type === "textarea" ? (
           <textarea
             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
