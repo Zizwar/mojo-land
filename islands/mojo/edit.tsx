@@ -52,15 +52,18 @@ dataSubmit.permissions = JSON.parse(dataSubmit.permissions);
             {label}
           </label>
         </div>
-        {type === "checkbox" ? (
-          <input
-            class="mr-2 leading-tight"
-            type="checkbox"
-            id={id}
-            name={name}
-            checked={!!data[name]}
-          />
-        ) : type === "textarea" ? (
+      {type === "select" ? (
+  <select
+    class="mr-2 leading-tight"
+    id={id}
+    name={name}
+    value={data[name] ? "true" : "false"}
+    onChange={(e) => {
+  
+      const newValue = e.target.value === "true";
+      
+    }}
+   : type === "textarea" ? (
           <textarea
             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id={id}
@@ -111,7 +114,7 @@ dataSubmit.permissions = JSON.parse(dataSubmit.permissions);
     {
       name: "single",
       label: "واحد فقط",
-      type: "checkboxcer",
+      type: "select",
       icon: "fa-circle-o-notch",
     },
 
@@ -129,7 +132,7 @@ dataSubmit.permissions = JSON.parse(dataSubmit.permissions);
 
 { name: "text", label: "النص", type: "textarea", icon: "fa-note" },    { name: "data", label: "البيانات", type: "textarea", icon: "fa-database" },
     { name: "sql", label: "استعلام مخصص", type: "text", icon: "fa-terminal" },
-    { name: "log", label: "السجل", type: "checkbox", icon: "fa-file-alt" },
+    { name: "log", label: "السجل", type: "select", icon: "fa-file-alt" },
   ];
 
   return (
