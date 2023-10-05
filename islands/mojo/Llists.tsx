@@ -23,7 +23,7 @@ const add=()=>document.location.href = "/mojo/edit";
     <div class="bg-gray-100 p-8">
       <div class="max-w-md mx-auto bg-white p-6 rounded-md shadow-md">
         <h1 class="text-xl font-semibold mb-4">Striped Table</h1>
-            <button class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md ml-2" onClick={add}>إلغاء</button><table class="w-full border-collapse">
+            <button class="bg-green-300 text-blanc-700 px-4 py-2 rounded-md ml-2" onClick={add}>New -جديد</button><table class="w-full border-collapse">
           <thead>
             <tr>
               <th class="py-2 px-4 border">ID</th>
