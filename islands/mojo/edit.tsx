@@ -1,4 +1,4 @@
-import { useEffect } from "preact/hooks";
+I'll noimport { useEffect } from "preact/hooks";
 export default function Edit({ data: { data = [] } }) {
   console.log("datatatat,", data);
   const handleSubmit = async (e) => {
@@ -162,13 +162,10 @@ dataSubmit.permissions = JSON.parse(dataSubmit.permissions);
               <div class="flex items-center justify-between mt-4">
                 <input name="uuid" type="hidden" value={data["uuid"]} />
 
-clone: <input
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="cbox"
-            type="checkbox"
-            name="clone"
-            
-          />                <button
+<br/>    clone:   <input type="checkbox"
+name="clone"
+value="clone"
+/>         <button
                   class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                   type="submit"
                 >
