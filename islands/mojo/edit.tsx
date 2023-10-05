@@ -13,7 +13,7 @@ export default function Edit({ data: { data = [] } }) {
     const token = dataSubmit["token"];
     delete dataSubmit.token
     
-    const UUID = dataSubmit.uuid;
+    const UUID =dataSubmit.clone?false: dataSubmit.uuid;
 
 dataSubmit.permissions = JSON.parse(dataSubmit.permissions);
 
@@ -161,7 +161,14 @@ dataSubmit.permissions = JSON.parse(dataSubmit.permissions);
               ))}
               <div class="flex items-center justify-between mt-4">
                 <input name="uuid" type="hidden" value={data["uuid"]} />
-                <button
+
+clone: <input
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="cbox"
+            type="checkbox"
+            name="clone"
+            
+          />                <button
                   class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                   type="submit"
                 >
