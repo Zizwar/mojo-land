@@ -1,4 +1,4 @@
-I'll noimport { useEffect } from "preact/hooks";
+import { useEffect } from "preact/hooks";
 export default function Edit({ data: { data = [] } }) {
   console.log("datatatat,", data);
   const handleSubmit = async (e) => {
