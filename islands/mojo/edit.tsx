@@ -15,7 +15,7 @@ delete dataSubmit.token;
     if(dataSubmit.clone)
        delete dataSubmit.uuid;
 
-const UUID =ataSubmit["uuid"];
+const UUID =dataSubmit["uuid"];
    
 dataSubmit.permissions = JSON.parse(dataSubmit.permissions);
 
