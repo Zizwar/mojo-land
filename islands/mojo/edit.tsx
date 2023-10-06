@@ -10,10 +10,12 @@ export default function Edit({ data: { data = [] } }) {
     for (let [name, value] of formData.entries()) {
       if (value) dataSubmit[name] = value;
     }
-    const token = dataSubmit["token"];
-    const UUID =ataSubmit.uuid;
+   const token = dataSubmit["token"];
+delete dataSubmit.token;
     if(dataSubmit.clone)
-       delete dataSubmit.uuid
+       delete dataSubmit.uuid;
+
+const UUID =ataSubmit["uuid"];
    
 dataSubmit.permissions = JSON.parse(dataSubmit.permissions);
 
