@@ -11,10 +11,10 @@ export default function Edit({ data: { data = [] } }) {
       if (value) dataSubmit[name] = value;
     }
     const token = dataSubmit["token"];
-    delete dataSubmit.token
-    
-    const UUID =dataSubmit.clone?false: dataSubmit.uuid;
-
+    const UUID =ataSubmit.uuid;
+    if(dataSubmit.clone)
+       delete dataSubmit.uuid
+   
 dataSubmit.permissions = JSON.parse(dataSubmit.permissions);
 
     console.log("start", { token,UUID, dataSubmit });
