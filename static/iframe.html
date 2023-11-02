@@ -1,0 +1,37 @@
+
+
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Chat</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+
+<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<link rel="stylesheet" href="/css/style2.css" />
+
+<div class="fabs">
+<div class="chat">
+<iframe
+  src="/send.html"
+  height="550"
+  width="300"
+></iframe>
+</div>
+<a id="prime" class="fab">
+<i class="prime zmdi zmdi-comment-outline"></i>
+</a>
+</div>
+
+<script>
+$("#prime").click(function () {
+$(".prime").toggleClass("zmdi-comment-outline");
+$(".prime").toggleClass("zmdi-close");
+$(".prime").toggleClass("is-active");
+$(".prime").toggleClass("is-visible");
+$("#prime").toggleClass("is-float");
+$(".chat").toggleClass("is-visible");
+});
+
+</script>
