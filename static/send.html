@@ -1,281 +1,301 @@
 <!DOCTYPE html>
 <html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Mujeeb - Chat</title>
+  <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+  <link rel="stylesheet" href="/css/chat.css" />
+  <style>
+    @import url(https://fonts.googleapis.com/css?family=Rubik:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900,900italic&subset=latin,cyrillic);
+
+    body *,
+    .chat_field {
+      font-family: "Rubik";
+    }
+
+    .chat {
+      font-family: "Rubik";
+    }
+
+    .chat .chat_converse .chat_msg_item {
+      line-height: 1.8;
+      direction: rtl;
+    }
+
+    .chat .chat_converse .chat_msg_item.chat_msg_item_user {
+      background-color: #1d6296;
+    }
+
+    .chat_header {
+      color: #ffffff;
+      background: #1d6296;
+    }
+
+    .chat_converse {
+      position: relative;
+      background: #fff;
+      margin: 0px 0 0px 0;
+      height: 310px;
+      min-height: 0;
+      font-size: 12px;
+      line-height: 18px;
+      overflow-y: auto;
+      width: 100%;
+      float: right;
+      padding-bottom: 100px;
+    }
+
+    .chat_option .online {
+      font-size: 11px;
+      font-weight: bold;
+      color: #b2f4b2;
+      opacity: 1;
+    }
+  </style>
+</head>
+
+<body>
+
   <head>
     <meta charset="UTF-8" />
-    <title>Mujeeb - Chat</title>
-    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-
-    <link rel="stylesheet" href="/css/chat.css" />
-    <style>
-      @import url(https://fonts.googleapis.com/css?family=Rubik:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900,900italic&subset=latin,cyrillic);
-
-      body *,
-      .chat_field {
-        font-family: "Rubik";
-      }
-      .chat {
-        font-family: "Rubik";
-      }
-      .chat .chat_converse .chat_msg_item {
-        line-height: 1.8;
-        direction: rtl;
-      }
-
-      .chat .chat_converse .chat_msg_item.chat_msg_item_user {
-    background-color: #1d6296;
-}
-      .chat_header {
-    color: #ffffff;
-    background: #1d6296;
-}
-      .chat_converse {
-    position: relative;
-    background: #fff;
-    margin: 0px 0 0px 0;
-    height: 310px;
-    min-height: 0;
-    font-size: 12px;
-    line-height: 18px;
-    overflow-y: auto;
-    width: 100%;
-    float: right;
-    padding-bottom: 100px;
-}
-      .chat_option .online {
-        font-size: 11px;
-        font-weight: bold;
-        color: #b2f4b2;
-        opacity: 1;
-      }
-    </style>
+    <title>Chat</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
   </head>
+
   <body>
-    <head>
-      <meta charset="UTF-8" />
-      <title>Chat</title>
-      <meta name="viewport" content="width=device-width, initial-scale=1" />
-    </head>
-
-    <body>
-      <div class="fabs">
-        <div class="chat is-visible">
-          <div class="chat_header">
-            <div class="chat_option">
-              <div class="header_img">
-                <img
-                  src="https://sisco.uxpan.net/assets/images/Logo-mujeebb.png"
-                />
-              </div>
-              <span id="chat_head">Mujeeb</span> <br />
-              <span class="agent">Agent</span>
-              <span class="online">(Online)</span>
-              <span id="chat_fullscreen_loader" class="chat_fullscreen_loader">
-                <i class="fullscreen zmdi zmdi-window-maximize"></i>
-              </span>
+    <div class="fabs">
+      <div class="chat is-visible">
+        <div class="chat_header">
+          <div class="chat_option">
+            <div class="header_img">
+              <img src="https://sisco.uxpan.net/assets/images/Logo-mujeebb.png" />
             </div>
-          </div>
-
-          <div id="chat_converse" class="chat_conversion chat_converse">
-            <span class="chat_msg_item chat_msg_item_admin">
-              <div class="chat_avatar">
-                <img
-                  src="https://sisco.uxpan.net/assets/images/Logo-mujeebb.png"
-                />
-              </div>
-              مرحباً انا مجيب كيف يمكنني مساعدتك! <br/>
-              Hello, I am. Mujeeb how can I help you?
+            <span id="chat_head">Mujeeb</span> <br />
+            <span class="agent">Agent</span>
+            <span class="online">(Online)</span>
+            <span id="chat_fullscreen_loader" class="chat_fullscreen_loader">
+              <i class="fullscreen zmdi zmdi-window-maximize"></i>
             </span>
           </div>
+        </div>
 
-          <div class="fab_field">
-            <a id="fab_mic" class="fab is-visible">
-              <i class="zmdi zmdi-mic"></i>
-            </a>
-            <a id="fab_send" class="fab is-visible">
-              <i class="zmdi zmdi-mail-send"></i>
-            </a>
-            <textarea
-              id="chatSend"
-              name="chat_message"
-              placeholder="Send a message"
-              class="chat_field chat_message"
-            ></textarea>
-          </div>
+        <div id="chat_converse" class="chat_conversion chat_converse">
+          <span class="chat_msg_item chat_msg_item_admin">
+            <div class="chat_avatar">
+              <img src="https://sisco.uxpan.net/assets/images/Logo-mujeebb.png" />
+            </div>
+            مرحباً انا مجيب كيف يمكنني مساعدتك! <br />
+            Hello, I am. Mujeeb how can I help you?
+          </span>
+        </div>
+
+        <div class="fab_field">
+          <a id="fab_mic" class="fab is-visible">
+            <i class="zmdi zmdi-mic"></i>
+          </a>
+          <a id="fab_send" class="fab is-visible">
+            <i class="zmdi zmdi-mail-send"></i>
+          </a>
+          <textarea id="chatSend" name="chat_message" placeholder="Send a message"
+            class="chat_field chat_message"></textarea>
         </div>
       </div>
+    </div>
 
-      <script>
-        function botSpeak(text, lang = "ar-SA", rate = 0.7) {
-          if ("speechSynthesis" in window) {
-            const msg = new SpeechSynthesisUtterance(text);
-            msg.lang = lang;
-            msg.rate = rate;
-            window.speechSynthesis.speak(msg);
-          }
+    <script>
+      function botSpeak(text, lang = "ar-SA", rate = 0.7) {
+        if ("speechSynthesis" in window) {
+          const msg = new SpeechSynthesisUtterance(text);
+          msg.lang = lang;
+          msg.rate = rate;
+          window.speechSynthesis.speak(msg);
         }
-        //Loader effect
-        function loadBeat(beat) {
-          beat
-            ? $("#fab_mic").addClass("is-loading")
-            : $("#fab_mic").removeClass("is-loading");
-        }
-        //hideChat(0);
-        //***record media */
-        $("#fab_send").click(function () {
-          const urlSearchParams = new URLSearchParams(window.location.search);
-          const agent = urlSearchParams.get("agent") || null;
-          //  alert(head)
-          const text = $("#chatSend").val();
-          $("#chatSend").val("");
-          document.querySelector(
-            "#chat_converse"
-          ).innerHTML += `<span class="chat_msg_item chat_msg_item_user">${text}</span>
+      }
+      //Loader effect
+      function loadBeat(beat) {
+        beat
+          ? $("#fab_mic").addClass("is-loading")
+          : $("#fab_mic").removeClass("is-loading");
+      }
+      //hideChat(0);
+      //***record media */
+      $("#fab_send").click(function () {
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        const agent = urlSearchParams.get("agent") || null;
+        //  alert(head)
+        const text = $("#chatSend").val();
+        $("#chatSend").val("");
+        document.querySelector(
+          "#chat_converse"
+        ).innerHTML += `<span style="direction:${setDirection(text)}" class="chat_msg_item chat_msg_item_user">${convertUrlsToAnchors(text)}</span>
     `;
-          //
-          const callback = (response) => {
-            response.json().then((data = []) => {
-              //const res = "wait respense ...";
-              document.querySelector(
-                "#chat_converse"
-              ).innerHTML += `  <span class="chat_msg_item chat_msg_item_admin">
+        //
+        const callback = (response) => {
+          response.json().then((data = []) => {
+            //const res = "wait respense ...";
+            document.querySelector(
+              "#chat_converse"
+            ).innerHTML += `<span style="direction:${setDirection(data.text)}" class="chat_msg_item chat_msg_item_admin">
       <div class="chat_avatar">
         <img src="https://sisco.uxpan.net/assets/images/Logo-mujeebb.png" />
       </div>
-    ${data.text}
+    ${convertUrlsToAnchors(data.text)}
     </span>`;
-            });
-          };
-          const requestOptions = {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ text }),
-          };
-          fetch(
-            "/api/" + (agent || "live-chat") + "?token=000000",
-            requestOptions
-          )
-            .then(callback)
-            .catch((error) => console.error("Error:", error));
-          //
-        });
-        $("#fab_mic").click(function () {
-          const recognition = new webkitSpeechRecognition();
+          });
+        };
+        const requestOptions = {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text }),
+        };
+        fetch(
+          "/api/" + (agent || "live-chat") + "?token=000000",
+          requestOptions
+        )
+          .then(callback)
+          .catch((error) => console.error("Error:", error));
+        //
+      });
+      $("#fab_mic").click(function () {
+        const recognition = new webkitSpeechRecognition();
 
-          loadBeat(true);
-          recognition.onresult = function (event) {
-            const text = event.results[0][0].transcript;
-            $("#chatSend").val(text);
-          };
-          recognition.onerror = function (event) {
-            console.error(event);
-            recognition.stop();
+        loadBeat(true);
+        recognition.onresult = function (event) {
+          const text = event.results[0][0].transcript;
+          $("#chatSend").val(text);
+        };
+        recognition.onerror = function (event) {
+          console.error(event);
+          recognition.stop();
 
-            loadBeat(false);
-          };
+          loadBeat(false);
+        };
 
-          recognition.onsoundend = function () {
-            recognition.stop();
-            loadBeat(false);
-          };
+        recognition.onsoundend = function () {
+          recognition.stop();
+          loadBeat(false);
+        };
 
-          // recognition.continuous = true;
-          recognition.lang = "ar-SA";
-          recognition.interimResults = true;
-          recognition.start();
-        });
+        // recognition.continuous = true;
+        recognition.lang = "ar-SA";
+        recognition.interimResults = true;
+        recognition.start();
+      });
 
-        ///
+      ///
 
-        $("#prime").click(function () {
-          toggleFab();
-        });
+      $("#prime").click(function () {
+        toggleFab();
+      });
 
-        //Toggle chat and links
-        function toggleFab() {
-          $(".prime").toggleClass("zmdi-comment-outline");
-          $(".prime").toggleClass("zmdi-close");
-          $(".prime").toggleClass("is-active");
-          $(".prime").toggleClass("is-visible");
-          $("#prime").toggleClass("is-float");
-          $(".chat").toggleClass("is-visible");
-          $(".fab").toggleClass("is-visible");
+      //Toggle chat and links
+      function toggleFab() {
+        $(".prime").toggleClass("zmdi-comment-outline");
+        $(".prime").toggleClass("zmdi-close");
+        $(".prime").toggleClass("is-active");
+        $(".prime").toggleClass("is-visible");
+        $("#prime").toggleClass("is-float");
+        $(".chat").toggleClass("is-visible");
+        $(".fab").toggleClass("is-visible");
+      }
+
+      $("#chat_first_screen").click(function (e) {
+        hideChat(1);
+      });
+
+      $("#chat_second_screen").click(function (e) {
+        hideChat(2);
+      });
+
+      $("#chat_third_screen").click(function (e) {
+        hideChat(3);
+      });
+
+      $("#chat_fourth_screen").click(function (e) {
+        hideChat(4);
+      });
+
+      $("#chat_fullscreen_loader").click(function (e) {
+        $(".fullscreen").toggleClass("zmdi-window-maximize");
+        $(".fullscreen").toggleClass("zmdi-window-restore");
+        $(".chat").toggleClass("chat_fullscreen");
+        $(".fab").toggleClass("is-hide");
+        $(".header_img").toggleClass("change_img");
+        $(".img_container").toggleClass("change_img");
+        $(".chat_header").toggleClass("chat_header2");
+        $(".fab_field").toggleClass("fab_field2");
+        $(".chat_converse").toggleClass("chat_converse2");
+        //$('#chat_converse').css('display', 'none');
+        // $('#chat_body').css('display', 'none');
+        // $('#chat_form').css('display', 'none');
+        // $('.chat_login').css('display', 'none');
+        // $('#chat_fullscreen').css('display', 'block');
+      });
+
+      function hideChat(hide) {
+        switch (hide) {
+          case 0:
+            $("#chat_converse").css("display", "none");
+            $("#chat_body").css("display", "none");
+            $("#chat_form").css("display", "none");
+            $(".chat_login").css("display", "block");
+            $(".chat_fullscreen_loader").css("display", "none");
+            $("#chat_fullscreen").css("display", "none");
+            break;
+          case 1:
+            $("#chat_converse").css("display", "block");
+            $("#chat_body").css("display", "none");
+            $("#chat_form").css("display", "none");
+            $(".chat_login").css("display", "none");
+            $(".chat_fullscreen_loader").css("display", "block");
+            break;
+          case 2:
+            $("#chat_converse").css("display", "none");
+            $("#chat_body").css("display", "block");
+            $("#chat_form").css("display", "none");
+            $(".chat_login").css("display", "none");
+            $(".chat_fullscreen_loader").css("display", "block");
+            break;
+          case 3:
+            $("#chat_converse").css("display", "none");
+            $("#chat_body").css("display", "none");
+            $("#chat_form").css("display", "block");
+            $(".chat_login").css("display", "none");
+            $(".chat_fullscreen_loader").css("display", "block");
+            break;
+          case 4:
+            $("#chat_converse").css("display", "none");
+            $("#chat_body").css("display", "none");
+            $("#chat_form").css("display", "none");
+            $(".chat_login").css("display", "none");
+            $(".chat_fullscreen_loader").css("display", "block");
+            $("#chat_fullscreen").css("display", "block");
+            break;
         }
+      }
 
-        $("#chat_first_screen").click(function (e) {
-          hideChat(1);
-        });
-
-        $("#chat_second_screen").click(function (e) {
-          hideChat(2);
-        });
-
-        $("#chat_third_screen").click(function (e) {
-          hideChat(3);
-        });
-
-        $("#chat_fourth_screen").click(function (e) {
-          hideChat(4);
-        });
-
-        $("#chat_fullscreen_loader").click(function (e) {
-          $(".fullscreen").toggleClass("zmdi-window-maximize");
-          $(".fullscreen").toggleClass("zmdi-window-restore");
-          $(".chat").toggleClass("chat_fullscreen");
-          $(".fab").toggleClass("is-hide");
-          $(".header_img").toggleClass("change_img");
-          $(".img_container").toggleClass("change_img");
-          $(".chat_header").toggleClass("chat_header2");
-          $(".fab_field").toggleClass("fab_field2");
-          $(".chat_converse").toggleClass("chat_converse2");
-          //$('#chat_converse').css('display', 'none');
-          // $('#chat_body').css('display', 'none');
-          // $('#chat_form').css('display', 'none');
-          // $('.chat_login').css('display', 'none');
-          // $('#chat_fullscreen').css('display', 'block');
-        });
-
-        function hideChat(hide) {
-          switch (hide) {
-            case 0:
-              $("#chat_converse").css("display", "none");
-              $("#chat_body").css("display", "none");
-              $("#chat_form").css("display", "none");
-              $(".chat_login").css("display", "block");
-              $(".chat_fullscreen_loader").css("display", "none");
-              $("#chat_fullscreen").css("display", "none");
-              break;
-            case 1:
-              $("#chat_converse").css("display", "block");
-              $("#chat_body").css("display", "none");
-              $("#chat_form").css("display", "none");
-              $(".chat_login").css("display", "none");
-              $(".chat_fullscreen_loader").css("display", "block");
-              break;
-            case 2:
-              $("#chat_converse").css("display", "none");
-              $("#chat_body").css("display", "block");
-              $("#chat_form").css("display", "none");
-              $(".chat_login").css("display", "none");
-              $(".chat_fullscreen_loader").css("display", "block");
-              break;
-            case 3:
-              $("#chat_converse").css("display", "none");
-              $("#chat_body").css("display", "none");
-              $("#chat_form").css("display", "block");
-              $(".chat_login").css("display", "none");
-              $(".chat_fullscreen_loader").css("display", "block");
-              break;
-            case 4:
-              $("#chat_converse").css("display", "none");
-              $("#chat_body").css("display", "none");
-              $("#chat_form").css("display", "none");
-              $(".chat_login").css("display", "none");
-              $(".chat_fullscreen_loader").css("display", "block");
-              $("#chat_fullscreen").css("display", "block");
-              break;
-          }
+      function setDirection(text = "") {
+        const rtlChar = /[\u0590-\u06FF]/;
+        if (rtlChar.test(text.charAt(0))) {
+          return 'rtl';
+        } else {
+          return 'ltr';
         }
-      </script>
-    </body>
+      }
+      
+
+
+function convertUrlsToAnchors(msg) {
+    const urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+    return msg.replace(urlRegex, function(url) {
+        return `<a href="${url}" target="_blank">${url}</a>`;
+    });
+}
+
+    </script>
   </body>
+</body>
+
 </html>
