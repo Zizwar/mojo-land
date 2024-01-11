@@ -124,6 +124,16 @@ ul li {
   top: 0px;
 }
 .chat_header {
+  /* margin: 10px; */
+  font-size: 13px;
+  font-family: "Roboto";
+  font-weight: 500;
+  color: #f3f3f3;
+  height: 55px;
+
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  padding-top: 8px;
   color: #ffffff;
   background: #1d6296;
 }
@@ -418,7 +428,9 @@ a {
   left: -52px;
   background: rgba(0, 0, 0, 0.03);
 }
-.chat .chat_converse .chat_msg_item.chat_msg_item_user {
+
+.chat .chat_converse .chat_msg_item.chat_msg_item_user .chat_avatar {
+  right: -52px;
   background-color: #1d6296;
 }
 
