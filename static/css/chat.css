@@ -102,19 +102,19 @@ ul li {
 /*Chatbox*/
 
 .chat {
-  width: 400px;
-  font-size: 12px;
-  line-height: 22px;
-  font-family: "Roboto";
-  font-weight: 500;
-  -webkit-font-smoothing: antialiased;
-  font-smoothing: antialiased;
-  opacity: 0;
-  box-shadow: -3px 0px 5px 5px rgb(0 0 0 / 8%);
-  border-radius: 10px;
-  -webkit-transition: all 0.2s ease-out;
-  -webkit-transition: all 0.2s ease-in-out;
-  transition: all 0.2s ease-in-out;
+    width: 400px;
+    font-size: 12px;
+    line-height: 22px;
+    font-family: "Roboto";
+    font-weight: 500;
+    -webkit-font-smoothing: antialiased;
+    font-smoothing: antialiased;
+    opacity: 0;
+    box-shadow: -3px 0px 5px 5px rgb(0 0 0 / 8%);
+    border-radius: 10px;
+    -webkit-transition: all 0.2s ease-out;
+    -webkit-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
 }
 
 .chat_fullscreen {
@@ -130,12 +130,10 @@ ul li {
   font-weight: 500;
   color: #f3f3f3;
   height: 55px;
-
+  background: #42a5f5;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   padding-top: 8px;
-  color: #ffffff;
-  background: #1d6296;
 }
 .chat_header2 {
   /* margin: 10px; */
@@ -366,8 +364,8 @@ a {
 .chat_converse {
   position: relative;
   background: #fff;
-  margin: 0px 0 0px 0;
-  height: 310px;
+  margin: 6px 0 0px 0;
+  height: 300px;
   min-height: 0;
   font-size: 12px;
   line-height: 18px;
@@ -431,7 +429,7 @@ a {
 
 .chat .chat_converse .chat_msg_item.chat_msg_item_user .chat_avatar {
   right: -52px;
-  background-color: #1d6296;
+  background: rgba(0, 0, 0, 0.6);
 }
 
 .chat .chat_converse .chat_msg_item .chat_avatar,
