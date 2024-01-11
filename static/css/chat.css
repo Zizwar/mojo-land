@@ -102,9 +102,6 @@ ul li {
 /*Chatbox*/
 
 .chat {
- /* position: fixed;
-  right: 85px;
-  bottom: 20px;*/
   width: 400px;
   font-size: 12px;
   line-height: 22px;
@@ -113,7 +110,7 @@ ul li {
   -webkit-font-smoothing: antialiased;
   font-smoothing: antialiased;
   opacity: 0;
-  box-shadow: 1px 1px 100px 2px rgba(0, 0, 0, 0.22);
+  box-shadow: -3px 0px 5px 5px rgb(0 0 0 / 8%);
   border-radius: 10px;
   -webkit-transition: all 0.2s ease-out;
   -webkit-transition: all 0.2s ease-in-out;
@@ -127,16 +124,8 @@ ul li {
   top: 0px;
 }
 .chat_header {
-  /* margin: 10px; */
-  font-size: 13px;
-  font-family: "Roboto";
-  font-weight: 500;
-  color: #f3f3f3;
-  height: 55px;
-  background: #42a5f5;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  padding-top: 8px;
+  color: #ffffff;
+  background: #1d6296;
 }
 .chat_header2 {
   /* margin: 10px; */
@@ -367,8 +356,8 @@ a {
 .chat_converse {
   position: relative;
   background: #fff;
-  margin: 6px 0 0px 0;
-  height: 300px;
+  margin: 0px 0 0px 0;
+  height: 310px;
   min-height: 0;
   font-size: 12px;
   line-height: 18px;
@@ -429,10 +418,8 @@ a {
   left: -52px;
   background: rgba(0, 0, 0, 0.03);
 }
-
-.chat .chat_converse .chat_msg_item.chat_msg_item_user .chat_avatar {
-  right: -52px;
-  background: rgba(0, 0, 0, 0.6);
+.chat .chat_converse .chat_msg_item.chat_msg_item_user {
+  background-color: #1d6296;
 }
 
 .chat .chat_converse .chat_msg_item .chat_avatar,
