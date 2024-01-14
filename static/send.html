@@ -290,9 +290,9 @@
 
 function convertUrlsToAnchors(msg) {
     const urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
-    return msg.replace(urlRegex, function(url) {
+    return msg? msg.replace(urlRegex, function(url) {
         return `<a href="${url}" target="_blank">${url}</a>`;
-    });
+    }) : msg;
 }
 
     </script>
