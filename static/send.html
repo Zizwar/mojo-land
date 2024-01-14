@@ -152,7 +152,7 @@
           body: JSON.stringify({ text ,time:Date.now(),session_web:_session}),
         };
         fetch(
-          "/api/" + (agent || "live-chat") + "?token=000000",
+          "/api/mujeeb/?token=000000" ,//+ (agent || "live-chat") + "?token=000000",
           requestOptions
         )
           .then(callback)
