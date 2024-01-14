@@ -138,6 +138,9 @@
         const callback = (response) => {
           response.json().then((data = []) => {
             //const res = "wait respense ...";
+            if(data.text)
+              memory.push({role: "assistant", content: data.text  });
+            
             document.querySelector(
               "#chat_converse"
             ).innerHTML += `<span style="direction:${setDirection(data.text)}" class="chat_msg_item chat_msg_item_admin">
