@@ -18,9 +18,9 @@ export default class Gpt {
     return await this.chat(messages);
   }
 
-  async chat(messages: any) {
+  async chat(messages: any,model: string = "gpt-3.5-turbo") {
     const chatCompletion = await this.#openAI.createChatCompletion({
-    model: "gpt-3.5-turbo",
+    model,
 //model: 'gpt-4-1106-preview',
       messages,
     });
