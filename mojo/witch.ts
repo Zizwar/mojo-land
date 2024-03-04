@@ -2,8 +2,8 @@ import { createClient } from "https://cdn.skypack.dev/@supabase/supabase-js?dts"
 import { getCookies } from "$std/http/cookie.ts";
 
 const supabase = createClient(
-  Deno.env.get("SUPABASE_API_URL2")!,
-  Deno.env.get("SUPABASE_ANON_KEY2")!
+  Deno.env.get("SUPABASE_API_URL")!,
+  Deno.env.get("SUPABASE_ANON_KEY")!
 );
 
 export const getTableMojoBy = async ({

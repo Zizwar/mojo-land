@@ -16,9 +16,8 @@ import * as $10 from "./routes/api/test.ts";
 import * as $11 from "./routes/index.tsx";
 import * as $12 from "./routes/mojo/edit.tsx";
 import * as $13 from "./routes/mojo/index.tsx";
-import * as $$0 from "./islands/Counter.tsx";
-import * as $$1 from "./islands/mojo/Llists.tsx";
-import * as $$2 from "./islands/mojo/edit.tsx";
+import * as $$0 from "./islands/mojo/Llists.tsx";
+import * as $$1 from "./islands/mojo/edit.tsx";
 
 const manifest = {
   routes: {
@@ -38,9 +37,8 @@ const manifest = {
     "./routes/mojo/index.tsx": $13,
   },
   islands: {
-    "./islands/Counter.tsx": $$0,
-    "./islands/mojo/Llists.tsx": $$1,
-    "./islands/mojo/edit.tsx": $$2,
+    "./islands/mojo/Llists.tsx": $$0,
+    "./islands/mojo/edit.tsx": $$1,
   },
   baseUrl: import.meta.url,
 };
