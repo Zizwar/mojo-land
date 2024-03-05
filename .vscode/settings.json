@@ -1,8 +1,0 @@
-{
-  "deno.enable": true,
-  "deno.lint": true,
-  "editor.defaultFormatter": "denoland.vscode-deno",
-  "[html]": {
-    "editor.defaultFormatter": "vscode.html-language-features"
-  }
-}
