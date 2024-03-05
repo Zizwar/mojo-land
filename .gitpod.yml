@@ -4,7 +4,7 @@ image:
 
 tasks:
   - command: |
-      deno task start
+      deno run --allow-net --allow-env  main.ts
 
 ports:
   - port: 8080
