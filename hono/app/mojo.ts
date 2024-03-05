@@ -1,5 +1,5 @@
 import { createClient } from "https://cdn.skypack.dev/@supabase/supabase-js?dts";
-import cookies from 'https://deno.land/x/hono/helper.ts'
+import cookies from "https://deno.land/x/hono/helper.ts";
 
 const supabase = createClient(
   Deno.env.get("SUPABASE_API_URL")!,
@@ -27,20 +27,19 @@ export default class Mojo {
     this.addons = { ...this.addons, ...addon };
   }
   async render(req, ctx, method) {
-    const url = new URL(req.url);
-    const query = (q) => url.searchParams.get(q);
+    const query = (q) => (q ? ctx.req.query(q) : ctx.req.query());
     let body = [];
     try {
-      body = method === "get" ? [] : (await req.json()) || [];
-    } catch (error) {
+      body = method === "get" ? [] : (await ctx.req.json()) || [];
+    } catch (_error) {
       body = [];
     }
-    console.log({ body });
+    //console.log({ body });
 
     //check user
     let user = {};
     const accessToken =
-    cookies.getCookie(req,"mojo_token") || query("token") || body?.token;
+      cookies.getCookie(req, "mojo_token") || query("token") || body?.token;
     if (accessToken) {
       user = await getUserByAccessToken(accessToken);
       console.log("middle_user=", { user, accessToken });
@@ -66,14 +65,7 @@ export default class Mojo {
         status,
       });
     };
-    const reply = (message: any) =>
-      json({
-        data: [
-          {
-            message,
-          },
-        ],
-      });
+
     //set logger
     const log = async ({
       status = "none",
@@ -101,7 +93,7 @@ export default class Mojo {
         .select("*")
         .eq(
           "endpoint",
-          ctx.param('land') || query("endpoint") || body?.endpoint || "intial"
+          ctx.param("land") || query("endpoint") || body?.endpoint || "intial"
         )
         .eq("status", "active")
         .single();
@@ -291,11 +283,11 @@ export default class Mojo {
             body,
             json,
             text,
-            reply,
+
             query,
             content,
             supabase,
-            cooki
+            cookies,
             log,
             endpointData: dbData,
             ...this.addons,
