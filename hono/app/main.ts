@@ -1,5 +1,5 @@
 import { Hono } from "https://deno.land/x/hono@v4.0.9/mod.ts";
-import Mojo from "../mojo.ts";
+import Mojo from "./mojo.ts";
 
 const app = new Hono();
 const mojo = new Mojo();

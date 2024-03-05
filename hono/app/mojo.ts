@@ -1,5 +1,5 @@
 import { createClient } from "https://cdn.skypack.dev/@supabase/supabase-js?dts";
-import cookies from "https://deno.land/x/hono/helper.ts";
+import * as cookies from "https://deno.land/x/hono/helper.ts";
 
 const supabase = createClient(
   Deno.env.get("SUPABASE_API_URL")!,
@@ -26,7 +26,7 @@ export default class Mojo {
   use(addon: any) {
     this.addons = { ...this.addons, ...addon };
   }
-  async render(req, ctx, method) {
+  async render(ctx, method) {
     const query = (q) => (q ? ctx.req.query(q) : ctx.req.query());
     let body = [];
     try {
@@ -39,7 +39,7 @@ export default class Mojo {
     //check user
     let user = {};
     const accessToken =
-      cookies.getCookie(req, "mojo_token") || query("token") || body?.token;
+      query("token") || body?.token || cookies.getCookie(ctx, "mojo_token");
     if (accessToken) {
       user = await getUserByAccessToken(accessToken);
       console.log("middle_user=", { user, accessToken });
@@ -93,7 +93,7 @@ export default class Mojo {
         .select("*")
         .eq(
           "endpoint",
-          ctx.param("land") || query("endpoint") || body?.endpoint || "intial"
+          ctx.req.param("land") || query("endpoint") || body?.endpoint || "intial"
         )
         .eq("status", "active")
         .single();
