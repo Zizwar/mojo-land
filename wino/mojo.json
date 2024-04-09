@@ -1,0 +1,79 @@
+[
+    {
+        "id": 48,
+        "created_at": "2024-04-04T01:00:13.720259+00:00",
+        "updated_at": null,
+        "updated_by": null,
+        "status": "x",
+        "title_ar": "sddd",
+        "title_en": "wx",
+        "columns": "sdf",
+        "table": "sdf",
+        "prefix": "sdf",
+        "endpoint": "dellll",
+        "comment": "dfr",
+        "data": null,
+        "permissions": null,
+        "sql": null,
+        "function": null,
+        "role": null,
+        "method": "w",
+        "select": null,
+        "uuid": "89cfe405-9349-4240-b6bc-00c0c815cc66",
+        "rpc": null,
+        "single": null,
+        "log": null,
+        "filters": null,
+        "text": null,
+        "methods": [
+            {
+                "a": "b"
+            }
+        ],
+        "name": null,
+        "is_active": null
+    },
+
+    {
+      
+        "status": "inactive ",
+        "title_ar": "قائمة المستخدمين الجديدة",
+        "title_en": "users_list_new",
+        "comment": "null",
+        "endpoint": "users_list_new",
+        "table": "mojoland",
+        "prefix": "null",
+        "method": "create",
+        "role": "null",
+        "select": "id,createAt",
+        "rpc": "null",
+        "text": "null",
+        "data": "null",
+        "sql": "null",
+        "log": "true",
+        "single": "false",
+        "function": "// write your code here\n//New Mesage",
+        "columns": "id,createAt,updateAt",
+        "methods": {
+            "create": {
+                "permissions": [
+                    "privat"
+                ],
+                "filters": {
+                    "ilike": [
+                        "id",
+                        "createAt"
+                    ],
+                    "like": [
+                        "updateAt",
+                        "createAt"
+                    ]
+                },
+                "filterValues": [
+                    "ilike",
+                    "like"
+                ]
+            }
+        }
+    }
+]
