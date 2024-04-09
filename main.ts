@@ -5,6 +5,10 @@ const app = new Hono();
 const mojo = new Mojo();
 mojo.use({test:23})
 mojo.use({testFN:(arg)=>arg})
+//
+mojo.tableName('mojos');
+mojo.tokenName('token');
+mojo.paramName('land');
 
 app.get("/", (ctx): any => {
   return ctx.text("Hono MojoLand!");
