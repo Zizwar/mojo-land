@@ -23,9 +23,23 @@ const getUserByAccessToken = async (accessToken: string) => {
 
 export default class Mojo {
   addons: [] | undefined;
+  _tableName:string="mojos"; 
+  _tokenName:string="token";
+  _paramName:string="land"
+  
   use(addon: any) {
     this.addons = { ...this.addons, ...addon };
   }
+  tableName(name: string="mojos") {
+    this._tableName = name;
+  }
+  paramName(name: string="mojos") {
+    this._paramName = name;
+  }
+  tokenName(name: string="mojos") {
+    this._tokenName = name;
+  }
+
   async render(ctx, method) {
     const query = (q) => (q ? ctx.req.query(q) : ctx.req.query());
     let body = [];
@@ -39,10 +53,10 @@ export default class Mojo {
     //check user
     let user = {};
     const accessToken =
-      query("token") || body?.token || cookies.getCookie(ctx, "mojo_token");
+      query(this._tokenName || "token") || body?.token || cookies.getCookie(ctx, this._tokenName || "token");
     if (accessToken) {
       user = await getUserByAccessToken(accessToken);
-      console.log("middle_user=", { user, accessToken });
+     // console.log("middle_user=", { user, accessToken });
     }
 
     const extractColumns = (columns = "") =>
@@ -88,12 +102,14 @@ export default class Mojo {
       }
     };
     try {
+      console.log({"this.tableName":this._tableName});
+      
       let { data: dbData, error } = await supabase
-        .from("mojos")
+        .from(this._tableName || "mojos")
         .select("*")
         .eq(
           "endpoint",
-          ctx.req.param("land") || query("endpoint") || body?.endpoint || "intial"
+          ctx.req.param(this._paramName ||"land") || query("endpoint") || body?.endpoint 
         )
         .eq("status", "active")
         .single();
@@ -144,7 +160,7 @@ export default class Mojo {
         if (!queryBuilder)
           queryBuilder = supabase
             .from(dbData.table)
-            .select(dbData.select || dbData.columns || "uuid");
+            .select(dbData.selects || dbData.select || dbData.columns || "uuid");
 
         if (id) queryBuilder.eq("uuid", id || uuid);
         else if (uuid) queryBuilder.eq("uuid", uuid);
