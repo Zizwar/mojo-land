@@ -192,23 +192,27 @@ export default class Mojo {
         if (limit) queryBuilder.limit(limit);
         if (page && dbData?.pagination)
           queryBuilder.range(page - 1, page + limit || 10);
-const filters = dbData?.methods[_method]?.filters || dbData?.filters;
+const filters = dbData?.methods && dbData?.methods[_method]?.filters || dbData?.filters;
 
         if (body?.filters && filters) {
           const validFilters: any = {};
           for (const key in filters) {
+            console.log({body:body.filters})
             if (Object.prototype.hasOwnProperty.call(filters, key)) {
+            //  console.log("hasOn",{key},"filters[key]",filters[key])
               const properties = filters[key]
                 .map((prop) => {
+           //       console.log({prop})
                   if (
-                    body.filters[key] &&
-                    body.filters[key][prop] !== undefined
+                    body.filters[key]  && body.filters[key][prop]
                   ) {
+                 //   console.log("dddddddd",prop, body.filters[key][prop])
                     return [prop, body.filters[key][prop]];
                   } else return null;
                 })
                 .filter(Boolean);
               validFilters[key] = properties;
+          //   console.log({properties})
             }
           }
           const supportedFilters = [
@@ -228,6 +232,7 @@ const filters = dbData?.methods[_method]?.filters || dbData?.filters;
             "ts",
           ];
           //
+          console.log({   validFilters          })
           for (const filter in validFilters) {
             if (supportedFilters.includes(filter)) {
               for (const [key, value] of validFilters[filter]) {
@@ -293,7 +298,7 @@ const filters = dbData?.methods[_method]?.filters || dbData?.filters;
             */
           }
         }
-        if (dbData.role && user.id) queryBuilder.eq(dbData.role, user.id);
+       // if (dbData.role && user.id) queryBuilder.eq(dbData.role, user.id);
         if (dbData.csv) queryBuilder.csv();
         const { data = [], error } = await queryBuilder;
 
