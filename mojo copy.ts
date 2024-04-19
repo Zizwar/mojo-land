@@ -23,26 +23,26 @@ const getUserByAccessToken = async (accessToken: string) => {
 
 export default class Mojo {
   addons: [] | undefined;
-  _tableName: string = "mojos";
-  _tokenName: string = "token";
-  _paramName: string = "land";
-
+  _tableName:string="mojos"; 
+  _tokenName:string="token";
+  _paramName:string="land"
+  
   use(addon: any) {
     this.addons = { ...this.addons, ...addon };
   }
-  tableName(name: string = "mojos") {
+  tableName(name: string="mojos") {
     this._tableName = name;
   }
-  paramName(name: string = "mojos") {
+  paramName(name: string="mojos") {
     this._paramName = name;
   }
-  tokenName(name: string = "mojos") {
+  tokenName(name: string="mojos") {
     this._tokenName = name;
   }
 
   async render(ctx, method) {
     const query = (q) => (q ? ctx.req.query(q) : ctx.req.query());
-    let body:any = [];
+    let body = [];
     try {
       body = method === "get" ? [] : (await ctx.req.json()) || [];
     } catch (_error) {
@@ -53,26 +53,14 @@ export default class Mojo {
     //check user
     let user = {};
     const accessToken =
-      query(this._tokenName || "token") ||
-      body?.token ||
-      cookies.getCookie(ctx, this._tokenName || "token");
+      query(this._tokenName || "token") || body?.token || cookies.getCookie(ctx, this._tokenName || "token");
     if (accessToken) {
       user = await getUserByAccessToken(accessToken);
-      // console.log("middle_user=", { user, accessToken });
+     // console.log("middle_user=", { user, accessToken });
     }
 
-    const isArray = (value:any) => {
-      return Array.isArray(value) || value instanceof Array;
-    };
-    
-    const extractColumns = (columns:any) => {
-      if (isArray(columns)) {
-        return columns;
-      } else {
-        return columns.split(",").map((column: string) => column.trim()) || []; 
-      }
-    };
-    
+    const extractColumns = (columns = "") =>
+      columns.split(",").map((column: string) => column.trim()) || [];
     const json = (
       data: any,
       status = 200,
@@ -114,16 +102,14 @@ export default class Mojo {
       }
     };
     try {
-      console.log({ "this.tableName": this._tableName });
-
+      console.log({"this.tableName":this._tableName});
+      
       let { data: dbData, error } = await supabase
         .from(this._tableName || "mojos")
         .select("*")
         .eq(
           "endpoint",
-          ctx.req.param(this._paramName || "land") ||
-            query("endpoint") ||
-            body?.endpoint
+          ctx.req.param(this._paramName ||"land") || query("endpoint") || body?.endpoint 
         )
         .eq("status", "active")
         .single();
@@ -152,21 +138,13 @@ export default class Mojo {
           }
         }
       };
-      const _method = body?.method || query("method") || method
       const isAuthorized = () => {
-    
-
         if (!dbData.method) return null;
-        /*** supôrt new methosds*/
-        let permission = null;
-        if (dbData.methods) permission = dbData?.methods[_method]?.permissions;
-        else
-          permission = dbData?.permissions
-            ? dbData.permissions[dbData.method]
-            : null;
-
+        const permission = dbData?.permissions
+          ? dbData.permissions[dbData.method]
+          : null;
         if (!permission) return null;
-        if (permission.includes("public")) return true;
+        if (permission === "public") return true;
         const extractColumnsRoles = extractColumns(permission);
         const found = user.roles?.some((roleObj: { role: { name: string } }) =>
           extractColumnsRoles.includes(roleObj?.role.name)
@@ -182,9 +160,7 @@ export default class Mojo {
         if (!queryBuilder)
           queryBuilder = supabase
             .from(dbData.table)
-            .select(
-              dbData.selects || dbData.select || dbData.columns || "uuid"
-            );
+            .select(dbData.selects || dbData.select || dbData.columns || "uuid");
 
         if (id) queryBuilder.eq("uuid", id || uuid);
         else if (uuid) queryBuilder.eq("uuid", uuid);
@@ -192,13 +168,12 @@ export default class Mojo {
         if (limit) queryBuilder.limit(limit);
         if (page && dbData?.pagination)
           queryBuilder.range(page - 1, page + limit || 10);
-const filters = dbData?.methods[_method]?.filters || dbData?.filters;
 
-        if (body?.filters && filters) {
+        if (body?.filters && dbData?.filters) {
           const validFilters: any = {};
-          for (const key in filters) {
-            if (Object.prototype.hasOwnProperty.call(filters, key)) {
-              const properties = filters[key]
+          for (const key in dbData?.filters) {
+            if (Object.prototype.hasOwnProperty.call(dbData?.filters, key)) {
+              const properties = dbData?.filters[key]
                 .map((prop) => {
                   if (
                     body.filters[key] &&
