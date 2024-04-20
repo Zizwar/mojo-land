@@ -130,8 +130,11 @@ export default class Mojo {
       if (error) return json({ message: "not endpont here", error }, 402);
 
       //   method = dbData.method ?? body?.method ?? method;
-      method = body?.method || query("method") || method;
+      if (dbData.method && dbData.method.includes(","))
+        method = body?.method || query("method") || method;
+      else method = dbData.method;
 
+      method = method.trim();
       if (dbData?.log)
         await log({
           action: "log",
@@ -155,15 +158,18 @@ export default class Mojo {
         }
       };
       const isAuthorized = () => {
+        console.log("method==", method);
+
         if (!dbData.method) return null;
         /*** supôrt new methosds*/
         let permission = null;
         if (dbData.methods) permission = dbData?.methods[method]?.permissions;
         else {
-          method = dbData.method;
+          //method = dbData.method;
           permission = dbData?.permissions ? dbData.permissions[method] : null;
         }
 
+        console.log("permission==", permission);
         if (!permission) return null;
         if (permission.includes("public")) return true;
         const extractColumnsRoles = extractColumns(permission);
