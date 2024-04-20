@@ -1,6 +1,12 @@
 {
   "version": "3",
   "redirects": {
+    "https://cdn.skypack.dev/-/@supabase/auth-js@v2.63.1-nkmpoHcuCqR7oQ1hxXCE/dist=es2019,mode=types/index.d.ts": "https://cdn.skypack.dev/-/@supabase/auth-js@v2.63.1-nkmpoHcuCqR7oQ1hxXCE/dist=es2019,mode=types/dist/module/index.d.ts",
+    "https://cdn.skypack.dev/-/@supabase/functions-js@v2.3.0-fmhp0YTtWpgHFejcMrdP/dist=es2019,mode=types/index.d.ts": "https://cdn.skypack.dev/-/@supabase/functions-js@v2.3.0-fmhp0YTtWpgHFejcMrdP/dist=es2019,mode=types/dist/module/index.d.ts",
+    "https://cdn.skypack.dev/-/@supabase/postgrest-js@v1.15.2-8FYbW7k6CftZGypxT4Gs/dist=es2019,mode=types/index.d.ts": "https://cdn.skypack.dev/-/@supabase/postgrest-js@v1.15.2-8FYbW7k6CftZGypxT4Gs/dist=es2019,mode=types/dist/module/index.d.ts",
+    "https://cdn.skypack.dev/-/@supabase/realtime-js@v2.9.4-F7hxw0Vp34m2bTV8BNSn/dist=es2019,mode=types/index.d.ts": "https://cdn.skypack.dev/-/@supabase/realtime-js@v2.9.4-F7hxw0Vp34m2bTV8BNSn/dist=es2019,mode=types/dist/module/index.d.ts",
+    "https://cdn.skypack.dev/-/@supabase/storage-js@v2.5.5-HMqXIkKSg1wGWsAJgUrK/dist=es2019,mode=types/index.d.ts": "https://cdn.skypack.dev/-/@supabase/storage-js@v2.5.5-HMqXIkKSg1wGWsAJgUrK/dist=es2019,mode=types/dist/module/index.d.ts",
+    "https://cdn.skypack.dev/-/@supabase/supabase-js@v2.42.5-DBYH3fRnRdmllQVxaLpX/dist=es2019,mode=types/dist/module/lib/types": "https://cdn.skypack.dev/-/@supabase/supabase-js@v2.42.5-DBYH3fRnRdmllQVxaLpX/dist=es2019,mode=types/dist/module/lib/types.d.ts",
     "https://deno.land/x/hono/helper.ts": "https://deno.land/x/hono@v4.2.5/helper.ts"
   },
   "remote": {

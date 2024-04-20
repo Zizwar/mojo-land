@@ -129,7 +129,7 @@ export default class Mojo {
         .single();
       if (error) return json({ message: "not endpont here", error }, 402);
 
-      method = dbData.method ?? body?.method ?? method;
+//   method = dbData.method ?? body?.method ?? method;
       if (dbData?.log)
         await log({
           action: "log",
