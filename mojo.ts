@@ -128,6 +128,9 @@ export default class Mojo {
         .eq("status", "active")
         .single();
       if (error) return json({ message: "not endpont here", error }, 402);
+console.log("___firstmethode===",method);
+
+console.log("___dbData.method===",dbData.method);
 
       //   method = dbData.method ?? body?.method ?? method;
       if (dbData.method && dbData.method.includes(","))
