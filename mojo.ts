@@ -42,7 +42,7 @@ export default class Mojo {
 
   async render(ctx, method) {
     const query = (q) => (q ? ctx.req.query(q) : ctx.req.query());
-    let body:any = [];
+    let body: any = [];
     try {
       body = method === "get" ? [] : (await ctx.req.json()) || [];
     } catch (_error) {
@@ -61,18 +61,18 @@ export default class Mojo {
       // console.log("middle_user=", { user, accessToken });
     }
 
-    const isArray = (value:any) => {
+    const isArray = (value: any) => {
       return Array.isArray(value) || value instanceof Array;
     };
-    
-    const extractColumns = (columns:any) => {
+
+    const extractColumns = (columns: any) => {
       if (isArray(columns)) {
         return columns;
       } else {
-        return columns.split(",").map((column: string) => column.trim()) || []; 
+        return columns.split(",").map((column: string) => column.trim()) || [];
       }
     };
-    
+
     const json = (
       data: any,
       status = 200,
@@ -129,7 +129,9 @@ export default class Mojo {
         .single();
       if (error) return json({ message: "not endpont here", error }, 402);
 
-//   method = dbData.method ?? body?.method ?? method;
+      //   method = dbData.method ?? body?.method ?? method;
+      method = body?.method || query("method") || method;
+
       if (dbData?.log)
         await log({
           action: "log",
@@ -152,18 +154,15 @@ export default class Mojo {
           }
         }
       };
-      const _method = body?.method || query("method") || method
       const isAuthorized = () => {
-    
-
         if (!dbData.method) return null;
         /*** supôrt new methosds*/
         let permission = null;
-        if (dbData.methods) permission = dbData?.methods[_method]?.permissions;
-        else
-          permission = dbData?.permissions
-            ? dbData.permissions[dbData.method]
-            : null;
+        if (dbData.methods) permission = dbData?.methods[method]?.permissions;
+        else {
+          method = dbData.method;
+          permission = dbData?.permissions ? dbData.permissions[method] : null;
+        }
 
         if (!permission) return null;
         if (permission.includes("public")) return true;
@@ -192,27 +191,27 @@ export default class Mojo {
         if (limit) queryBuilder.limit(limit);
         if (page && dbData?.pagination)
           queryBuilder.range(page - 1, page + limit || 10);
-const filters = dbData?.methods && dbData?.methods[_method]?.filters || dbData?.filters;
+        const filters =
+          (dbData?.methods && dbData?.methods[method]?.filters) ||
+          dbData?.filters;
 
         if (body?.filters && filters) {
           const validFilters: any = {};
           for (const key in filters) {
-            console.log({body:body.filters})
+            console.log({ body: body.filters });
             if (Object.prototype.hasOwnProperty.call(filters, key)) {
-            //  console.log("hasOn",{key},"filters[key]",filters[key])
+              //  console.log("hasOn",{key},"filters[key]",filters[key])
               const properties = filters[key]
                 .map((prop) => {
-           //       console.log({prop})
-                  if (
-                    body.filters[key]  && body.filters[key][prop]
-                  ) {
-                 //   console.log("dddddddd",prop, body.filters[key][prop])
+                  //       console.log({prop})
+                  if (body.filters[key] && body.filters[key][prop]) {
+                    //   console.log("dddddddd",prop, body.filters[key][prop])
                     return [prop, body.filters[key][prop]];
                   } else return null;
                 })
                 .filter(Boolean);
               validFilters[key] = properties;
-          //   console.log({properties})
+              //   console.log({properties})
             }
           }
           const supportedFilters = [
@@ -232,7 +231,7 @@ const filters = dbData?.methods && dbData?.methods[_method]?.filters || dbData?.
             "ts",
           ];
           //
-          console.log({   validFilters          })
+          console.log({ validFilters });
           for (const filter in validFilters) {
             if (supportedFilters.includes(filter)) {
               for (const [key, value] of validFilters[filter]) {
@@ -298,7 +297,7 @@ const filters = dbData?.methods && dbData?.methods[_method]?.filters || dbData?.
             */
           }
         }
-       // if (dbData.role && user.id) queryBuilder.eq(dbData.role, user.id);
+        // if (dbData.role && user.id) queryBuilder.eq(dbData.role, user.id);
         if (dbData.csv) queryBuilder.csv();
         const { data = [], error } = await queryBuilder;
 
@@ -314,7 +313,7 @@ const filters = dbData?.methods && dbData?.methods[_method]?.filters || dbData?.
       };
       if (!isAuthorized()) return json({ error: "not permession!" }, 403);
 
-      if (dbData.method === "function") {
+      if (method === "function") {
         const dynamicFunctionCode = dbData?.function;
         const content = "";
 
@@ -349,7 +348,7 @@ const filters = dbData?.methods && dbData?.methods[_method]?.filters || dbData?.
         }
       }
       //add
-      if (dbData.method === "create") {
+      if (method === "create") {
         const valideBodyInsert = filterValidColumns(body?.insert ?? body);
         if (!valideBodyInsert)
           return text("not data Insert inert in body.insert", 402);
@@ -365,21 +364,21 @@ const filters = dbData?.methods && dbData?.methods[_method]?.filters || dbData?.
       }
 
       //get
-      if (dbData.method === "read") {
+      if (method === "read" || method === "get") {
         const queryBuilder = supabase
           .from(dbData.table)
           .select(dbData.select || dbData.columns || "uuid");
         return await applyDataFilter(queryBuilder);
       }
       //post
-      if (dbData.method === "post") {
+      if (method === "post") {
         const queryBuilder = supabase
           .from(dbData.table)
           .select(dbData.select || dbData.columns || "uuid");
         return await applyDataFilter(queryBuilder);
       }
       //update
-      if (dbData.method === "update") {
+      if (method === "update") {
         const valideBodyUpdate = filterValidColumns(body?.update ?? body);
         if (!valideBodyUpdate)
           return text("not data update inert in body.insert", 402);
@@ -391,24 +390,24 @@ const filters = dbData?.methods && dbData?.methods[_method]?.filters || dbData?.
         return await applyDataFilter(queryBuilder);
       }
       //update
-      if (dbData.method === "delete") {
+      if (method === "delete") {
         const queryBuilder = supabase.from(dbData.table).delete().select();
         return await applyDataFilter(queryBuilder);
       }
-      if (dbData.method === "data") {
+      if (method === "data") {
         return json(dbData.data);
       }
-      if (dbData.method === "text") {
+      if (method === "text") {
         return json(dbData.text);
       }
-      if (dbData.method === "view") {
+      if (method === "view") {
         return json(dbData);
       }
-      if (dbData.method === "sql") {
+      if (method === "sql") {
         const queryBuilder = supabase.rpc(dbData.sql, body);
         return await applyDataFilter(queryBuilder);
       }
-      if (dbData.method === "rpc") {
+      if (method === "rpc") {
         const queryBuilder = supabase.rpc(dbData.rpc, body);
         return await applyDataFilter(queryBuilder);
       }
