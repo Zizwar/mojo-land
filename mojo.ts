@@ -128,9 +128,9 @@ export default class Mojo {
         .eq("status", "active")
         .single();
       if (error) return json({ message: "not endpont here", error }, 402);
-console.log("___firstmethode===",method);
+      console.log("___firstmethode===", method);
 
-console.log("___dbData.method===",dbData.method);
+      console.log("___dbData.method===", dbData.method);
 
       //   method = dbData.method ?? body?.method ?? method;
       if (dbData.method && dbData.method.includes(","))
@@ -186,6 +186,8 @@ console.log("___dbData.method===",dbData.method);
         const uuid = query("uuid");
         const limit = query("limit");
         const page = query("page");
+        const order = query("order");
+        const ascending = !!query("ascending");
 
         if (!queryBuilder)
           queryBuilder = supabase
@@ -194,6 +196,7 @@ console.log("___dbData.method===",dbData.method);
               dbData.selects || dbData.select || dbData.columns || "uuid"
             );
 
+        if (order) queryBuilder.order(order, { ascending });
         if (id) queryBuilder.eq("uuid", id || uuid);
         else if (uuid) queryBuilder.eq("uuid", uuid);
         if (dbData.single) queryBuilder.single();
@@ -306,7 +309,7 @@ console.log("___dbData.method===",dbData.method);
             */
           }
         }
-        // if (dbData.role && user.id) queryBuilder.eq(dbData.role, user.id);
+        if (dbData.role && user.id) queryBuilder.eq(dbData.role, user.id);
         if (dbData.csv) queryBuilder.csv();
         const { data = [], error } = await queryBuilder;
 
@@ -337,7 +340,7 @@ console.log("___dbData.method===",dbData.method);
             body,
             json,
             text,
-
+            user,
             query,
             content,
             supabase,
