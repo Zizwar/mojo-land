@@ -187,7 +187,7 @@ export default class Mojo {
         const limit = query("limit");
         const page = query("page");
         const order = query("order");
-        const ascending = !!query("ascending");
+        const ascending = !!query("ascending") || !!query("asc");
 
         if (!queryBuilder)
           queryBuilder = supabase
@@ -200,7 +200,7 @@ export default class Mojo {
         if (id) queryBuilder.eq("uuid", id || uuid);
         else if (uuid) queryBuilder.eq("uuid", uuid);
         if (dbData.single) queryBuilder.single();
-        if (limit) queryBuilder.limit(limit);
+        if (limit) queryBuilder.limit(limit > 100 ? 100 : limit);
         if (page && dbData?.pagination)
           queryBuilder.range(page - 1, page + limit || 10);
         const filters =
