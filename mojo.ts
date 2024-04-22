@@ -362,14 +362,14 @@ export default class Mojo {
       }
       //add
       if (method === "create") {
-        const valideBodyInsert = filterValidColumns(body?.insert ?? body);
+        const valideBodyInsert = filterValidColumns(body?.insert ?? body?.create ?? body);
         if (!valideBodyInsert)
           return text("not data Insert inert in body.insert", 402);
         if (dbData.role && user.id) valideBodyInsert[dbData.role] = user.id;
         let { data = [], error } = await this._supabase
           .from(dbData.table)
           .insert(valideBodyInsert)
-          .select(dbData.select || "uuid");
+          .select(dbData.select ||dbData.selects || "uuid");
 
         if (error)
           return json({ error: "Something went wrong!" + error.message }, 500);
@@ -380,14 +380,14 @@ export default class Mojo {
       if (method === "read" || method === "get") {
         const queryBuilder = this._supabase
           .from(dbData.table)
-          .select(dbData.select || dbData.columns || "uuid");
+          .select(dbData.select || dbData.selects || "uuid");
         return await applyDataFilter(queryBuilder);
       }
       //post
       if (method === "post") {
         const queryBuilder = this._supabase
           .from(dbData.table)
-          .select(dbData.select || dbData.columns || "uuid");
+          .select(dbData.select || dbData.selects || "uuid");
         return await applyDataFilter(queryBuilder);
       }
       //update
@@ -399,7 +399,7 @@ export default class Mojo {
         const queryBuilder = this._supabase
           .from(dbData.table)
           .update(valideBodyUpdate)
-          .select(dbData.select || dbData.columns || "uuid");
+          .select(dbData.select || dbData.selects || "uuid");
         return await applyDataFilter(queryBuilder);
       }
       //update
