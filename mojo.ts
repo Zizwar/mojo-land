@@ -326,7 +326,7 @@ export default class Mojo {
       };
       if (!isAuthorized()) return json({ error: "not permession!" }, 403);
 
-      if (method === "function") {
+      if (method === "function" || dbData.checker) {
         const dynamicFunctionCode = dbData?.function;
         const content = "";
 
@@ -336,7 +336,7 @@ export default class Mojo {
         );
 
         try {
-          return await executeDynamicFunction({
+          const resFnDynamic =  await executeDynamicFunction({
             user_id: user.id,
             body,
             json,
@@ -350,6 +350,8 @@ export default class Mojo {
             endpointData: dbData,
             ...this.addons,
           });
+          if(resFnDynamic !== "next")
+            return resFnDynamic
         } catch (error) {
           console.error("Error In FunctionDynamique Mojo.Land: ", error);
           await log({
