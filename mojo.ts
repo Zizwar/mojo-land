@@ -1,12 +1,5 @@
-import { createClient } from "https://cdn.skypack.dev/@supabase/supabase-js?dts";
-import * as cookies from "https://deno.land/x/hono/helper.ts";
 
-const supabase = createClient(
-  Deno.env.get("SUPABASE_API_URL")!,
-  Deno.env.get("SUPABASE_ANON_KEY")!
-);
-
-const getUserByAccessToken = async (accessToken: string) => {
+const getUserByAccessToken = async (accessToken: string,supabase:any) => {
   const { data, error } = await supabase
     .from("users")
     .select("id,uuid,username,is_active,roles(role(name))")
@@ -26,6 +19,8 @@ export default class Mojo {
   _tableName: string = "mojos";
   _tokenName: string = "token";
   _paramName: string = "land";
+  _supabase: any;
+  _cookies: any;
 
   use(addon: any) {
     this.addons = { ...this.addons, ...addon };
@@ -38,6 +33,12 @@ export default class Mojo {
   }
   tokenName(name: string = "mojos") {
     this._tokenName = name;
+  }
+  supabase(arg: any) {
+    this._supabase = arg;
+  }
+  cookies(arg: any) {
+    this._cookies = arg;
   }
 
   async render(ctx, method) {
@@ -55,9 +56,9 @@ export default class Mojo {
     const accessToken =
       query(this._tokenName || "token") ||
       body?.token ||
-      cookies.getCookie(ctx, this._tokenName || "token");
+      this._cookies.getCookie(ctx, this._tokenName || "token");
     if (accessToken) {
-      user = await getUserByAccessToken(accessToken);
+      user = await getUserByAccessToken(accessToken,this._supabase);
       // console.log("middle_user=", { user, accessToken });
     }
 
@@ -102,7 +103,7 @@ export default class Mojo {
     }) => {
       if (_error) action = "error";
       try {
-        const { error } = await supabase
+        const { error } = await this._supabase
           .from("logs")
           .insert({ status, module, action, error: _error, log });
 
@@ -116,7 +117,7 @@ export default class Mojo {
     try {
       console.log({ "this.tableName": this._tableName });
 
-      let { data: dbData, error } = await supabase
+      let { data: dbData, error } = await this._supabase
         .from(this._tableName || "mojos")
         .select("*")
         .eq(
@@ -190,7 +191,7 @@ export default class Mojo {
         const ascending = !!query("ascending") || !!query("asc");
 
         if (!queryBuilder)
-          queryBuilder = supabase
+          queryBuilder = this._supabase
             .from(dbData.table)
             .select(
               dbData.selects || dbData.select || dbData.columns || "uuid"
@@ -343,8 +344,8 @@ export default class Mojo {
             user,
             query,
             content,
-            supabase,
-            cookies,
+            supabase:this._supabase,
+            cookies:this._cookies,
             log,
             endpointData: dbData,
             ...this.addons,
@@ -365,7 +366,7 @@ export default class Mojo {
         if (!valideBodyInsert)
           return text("not data Insert inert in body.insert", 402);
         if (dbData.role && user.id) valideBodyInsert[dbData.role] = user.id;
-        let { data = [], error } = await supabase
+        let { data = [], error } = await this._supabase
           .from(dbData.table)
           .insert(valideBodyInsert)
           .select(dbData.select || "uuid");
@@ -377,14 +378,14 @@ export default class Mojo {
 
       //get
       if (method === "read" || method === "get") {
-        const queryBuilder = supabase
+        const queryBuilder = this._supabase
           .from(dbData.table)
           .select(dbData.select || dbData.columns || "uuid");
         return await applyDataFilter(queryBuilder);
       }
       //post
       if (method === "post") {
-        const queryBuilder = supabase
+        const queryBuilder = this._supabase
           .from(dbData.table)
           .select(dbData.select || dbData.columns || "uuid");
         return await applyDataFilter(queryBuilder);
@@ -395,7 +396,7 @@ export default class Mojo {
         if (!valideBodyUpdate)
           return text("not data update inert in body.insert", 402);
 
-        const queryBuilder = supabase
+        const queryBuilder = this._supabase
           .from(dbData.table)
           .update(valideBodyUpdate)
           .select(dbData.select || dbData.columns || "uuid");
@@ -403,7 +404,7 @@ export default class Mojo {
       }
       //update
       if (method === "delete") {
-        const queryBuilder = supabase.from(dbData.table).delete().select();
+        const queryBuilder = this._supabase.from(dbData.table).delete().select();
         return await applyDataFilter(queryBuilder);
       }
       if (method === "data") {
@@ -416,11 +417,11 @@ export default class Mojo {
         return json(dbData);
       }
       if (method === "sql") {
-        const queryBuilder = supabase.rpc(dbData.sql, body);
+        const queryBuilder = this._supabase.rpc(dbData.sql, body);
         return await applyDataFilter(queryBuilder);
       }
       if (method === "rpc") {
-        const queryBuilder = supabase.rpc(dbData.rpc, body);
+        const queryBuilder = this._supabase.rpc(dbData.rpc, body);
         return await applyDataFilter(queryBuilder);
       }
     } catch (error) {
