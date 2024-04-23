@@ -1,5 +1,4 @@
-
-const getUserByAccessToken = async (accessToken: string,supabase:any) => {
+const getUserByAccessToken = async (accessToken: string, supabase: any) => {
   const { data, error } = await supabase
     .from("users")
     .select("id,uuid,username,is_active,roles(role(name))")
@@ -58,7 +57,7 @@ export default class Mojo {
       body?.token ||
       this._cookies.getCookie(ctx, this._tokenName || "token");
     if (accessToken) {
-      user = await getUserByAccessToken(accessToken,this._supabase);
+      user = await getUserByAccessToken(accessToken, this._supabase);
       // console.log("middle_user=", { user, accessToken });
     }
 
@@ -186,7 +185,7 @@ export default class Mojo {
         const id = query("id");
         const uuid = query("uuid");
         const limit = query("limit");
-        const page = query("page");
+        const page = +query("page") ||0;
         const order = query("order");
         const ascending = !!query("ascending") || !!query("asc");
 
@@ -202,7 +201,7 @@ export default class Mojo {
         else if (uuid) queryBuilder.eq("uuid", uuid);
         if (dbData.single) queryBuilder.single();
         if (limit) queryBuilder.limit(limit > 100 ? 100 : limit);
-        if (page && dbData?.pagination)
+        if (page /* && dbData?.pagination*/)
           queryBuilder.range(page - 1, page + limit || 10);
         const filters =
           (dbData?.methods && dbData?.methods[method]?.filters) ||
@@ -336,7 +335,7 @@ export default class Mojo {
         );
 
         try {
-          const resFnDynamic =  await executeDynamicFunction({
+          const resFnDynamic = await executeDynamicFunction({
             user_id: user.id,
             body,
             json,
@@ -344,14 +343,13 @@ export default class Mojo {
             user,
             query,
             content,
-            supabase:this._supabase,
-            cookies:this._cookies,
+            supabase: this._supabase,
+            cookies: this._cookies,
             log,
             endpointData: dbData,
             ...this.addons,
           });
-          if(resFnDynamic !== "next")
-            return resFnDynamic
+          if (resFnDynamic !== "next") return resFnDynamic;
         } catch (error) {
           console.error("Error In FunctionDynamique Mojo.Land: ", error);
           await log({
@@ -364,14 +362,16 @@ export default class Mojo {
       }
       //add
       if (method === "create") {
-        const valideBodyInsert = filterValidColumns(body?.insert ?? body?.create ?? body);
+        const valideBodyInsert = filterValidColumns(
+          body?.insert ?? body?.create ?? body
+        );
         if (!valideBodyInsert)
           return text("not data Insert inert in body.insert", 402);
         if (dbData.role && user.id) valideBodyInsert[dbData.role] = user.id;
         let { data = [], error } = await this._supabase
           .from(dbData.table)
           .insert(valideBodyInsert)
-          .select(dbData.select ||dbData.selects || "uuid");
+          .select(dbData.select || dbData.selects || "uuid");
 
         if (error)
           return json({ error: "Something went wrong!" + error.message }, 500);
@@ -406,7 +406,10 @@ export default class Mojo {
       }
       //update
       if (method === "delete") {
-        const queryBuilder = this._supabase.from(dbData.table).delete().select();
+        const queryBuilder = this._supabase
+          .from(dbData.table)
+          .delete()
+          .select();
         return await applyDataFilter(queryBuilder);
       }
       if (method === "data") {
