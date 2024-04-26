@@ -2,6 +2,9 @@ import { Hono } from "https://deno.land/x/hono@v4.0.9/mod.ts";
 import { createClient } from "https://cdn.skypack.dev/@supabase/supabase-js?dts";
 import { jwt } from "https://deno.land/x/hono/middleware.ts";
 import * as cookies from "https://deno.land/x/hono/helper.ts";
+//
+import * as denoblogger from "https://deno.land/x/denoblogger@v0.9.3/mod.js";
+//
 import Mojo from "./mojo.ts";
 
 const supabase = createClient(
@@ -20,7 +23,7 @@ const mojo = new Mojo();
 
 
 
-mojo.use({ jwt, generate });
+mojo.use({ jwt, generate,useblogger:denoblogger });
 mojo.use({ testFN: (arg) => arg });
 //
 mojo.cookies(cookies);
