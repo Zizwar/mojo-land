@@ -3,7 +3,7 @@ import { createClient } from "https://cdn.skypack.dev/@supabase/supabase-js?dts"
 import { jwt } from "https://deno.land/x/hono/middleware.ts";
 import * as cookies from "https://deno.land/x/hono/helper.ts";
 //
-import * as denoblogger from "https://deno.land/x/denoblogger@v0.9.3/mod.js";
+import denoblogger from "https://deno.land/x/denoblogger@v0.9.4/main.js";
 //
 import Mojo from "./mojo.ts";
 
