@@ -185,7 +185,7 @@ export default class Mojo {
         const id = query("id");
         const uuid = query("uuid");
         const limit = query("limit");
-        const page = +query("page") ||0;
+        const page = query("page") || 0;
         const order = query("order");
         const ascending = !!query("ascending") || !!query("asc");
 
@@ -202,7 +202,7 @@ export default class Mojo {
         if (dbData.single) queryBuilder.single();
         if (limit) queryBuilder.limit(limit > 100 ? 100 : limit);
         if (page /* && dbData?.pagination*/)
-          queryBuilder.range(page - 1, page + limit || 10);
+          queryBuilder.range((page - 1) * limit, page * ((limit || 10) - 1));
         const filters =
           (dbData?.methods && dbData?.methods[method]?.filters) ||
           dbData?.filters;
