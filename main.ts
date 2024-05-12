@@ -46,7 +46,7 @@ const mojo = new Mojo();
 
 const gpt = new Gpt();
 
-mojo.use({ jwt, generate,useblogger:denoblogger });
+mojo.use({ jwt,gpt, generate,useblogger:denoblogger });
 mojo.use({ testFN: (arg) => arg });
 //
 mojo.cookies(cookies);
