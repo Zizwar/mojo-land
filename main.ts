@@ -5,6 +5,29 @@ import * as cookies from "https://deno.land/x/hono/helper.ts";
 //
 import denoblogger from "https://deno.land/x/denoblogger@v0.9.4/main.js";
 //
+import { OpenAI } from  "https://deno.land/x/openai@1.3.1/mod.ts";
+
+class Gpt {
+  #openAI: OpenAI;
+
+  constructor() {
+    this.#openAI = new OpenAI(Deno.env.get("KEY_OPEN_AI") ?? "");
+  }
+
+  async chat(messages: any,model: string = "gpt-3.5-turbo") {
+    const chatCompletion = await this.#openAI.createChatCompletion({
+    model,
+//model: 'gpt-4-1106-preview',
+      messages,
+    });
+    console.log({ chatCompletion });
+    const choices = chatCompletion?.choices;
+    const text = choices[0]?.message.content;
+    return text;
+  }
+}
+
+//
 import Mojo from "./mojo.ts";
 
 const supabase = createClient(
@@ -21,7 +44,7 @@ function generate(l = 64) {
 const app = new Hono();
 const mojo = new Mojo();
 
-
+const gpt = new Gpt();
 
 mojo.use({ jwt, generate,useblogger:denoblogger });
 mojo.use({ testFN: (arg) => arg });
