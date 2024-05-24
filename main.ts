@@ -5,7 +5,9 @@ import * as cookies from "https://deno.land/x/hono/helper.ts";
 //
 import denoblogger from "https://deno.land/x/denoblogger@v0.9.4/main.js";
 //
-import { OpenAI } from  "https://deno.land/x/openai@1.3.1/mod.ts";
+import { OpenAI } from "https://deno.land/x/openai@1.3.1/mod.ts";
+
+import cheerio from "https://cdn.skypack.dev/cheerio";
 
 class Gpt {
   #openAI: OpenAI;
@@ -14,10 +16,10 @@ class Gpt {
     this.#openAI = new OpenAI(Deno.env.get("KEY_OPEN_AI") ?? "");
   }
 
-  async chat(messages: any,model: string = "gpt-3.5-turbo") {
+  async chat(messages: any, model: string = "gpt-3.5-turbo") {
     const chatCompletion = await this.#openAI.createChatCompletion({
-    model,
-//model: 'gpt-4-1106-preview',
+      model,
+      //model: 'gpt-4-1106-preview',
       messages,
     });
     console.log({ chatCompletion });
@@ -46,7 +48,7 @@ const mojo = new Mojo();
 
 const gpt = new Gpt();
 
-mojo.use({ jwt,gpt, generate,useblogger:denoblogger });
+mojo.use({ jwt, gpt, cheerio, generate, useblogger: denoblogger });
 mojo.use({ testFN: (arg) => arg });
 //
 mojo.cookies(cookies);
