@@ -86,9 +86,14 @@ export default class Mojo {
       });
     };
     //
-    const text = (text: string, status = 200) => {
+    const text = (text: string, status = 200,headers ={
+      'Content-Type': 'text/plain'
+    },options = {}) => {
+
       return new Response(text, {
         status,
+headers,
+...options
       });
     };
 
