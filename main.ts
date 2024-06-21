@@ -1,3 +1,7 @@
+
+//import Mojo from "./mojo.ts";
+import Mojo from "npm:mojo-land";
+//
 import { Hono } from "https://deno.land/x/hono@v4.0.9/mod.ts";
 import { createClient } from "https://cdn.skypack.dev/@supabase/supabase-js?dts";
 import { jwt } from "https://deno.land/x/hono/middleware.ts";
@@ -29,8 +33,7 @@ class Gpt {
   }
 }
 
-//
-import Mojo from "./mojo.ts";
+
 
 const supabase = createClient(
   Deno.env.get("SUPABASE_API_URL")!,
