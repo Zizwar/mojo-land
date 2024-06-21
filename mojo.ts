@@ -119,7 +119,7 @@ headers,
       }
     };
     try {
-      console.log({ "this.tableName": this._tableName });
+     // console.log({ "this.tableName": this._tableName });
 
       let { data: dbData, error } = await this._supabase
         .from(this._tableName || "mojos")
@@ -133,9 +133,9 @@ headers,
         .eq("status", "active")
         .single();
       if (error) return json({ message: "not endpont here", error }, 402);
-      console.log("___firstmethode===", method);
+     // console.log("___firstmethode===", method);
 
-      console.log("___dbData.method===", dbData.method);
+     // console.log("___dbData.method===", dbData.method);
 
       //   method = dbData.method ?? body?.method ?? method;
       if (dbData.method && dbData.method.includes(","))
@@ -166,7 +166,7 @@ headers,
         }
       };
       const isAuthorized = () => {
-        console.log("method==", method);
+      //  console.log("method==", method);
 
         if (!dbData.method) return null;
         /*** supôrt new methosds*/
@@ -177,7 +177,7 @@ headers,
           permission = dbData?.permissions ? dbData.permissions[method] : null;
         }
 
-        console.log("permission==", permission);
+      //  console.log("permission==", permission);
         if (!permission) return null;
         if (permission.includes("public")) return true;
         const extractColumnsRoles = extractColumns(permission);
@@ -215,7 +215,7 @@ headers,
         if (body?.filters && filters) {
           const validFilters: any = {};
           for (const key in filters) {
-            console.log({ body: body.filters });
+           // console.log({ body: body.filters });
             if (Object.prototype.hasOwnProperty.call(filters, key)) {
               //  console.log("hasOn",{key},"filters[key]",filters[key])
               const properties = filters[key]
@@ -248,7 +248,7 @@ headers,
             "ts",
           ];
           //
-          console.log({ validFilters });
+         // console.log({ validFilters });
           for (const filter in validFilters) {
             if (supportedFilters.includes(filter)) {
               for (const [key, value] of validFilters[filter]) {
