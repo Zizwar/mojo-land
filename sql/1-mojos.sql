@@ -32,5 +32,11 @@ create table
     files jsonb null,
     embedding text null,
     jwt jsonb null,
-    constraint mojo_pkey primary key (id)
+    "userId" bigint null,
+    version text null default '1.1'::text,
+    checker boolean null default false,
+    constraint mojo_pkey primary key (id),
+    constraint mojos_endpoint_key unique (endpoint),
+    constraint public_mojos_updated_by_fkey foreign key (updated_by) references users (id),
+    constraint public_mojos_userid_fkey foreign key ("userId") references users (id)
   ) tablespace pg_default;
