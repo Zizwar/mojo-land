@@ -5,6 +5,7 @@ import * as cookies from "https://deno.land/x/hono/helper.ts";
 import denoblogger from "https://deno.land/x/denoblogger@v0.9.4/main.js";
 import { OpenAI } from "https://deno.land/x/openai@1.3.1/mod.ts";
 import cheerio from "https://cdn.skypack.dev/cheerio";
+import Mojo from "npm:mojo-land";
 import { corsMiddleware } from "./middleware.ts"; 
 
 class Gpt {
