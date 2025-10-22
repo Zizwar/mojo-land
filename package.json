@@ -1,25 +1,89 @@
 {
   "name": "mojo-land",
-  "version": "0.9.0",
-  "description": "Mojo Land",
-  "main": "./dist/cjs/mojo.js",
-  "module": "./dist/esm/mojo.js",
-  "types": "./dist/cjs/mojo.d.ts",
+  "version": "2.0.0",
+  "description": "AI-Powered Dynamic API Framework - Framework Agnostic. Build dynamic APIs with natural language, work with any web framework (Hono, Express, Next.js, Koa, etc.)",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/cjs/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "types": "./dist/cjs/index.d.ts"
+    },
+    "./adapters": {
+      "import": "./dist/esm/adapters/index.js",
+      "require": "./dist/cjs/adapters/index.js",
+      "types": "./dist/cjs/adapters/index.d.ts"
+    },
+    "./services": {
+      "import": "./dist/esm/services/AIService.js",
+      "require": "./dist/cjs/services/AIService.js"
+    },
+    "./types": {
+      "import": "./dist/esm/types/index.js",
+      "require": "./dist/cjs/types/index.js",
+      "types": "./dist/cjs/types/index.d.ts"
+    }
+  },
   "files": [
-    "dist/**/*"
+    "dist/**/*",
+    "sql/**/*",
+    "examples/**/*",
+    "README.md",
+    "README-v2.md",
+    "README-AR.md",
+    "LICENSE"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-      "build:cjs": "tsc --outDir ./dist/cjs",
-      "build:esm": "tsc --module ES6 --outDir ./dist/esm",
-      "build": "npm run build:cjs && npm run build:esm"
+    "build:cjs": "tsc --outDir ./dist/cjs",
+    "build:esm": "tsc --module ES6 --outDir ./dist/esm",
+    "build": "npm run build:cjs && npm run build:esm",
+    "dev": "deno run --allow-net --allow-env examples/hono-example.ts",
+    "prepublishOnly": "npm run build"
   },
-  
-  "keywords": [],
+  "keywords": [
+    "api",
+    "dynamic-api",
+    "ai",
+    "artificial-intelligence",
+    "openrouter",
+    "supabase",
+    "postgresql",
+    "hono",
+    "express",
+    "nextjs",
+    "koa",
+    "framework-agnostic",
+    "natural-language",
+    "crud",
+    "backend",
+    "api-builder",
+    "low-code",
+    "no-code",
+    "endpoint-generator",
+    "rest-api"
+  ],
   "author": "Brahim BIDI",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Zizwar/mojo-land.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Zizwar/mojo-land/issues"
+  },
+  "homepage": "https://github.com/Zizwar/mojo-land#readme",
   "devDependencies": {
-    "typescript": "^5.5.2"
+    "typescript": "^5.5.2",
+    "@types/node": "^20.0.0"
+  },
+  "peerDependencies": {
+    "@supabase/supabase-js": "^2.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
   }
 }
 
