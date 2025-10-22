@@ -1,13 +1,34 @@
 {
-    "compilerOptions": {
-      "target": "ES6",
-      "moduleResolution": "node",
-      "declaration": true,
-      "rootDir": "./src",
-      "esModuleInterop": true,
-      "strict": true
-    },
-    "include": ["src/**/*.ts"],
-    "exclude": ["node_modules"]
-  }
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "commonjs",
+    "lib": ["ES2020"],
+    "moduleResolution": "node",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "rootDir": "./",
+    "outDir": "./dist/cjs",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "include": [
+    "index.ts",
+    "core/**/*.ts",
+    "services/**/*.ts",
+    "adapters/**/*.ts",
+    "types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "examples",
+    "sql",
+    "**/*.test.ts"
+  ]
+}
   
